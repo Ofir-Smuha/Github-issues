@@ -5,9 +5,17 @@ import styled from 'styled-components';
 
 import { setCurrentIssue } from 'actions/issues.actions';
 
+import type { State } from 'types/redux.types';
+import type { Issue } from './issues.types';
+
 type OwnProps = {};
 
-type ConnectedProps = {};
+type ConnectedProps = {
+  setCurrentIssue: () => void,
+  currentIssue: Issue,
+  match: Object,
+  params: Object
+};
 
 class IssueDetails extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
@@ -27,8 +35,8 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
   }
 }
 
-const mapStateToProps = ({ issues }) => ({
-  currentIssue: issues.currentIssue
+const mapStateToProps = (state: State) => ({
+  currentIssue: state.issues.currentIssue
 });
 
 export default connect(mapStateToProps, { setCurrentIssue })(IssueDetails);
