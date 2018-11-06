@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,6 +7,8 @@ import { get } from 'lodash/fp';
 
 import commentIcon from 'assets/images/comments.svg';
 import warning from 'assets/images/warning.svg';
+
+import type { Issue } from './issues.types';
 
 const OpenIssueContainer = styled.li`
   display: flex;
@@ -68,7 +71,12 @@ const Comments = styled.div`
   font-size: 0.9rem;
 `;
 
-const IssuePreview = props => {
+type Props = {|
+  openIssue: Issue,
+  history: []
+|};
+
+const IssuePreview = (props: Props) => {
   const userName = get('user.login', props.openIssue);
   const {
     number: issueSerial,
