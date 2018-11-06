@@ -1,6 +1,6 @@
 // @flow
 import { get, castArray, compact } from 'lodash/fp';
-import urljoin from 'url-join';
+// import urljoin from 'url-join';
 
 import apiUtils from 'utils/api.utils';
 import { startNetwork, endNetwork } from 'actions/network.actions';
@@ -27,7 +27,7 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     const { path, baseUrl, onSuccess, onError } = payload;
     const { networkLabel, data, method = 'GET' } = payload;
     const headers = {};
-    const requestUrl = urljoin(baseUrl || BASE_URL, path);
+    // const requestUrl = urljoin(baseUrl || BASE_URL, path);
     // TODO: if using token authentication
     // if (getState().user.token) {
     //   headers['auth'] = getState().user.token;
@@ -36,9 +36,8 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     next(action);
 
     dispatch(startNetwork(networkLabel));
-
     apiUtils
-      .request({ method, url: requestUrl, data, headers })
+      .request({ method, url: path, data, headers })
       .then(({ body }) => {
         if (onSuccess) {
           dispatchActions(onSuccess(body));
