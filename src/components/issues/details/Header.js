@@ -42,7 +42,7 @@ const Header = (props: Props) => {
 const HeaderWrapper = styled.div`
   border-bottom: 1px solid #e6ebf1;
   padding-bottom: 20px;
-  margin-top: 20px;
+  margin: 20px 0;
 `;
 
 const TitleButtonContainer = styled.div`

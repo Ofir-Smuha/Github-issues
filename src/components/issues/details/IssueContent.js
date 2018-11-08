@@ -1,9 +1,35 @@
 import React from 'react';
+import styled from 'styled-components';
+import MarkDown from 'react-markdown/with-html';
 
-type Props = {};
+import IssueComment from './IssueComment';
+
+import type { Issue, Comments } from 'components/issues/issues.types';
+
+type Props = {
+  currentIssue: Issue,
+  issueComments: Comments
+};
 
 const IssueContent = (props: Props) => {
-  return <div />;
+  if (!props.currentIssue) {
+    return null;
+  }
+
+  const renderComments = () => {
+    if (props.currentIssue.comments) {
+      return props.issueComments.map(comment => (
+        <IssueComment context={comment} />
+      ));
+    }
+  };
+
+  return (
+    <div>
+      <IssueComment context={props.currentIssue} />
+      {renderComments()}
+    </div>
+  );
 };
 
 export default IssueContent;

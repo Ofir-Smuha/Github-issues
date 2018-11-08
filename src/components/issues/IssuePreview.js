@@ -15,7 +15,7 @@ const OpenIssueContainer = styled.li`
   align-items: flex-start;
   justify-content: space-between;
   background-color: #fff;
-  margin: 3px;
+  margin: 0 3px 3px 3px;
   min-height: 61px;
   padding: 10px;
   transition: all 300ms;
