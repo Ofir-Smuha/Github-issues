@@ -7,19 +7,31 @@ import IssuesList from './IssuesList';
 import SortIssues from './SortIssues';
 import { fetchIssues } from 'actions/issues.actions';
 
+import type { State } from 'types/redux.types';
+import type { Issues } from './issues.types';
+import type { IssuesState } from 'reducers/issues.reducer';
+
 const ListSortWrapper = styled.div`
   width: 90%;
   margin: 0 auto;
 `;
 
+type StateWithIssues = State;
+
 type ConnectedProps = {
   fetchIssues: () => void,
-  openIssues: {}
+  openIssues: Issues
 };
 
-class IssuesPage extends Component<ConnectedProps> {
+type OwnProps = {};
+
+class IssuesPage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
     this.props.fetchIssues();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
   }
 
   render() {
@@ -34,8 +46,8 @@ class IssuesPage extends Component<ConnectedProps> {
   }
 }
 
-const mapStateToProps = ({ issues }) => ({
-  openIssues: issues.openIssues
+const mapStateToProps = (state: StateWithIssues) => ({
+  openIssues: state.issues.openIssues
 });
 
 export default connect(mapStateToProps, { fetchIssues })(IssuesPage);

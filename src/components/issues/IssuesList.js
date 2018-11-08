@@ -4,13 +4,15 @@ import styled from 'styled-components';
 
 import IssuePreview from './IssuePreview';
 
+import type { Issues } from './issues.types';
+
 const List = styled.ul`
   background-color: #f7f8fb;
   border-left: 4px solid #dcdcdc;
   padding-left: 4px;
 `;
 
-const IssuesList = ({ openIssues }: { openIssues: Object[] }) => {
+const IssuesList = ({ openIssues }: { openIssues: Issues }) => {
   return (
     <List>
       {openIssues.map(openIssue => (

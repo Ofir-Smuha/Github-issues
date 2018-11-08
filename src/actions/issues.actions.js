@@ -1,8 +1,10 @@
 // @flow
 import { apiAction } from 'actions/api.actions';
 
-import type { BaseAction } from 'types/redux.types';
-import { POSTS_LABEL } from '../sample/sample.actions';
+// import type { BaseAction } from 'types/redux.types';
+import type { Issues } from 'components/issues/issues.actions';
+export type id = number;
+// import { POSTS_LABEL } from '../sample/sample.actions'; what is it made for??
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
 export const SET_ISSUES = 'SET_ISSUES';
@@ -20,21 +22,21 @@ export const fetchIssues = () =>
     }
   });
 
-export const setIssues = (openIssues: OpenIssues) => ({
+export const setIssues = (openIssues: Issues) => ({
   type: SET_ISSUES,
   payload: {
     openIssues
   }
 });
 
-export const setCurrentIssue = (issueId): BaseAction => ({
+export const setCurrentIssue = (issueId: id) => ({
   type: SET_CURRENT_ISSUE,
   payload: {
     issueId: issueId
   }
 });
 
-export const setError = (): BaseAction => ({
+export const setError = () => ({
   type: SET_ERROR,
   payload: {}
 });
