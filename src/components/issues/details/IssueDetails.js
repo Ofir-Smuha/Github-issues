@@ -25,10 +25,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     this.props.setCurrentIssue(this.props.match.params.issueId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.currentIssue);
-  }
-
   render() {
     if (!this.props.currentIssue) {
       return null;
@@ -36,6 +32,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     return (
       <Wrapper>
         <Header currentIssue={this.props.currentIssue} />
+        <IssueContent currentIssue={this.props.currentIssue} />
       </Wrapper>
     );
   }

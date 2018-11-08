@@ -1,6 +1,10 @@
 import React from 'react';
 
-type Props = {};
+import type { Issue } from 'components/issues.types';
+
+type Props = {
+  currentIssue: Issue
+};
 
 const IssueContent = (props: Props) => {
   return <div />;
