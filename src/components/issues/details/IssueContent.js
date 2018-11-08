@@ -19,7 +19,7 @@ const IssueContent = (props: Props) => {
   const renderComments = () => {
     if (props.currentIssue.comments) {
       return props.issueComments.map(comment => (
-        <IssueComment context={comment} />
+        <IssueComment context={comment} key={comment.id} />
       ));
     }
   };

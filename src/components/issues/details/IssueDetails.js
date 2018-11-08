@@ -5,7 +5,11 @@ import styled from 'styled-components';
 
 import Header from './Header';
 import IssueContent from './IssueContent';
-import { setCurrentIssue, fetchComments } from 'actions/issues.actions';
+import {
+  setCurrentIssue,
+  fetchComments,
+  removeComments
+} from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
 import type { Issue, Comments } from '../issues.types';
@@ -29,9 +33,15 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
   componentDidUpdate(prevProps, prevState) {
     if (
       this.props.currentIssue.comments &&
-      this.props.currentIssue.comments !== prevProps.currentIssue.comments
+      this.props.currentIssue !== prevProps.currentIssue
     ) {
       this.props.fetchComments(this.props.currentIssue.comments_url);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.currentIssue.comments) {
+      this.props.removeComments();
     }
   }
 
@@ -44,7 +54,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
         <Header currentIssue={this.props.currentIssue} />
         <IssueContent
           currentIssue={this.props.currentIssue}
-          issueComments={this.props.IssueComments}
+          issueComments={this.props.issueComments}
         />
       </Wrapper>
     );
@@ -59,9 +69,11 @@ const Wrapper = styled.div`
 
 const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
-  IssueComments: state.issues.IssueComments
+  issueComments: state.issues.issueComments
 });
 
-export default connect(mapStateToProps, { setCurrentIssue, fetchComments })(
-  IssueDetails
-);
+export default connect(mapStateToProps, {
+  setCurrentIssue,
+  fetchComments,
+  removeComments
+})(IssueDetails);

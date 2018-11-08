@@ -12,6 +12,7 @@ export const SET_ERROR = 'SET_ERROR';
 export const SET_CURRENT_ISSUE = 'SET_CURRENT_ISSUE';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 export const SET_COMMENTS = 'SET_COMMENTS';
+export const REMOVE_COMMENTS = 'REMOVE_COMMENTS';
 
 export const fetchIssues = () =>
   apiAction({
@@ -54,6 +55,11 @@ export const setComments = (comments: Comments) => ({
   payload: {
     comments: comments
   }
+});
+
+export const removeComments = () => ({
+  type: REMOVE_COMMENTS,
+  payload: {}
 });
 
 export const setError = () => ({

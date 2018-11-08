@@ -30,10 +30,6 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     this.props.fetchIssues();
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-  }
-
   render() {
     return (
       <div>
