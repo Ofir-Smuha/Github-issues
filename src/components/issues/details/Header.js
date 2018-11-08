@@ -17,10 +17,10 @@ const Header = (props: Props) => {
   const { title, number, created_at, comments } = props.currentIssue;
 
   return (
-    <div>
+    <HeaderWrapper>
       <TitleButtonContainer>
         <IssueTitle>
-          {title} &nbsp <Serial>#{number}</Serial>
+          {title} <Serial>#{number}</Serial>
         </IssueTitle>
         <NewIssueButton>New issue</NewIssueButton>
       </TitleButtonContainer>
@@ -35,9 +35,14 @@ const Header = (props: Props) => {
           <Comments>&middot; {comments} comments</Comments>
         </DetailsContainer>
       </StatusDetailsContainer>
-    </div>
+    </HeaderWrapper>
   );
 };
+
+const HeaderWrapper = styled.div`
+  border-bottom: 1px solid #e6ebf1;
+  padding-bottom: 20px;
+`;
 
 const TitleButtonContainer = styled.div`
   display: flex;
@@ -81,7 +86,6 @@ const StatusDetailsContainer = styled.div`
 const StatusDisplay = styled.div`
   display: flex;
   align-items: center;
-  border: 1px solid rgba(27, 31, 35, 0.2);
   padding: 3px 10px;
   font-weight: bold;
   background-color: #28a745;

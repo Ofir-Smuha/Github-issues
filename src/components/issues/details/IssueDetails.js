@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Header from './Header';
 import IssueContent from './IssueContent';
-import Comments from './Comments';
+import CommentsPanel from './CommentsPanel';
 import { setCurrentIssue } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
