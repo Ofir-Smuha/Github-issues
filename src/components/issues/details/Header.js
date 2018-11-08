@@ -42,6 +42,7 @@ const Header = (props: Props) => {
 const HeaderWrapper = styled.div`
   border-bottom: 1px solid #e6ebf1;
   padding-bottom: 20px;
+  margin-top: 20px;
 `;
 
 const TitleButtonContainer = styled.div`
@@ -92,7 +93,7 @@ const StatusDisplay = styled.div`
   background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
   color: #fff;
   border-radius: 3px;
-  margin-right: 5px;
+  margin-right: 8px;
 `;
 
 const StatusIcon = styled.div`
