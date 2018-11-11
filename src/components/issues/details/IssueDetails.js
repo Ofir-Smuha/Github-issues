@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import Header from './Header';
 import IssueContent from './IssueContent';
+import SideBar from './SideBar';
 import {
   setCurrentIssue,
   fetchComments,
@@ -30,13 +31,14 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     this.props.setCurrentIssue(this.props.match.params.issueId);
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (
       this.props.currentIssue.comments &&
       this.props.currentIssue !== prevProps.currentIssue
     ) {
       this.props.fetchComments(this.props.currentIssue.comments_url);
     }
+    console.log('props', this.props);
   }
 
   componentWillUnmount() {
@@ -52,10 +54,13 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     return (
       <Wrapper>
         <Header currentIssue={this.props.currentIssue} />
-        <IssueContent
-          currentIssue={this.props.currentIssue}
-          issueComments={this.props.issueComments}
-        />
+        <ContentContainer>
+          <IssueContent
+            currentIssue={this.props.currentIssue}
+            issueComments={this.props.issueComments}
+          />
+          <SideBar />
+        </ContentContainer>
       </Wrapper>
     );
   }
@@ -65,6 +70,12 @@ const Wrapper = styled.div`
   width: 80%;
   max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const mapStateToProps = (state: State) => ({

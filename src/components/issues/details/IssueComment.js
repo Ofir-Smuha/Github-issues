@@ -11,9 +11,12 @@ type Props = {
 
 const IssueComment = (props: Props) => {
   const userName = get('user.login', props.context);
+  const avatar = get('user.avatar_url', props.context);
   const { created_at } = props.context;
+
   return (
     <Wrapper>
+      <Gravatar avatar={avatar} />
       <CommentContainer>
         <UserDetails>
           <Details>
@@ -30,8 +33,20 @@ const IssueComment = (props: Props) => {
 };
 
 const Wrapper = styled.div`
-  max-width: 70%;
+  width: 700px;
   margin-bottom: 20px;
+  padding-left: 50px;
+  position: relative;
+`;
+
+const Gravatar = styled.div`
+  background: url(${props => props.avatar}) no-repeat center;
+  width: 41px;
+  height: 41px;
+  border-radius: 3px;
+  position: absolute;
+  left: 0;
+  top: 0;
 `;
 
 const CommentContainer = styled.div`

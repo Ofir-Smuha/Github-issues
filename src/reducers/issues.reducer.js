@@ -20,7 +20,7 @@ const initialState = {
 export type IssuesState = {|
   +openIssues: Issues,
   +currentIssue: Issue,
-  +IssueComments: []
+  +issueComments: []
 |};
 
 export default handleActions(

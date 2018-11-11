@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import MarkDown from 'react-markdown/with-html';
 
 import IssueComment from './IssueComment';
 
