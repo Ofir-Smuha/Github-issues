@@ -33,7 +33,11 @@ const SideBar = (props: Props) => {
           <ProgressContainer>
             <ProgressBar progress={progress} />
           </ProgressContainer>
-          <BarTitle>{milestone.title}</BarTitle>
+          <BarTitle
+            target="_blank"
+            href={'https://github.com/facebook/create-react-app/milestone/59'}>
+            {milestone.title}
+          </BarTitle>
         </div>
       );
     }
@@ -112,8 +116,16 @@ const ProgressBar = styled.div`
   background-color: #2cbe4e;
 `;
 
-const BarTitle = styled(Title)`
-  margin-bottom: 0;
+const BarTitle = styled.a`
+  color: #586069;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  text-decoration: none;
+
+  &:hover {
+    color: #0366d6;
+  }
 `;
 
 const AssignContainer = styled.div`
