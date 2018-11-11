@@ -38,7 +38,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     ) {
       this.props.fetchComments(this.props.currentIssue.comments_url);
     }
-    console.log('props', this.props);
   }
 
   componentWillUnmount() {

@@ -8,7 +8,6 @@ import {
   REMOVE_COMMENTS
 } from 'actions/issues.actions';
 
-// import type BaseAction from 'types/redux.types'
 import type { Issue, Issues } from 'components/issues/issues.types';
 
 const initialState = {
