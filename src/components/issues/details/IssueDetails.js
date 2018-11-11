@@ -59,7 +59,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
             currentIssue={this.props.currentIssue}
             issueComments={this.props.issueComments}
           />
-          <SideBar />
+          <SideBar currentIssue={this.props.currentIssue} />
         </ContentContainer>
       </Wrapper>
     );

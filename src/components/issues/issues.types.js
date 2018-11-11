@@ -10,6 +10,13 @@ export type Issue = {
   comments_url: string
 };
 
+export type SideBarIssue = {
+  assignees?: {},
+  labels?: Object[],
+  milestone?: any,
+  projects?: any
+};
+
 export type Issues = Issue[];
 
 export type Comment = {
