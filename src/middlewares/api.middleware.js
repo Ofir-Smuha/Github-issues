@@ -39,9 +39,9 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     apiUtils
       .request({ method, url: path, data, headers })
       .then(({ body, header }) => {
-        console.log(header);
         if (handleHeaders) {
           console.log('header: ', header);
+          dispatchActions(handleHeaders(header));
         }
         if (onSuccess) {
           dispatchActions(onSuccess(body));

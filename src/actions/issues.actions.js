@@ -3,6 +3,7 @@ import { apiAction } from 'actions/api.actions';
 
 // import type { BaseAction } from 'types/redux.types';
 import type { Issues, Comments } from 'components/issues/issues.actions';
+export type Header = {};
 export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
@@ -33,8 +34,11 @@ export const setIssues = (openIssues: Issues) => ({
   }
 });
 
-export const setPaging = () => ({
-  type: SET_ISSUES_PAGING
+export const setPaging = (header: Header) => ({
+  type: SET_ISSUES_PAGING,
+  payload: {
+    header
+  }
 });
 
 export const setCurrentIssue = (issueId: id) => ({
