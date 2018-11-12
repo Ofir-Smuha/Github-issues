@@ -8,7 +8,9 @@ import type { Issues } from 'components/issues/issues.types';
 
 const List = styled.ul`
   background-color: #f7f8fb;
-  border-left: 4px solid #dcdcdc;
+  // border-left: 4px solid #dcdcdc;
+  border: 1px solid #d1d5da;
+  border-top: none;
   padding-left: 4px;
 `;
 

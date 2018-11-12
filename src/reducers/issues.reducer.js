@@ -1,19 +1,25 @@
 import { set } from 'lodash/fp';
 import { handleActions } from 'redux-actions';
 
-import { SET_ISSUES, SET_CURRENT_ISSUE } from 'actions/issues.actions';
+import {
+  SET_ISSUES,
+  SET_CURRENT_ISSUE,
+  SET_COMMENTS,
+  REMOVE_COMMENTS
+} from 'actions/issues.actions';
 
-// import type BaseAction from 'types/redux.types'
 import type { Issue, Issues } from 'components/issues/issues.types';
 
 const initialState = {
   openIssues: [],
-  currentIssue: {}
+  currentIssue: {},
+  issueComments: []
 };
 
 export type IssuesState = {|
   +openIssues: Issues,
-  +currentIssue: Issue
+  +currentIssue: Issue,
+  +issueComments: []
 |};
 
 export default handleActions(
@@ -24,8 +30,12 @@ export default handleActions(
       const currentIssue = state.openIssues.find(
         issue => issue.id.toString() === payload.issueId
       );
-      return set('currentIssue', currentIssue, state);
-    }
+      return set('currentIssue', { ...currentIssue }, state);
+    },
+    [SET_COMMENTS]: (state: IssuesState, { payload }) =>
+      set('issueComments', payload.comments, state),
+    [REMOVE_COMMENTS]: state =>
+      set('issueComments', initialState.issueComments, state)
   },
   initialState
 );

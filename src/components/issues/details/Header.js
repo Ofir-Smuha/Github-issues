@@ -15,6 +15,7 @@ type Props = {
 const Header = (props: Props) => {
   const userName = get('user.login', props.currentIssue);
   const { title, number, created_at, comments } = props.currentIssue;
+  const createdAt = moment(created_at).fromNow();
 
   return (
     <HeaderWrapper>
@@ -31,7 +32,7 @@ const Header = (props: Props) => {
         </StatusDisplay>
         <DetailsContainer>
           <Name>{userName}</Name>
-          <OpenedAt> opened this issue {moment(created_at).fromNow()}</OpenedAt>
+          <OpenedAt> opened this issue {createdAt}</OpenedAt>
           <Comments>&middot; {comments} comments</Comments>
         </DetailsContainer>
       </StatusDetailsContainer>
@@ -42,7 +43,7 @@ const Header = (props: Props) => {
 const HeaderWrapper = styled.div`
   border-bottom: 1px solid #e6ebf1;
   padding-bottom: 20px;
-  margin-top: 20px;
+  margin: 20px 0;
 `;
 
 const TitleButtonContainer = styled.div`
@@ -67,7 +68,7 @@ const NewIssueButton = styled.button`
   padding: 5px 10px;
   font-weight: bold;
   background-image: ${({ theme }) => theme.greenGradient};
-  color: ${({ theme }) => theme.white}
+  color: ${({ theme }) => theme.white};
   outline: none;
   cursor: pointer;
 `;
@@ -89,7 +90,7 @@ const StatusDisplay = styled.div`
   padding: 3px 10px;
   font-weight: bold;
   background-image: ${({ theme }) => theme.greenGradient};
-  color: ${({ theme }) => theme.white}
+  color: ${({ theme }) => theme.white};
   border-radius: 3px;
   margin-right: 8px;
 `;

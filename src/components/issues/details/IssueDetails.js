@@ -5,17 +5,23 @@ import styled from 'styled-components';
 
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
-import CommentsPanel from 'components/issues/details/CommentsPanel';
-import { setCurrentIssue } from 'actions/issues.actions';
+import SideBar from 'components/issues/details/SideBar';
+import {
+  setCurrentIssue,
+  fetchComments,
+  removeComments
+} from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
-import type { Issue } from '../issues.types';
+import type { Issue, Comments } from '../issues.types';
 
 type OwnProps = {};
 
 type ConnectedProps = {
   setCurrentIssue: () => void,
+  fetchComments: () => void,
   currentIssue: Issue,
+  issueComments: Comments,
   match: Object,
   params: Object
 };
@@ -25,6 +31,20 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     this.props.setCurrentIssue(this.props.match.params.issueId);
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.currentIssue.comments &&
+      this.props.currentIssue !== prevProps.currentIssue
+    ) {
+      this.props.fetchComments(this.props.currentIssue.comments_url);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.currentIssue.comments) {
+      this.props.removeComments();
+    }
+  }
   render() {
     if (!this.props.currentIssue) {
       return null;
@@ -32,7 +52,13 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     return (
       <Wrapper>
         <Header currentIssue={this.props.currentIssue} />
-        <IssueContent currentIssue={this.props.currentIssue} />
+        <ContentContainer>
+          <IssueContent
+            currentIssue={this.props.currentIssue}
+            issueComments={this.props.issueComments}
+          />
+          <SideBar currentIssue={this.props.currentIssue} />
+        </ContentContainer>
       </Wrapper>
     );
   }
@@ -42,10 +68,21 @@ const Wrapper = styled.div`
   width: 80%;
   max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const mapStateToProps = (state: State) => ({
-  currentIssue: state.issues.currentIssue
+  currentIssue: state.issues.currentIssue,
+  issueComments: state.issues.issueComments
 });
 
-export default connect(mapStateToProps, { setCurrentIssue })(IssueDetails);
+export default connect(mapStateToProps, {
+  setCurrentIssue,
+  fetchComments,
+  removeComments
+})(IssueDetails);
