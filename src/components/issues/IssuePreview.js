@@ -8,7 +8,7 @@ import { get } from 'lodash/fp';
 import commentIcon from 'assets/images/comments.svg';
 import warning from 'assets/images/warning.svg';
 
-import type { Issue } from './issues.types';
+import type { Issue } from 'components/issues/issues.types';
 
 const OpenIssueContainer = styled.li`
   display: flex;
@@ -21,7 +21,6 @@ const OpenIssueContainer = styled.li`
   transition: all 300ms;
 
   &:hover {
-    // background-color: rgba(203, 250, 255, 0.5);
     background-color: #f7f8fb;
   }
 `;

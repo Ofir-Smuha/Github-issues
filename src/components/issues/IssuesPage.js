@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import IssuesList from './IssuesList';
-import SortIssues from './SortIssues';
+import IssuesList from 'components/issues/IssuesList';
+import SortIssues from 'components/issues/SortIssues';
 import { fetchIssues } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
-import type { Issues } from './issues.types';
+import type { Issues } from 'components/issues/issues.types';
 import type { IssuesState } from 'reducers/issues.reducer';
 
 const ListSortWrapper = styled.div`

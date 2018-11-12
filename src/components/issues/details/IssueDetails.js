@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Header from './Header';
-import IssueContent from './IssueContent';
-import CommentsPanel from './CommentsPanel';
+import Header from 'components/issues/details/Header';
+import IssueContent from 'components/issues/details/IssueContent';
+import CommentsPanel from 'components/issues/details/CommentsPanel';
 import { setCurrentIssue } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
