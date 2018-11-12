@@ -15,6 +15,7 @@ type Props = {
 const Header = (props: Props) => {
   const userName = get('user.login', props.currentIssue);
   const { title, number, created_at, comments } = props.currentIssue;
+  const createdAt = moment(created_at).fromNow();
 
   return (
     <HeaderWrapper>
@@ -31,7 +32,7 @@ const Header = (props: Props) => {
         </StatusDisplay>
         <DetailsContainer>
           <Name>{userName}</Name>
-          <OpenedAt> opened this issue {moment(created_at).fromNow()}</OpenedAt>
+          <OpenedAt> opened this issue {createdAt}</OpenedAt>
           <Comments>&middot; {comments} comments</Comments>
         </DetailsContainer>
       </StatusDetailsContainer>
