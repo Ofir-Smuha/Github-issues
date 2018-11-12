@@ -12,7 +12,7 @@ type Props = {
 const IssueComment = (props: Props) => {
   const userName = get('user.login', props.context);
   const avatar = get('user.avatar_url', props.context);
-  const { created_at } = props.context;
+  const { created_at: createdAt } = props.context;
 
   return (
     <Wrapper>
@@ -21,7 +21,7 @@ const IssueComment = (props: Props) => {
         <UserDetails>
           <Details>
             <Name>{userName}</Name>
-            <OpenedAt> commented {moment(created_at).fromNow()}</OpenedAt>
+            <OpenedAt> commented {moment(createdAt).fromNow()}</OpenedAt>
           </Details>
         </UserDetails>
         <CommentBody>

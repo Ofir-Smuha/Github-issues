@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
-import SideBar from './SideBar';
+import SideBar from 'components/issues/details/SideBar';
 import {
   setCurrentIssue,
   fetchComments,
@@ -38,7 +38,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     ) {
       this.props.fetchComments(this.props.currentIssue.comments_url);
     }
-    console.log('props', this.props);
   }
 
   componentWillUnmount() {

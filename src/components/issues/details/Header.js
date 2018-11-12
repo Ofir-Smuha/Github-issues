@@ -67,7 +67,7 @@ const NewIssueButton = styled.button`
   padding: 5px 10px;
   font-weight: bold;
   background-image: ${({ theme }) => theme.greenGradient};
-  color: ${({ theme }) => theme.white}
+  color: ${({ theme }) => theme.white};
   outline: none;
   cursor: pointer;
 `;
@@ -89,7 +89,7 @@ const StatusDisplay = styled.div`
   padding: 3px 10px;
   font-weight: bold;
   background-image: ${({ theme }) => theme.greenGradient};
-  color: ${({ theme }) => theme.white}
+  color: ${({ theme }) => theme.white};
   border-radius: 3px;
   margin-right: 8px;
 `;

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { get } from 'lodash/fp';
+import { get, size } from 'lodash/fp';
+
 import type { SideBarIssue } from 'components/issues/issues.types';
 
 type Props = {
@@ -8,14 +9,12 @@ type Props = {
 };
 
 const SideBar = (props: Props) => {
-  const assignee = get('assignee.login', props.currentIssue);
-  const { labels, milestone, projects } = props.currentIssue;
+  const { labels, milestone, projects, assignee } = props.currentIssue;
+  const assigneeName = get('login', assignee);
 
   const renderLabels = () => {
-    if (labels) {
-      if (labels.length > 0) {
-        return labels.map(label => <Label key={label.id}>{label.name}</Label>);
-      }
+    if (labels && size(labels)) {
+      return labels.map(label => <Label key={label.id}>{label.name}</Label>);
     }
     return <Info>None yet</Info>;
   };
@@ -33,9 +32,7 @@ const SideBar = (props: Props) => {
           <ProgressContainer>
             <ProgressBar progress={progress} />
           </ProgressContainer>
-          <BarTitle
-            target="_blank"
-            href={'https://github.com/facebook/create-react-app/milestone/59'}>
+          <BarTitle target="_blank" href={milestone.html_url}>
             {milestone.title}
           </BarTitle>
         </div>
@@ -48,7 +45,7 @@ const SideBar = (props: Props) => {
     <Wrapper>
       <AssignContainer>
         <Title>Assignees</Title>
-        <Info>{assignee ? assignee : 'No one assigned'}</Info>
+        <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
       </AssignContainer>
       <LabelsContainer>
         <Title>Projects</Title>
