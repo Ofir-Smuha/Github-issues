@@ -10,7 +10,7 @@ import store from 'store';
 import theme from 'constants/themes.constants';
 
 import IssuesPage from 'components/issues/IssuesPage';
-import IssueDetails from 'components/issues/IssueDetails';
+import IssueDetails from 'components/issues/details/IssueDetails';
 
 class App extends React.Component<{||}> {
   render() {

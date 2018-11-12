@@ -21,7 +21,8 @@ const OpenIssueContainer = styled.li`
   transition: all 300ms;
 
   &:hover {
-    background-color: rgba(203, 250, 255, 0.5);
+    // background-color: rgba(203, 250, 255, 0.5);
+    background-color: #f7f8fb;
   }
 `;
 
@@ -46,6 +47,10 @@ const IssueTitle = styled.h1`
   color: #444;
   max-width: 90%;
   cursor: pointer;
+
+  &:hover {
+    color: #0366d6;
+  }
 `;
 
 const OpendAt = styled.h1`

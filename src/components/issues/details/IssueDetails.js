@@ -3,10 +3,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import Header from './Header';
+import IssueContent from './IssueContent';
+import CommentsPanel from './CommentsPanel';
 import { setCurrentIssue } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
-import type { Issue } from './issues.types';
+import type { Issue } from '../issues.types';
 
 type OwnProps = {};
 
@@ -22,18 +25,24 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     this.props.setCurrentIssue(this.props.match.params.issueId);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps.currentIssue);
-  }
-
   render() {
+    if (!this.props.currentIssue) {
+      return null;
+    }
     return (
-      <div>
-        <h1>{this.props.currentIssue.body}</h1>
-      </div>
+      <Wrapper>
+        <Header currentIssue={this.props.currentIssue} />
+        <IssueContent currentIssue={this.props.currentIssue} />
+      </Wrapper>
     );
   }
 }
+
+const Wrapper = styled.div`
+  width: 80%;
+  max-width: 1000px;
+  margin: 0 auto;
+`;
 
 const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue
