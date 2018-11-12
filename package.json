@@ -13,6 +13,7 @@
     "http-server": "0.11.1",
     "lodash": "4.17.5",
     "moment": "2.20.1",
+    "parse-link-header": "^1.0.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-intl": "2.4.0",

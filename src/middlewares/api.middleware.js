@@ -1,6 +1,6 @@
 // @flow
 import { get, castArray, compact } from 'lodash/fp';
-// import urljoin from 'url-join';
+import parse from 'parse-link-header';
 
 import apiUtils from 'utils/api.utils';
 import { startNetwork, endNetwork } from 'actions/network.actions';
@@ -40,8 +40,8 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
       .request({ method, url: path, data, headers })
       .then(({ body, header }) => {
         if (handleHeaders) {
-          console.log('header: ', header);
-          dispatchActions(handleHeaders(header));
+          const parsedLink = parse(header.link);
+          dispatchActions(handleHeaders(parsedLink));
         }
         if (onSuccess) {
           dispatchActions(onSuccess(body));

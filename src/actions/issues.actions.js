@@ -15,7 +15,7 @@ export const SET_COMMENTS = 'SET_COMMENTS';
 export const REMOVE_COMMENTS = 'REMOVE_COMMENTS';
 export const SET_ISSUES_PAGING = 'SET_ISSUES_PAGING';
 
-export const fetchIssues = (page = 1) =>
+export const fetchIssues = (page = 8) =>
   apiAction({
     type: FETCH_ISSUES,
     payload: {
