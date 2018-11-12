@@ -113,6 +113,7 @@ const ProgressContainer = styled.div`
 const ProgressBar = styled.div`
   height: 100%;
   width: ${props => props.progress + '%'};
+  max-width: 100%;
   background-color: #2cbe4e;
 `;
 
