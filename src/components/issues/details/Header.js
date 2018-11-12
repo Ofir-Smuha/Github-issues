@@ -13,8 +13,8 @@ type Props = {
 };
 
 const Header = (props: Props) => {
-  const userName = get('user.login', props.currentIssue);
-  const { title, number, created_at, comments } = props.currentIssue;
+  const { title, number, created_at, comments, user } = props.currentIssue;
+  const userName = get('login', user);
   const createdAt = moment(created_at).fromNow();
 
   return (

@@ -13,19 +13,23 @@ import type { Issue, Issues } from 'components/issues/issues.types';
 const initialState = {
   openIssues: [],
   currentIssue: {},
-  issueComments: []
+  issueComments: [],
+  page: 1
 };
 
 export type IssuesState = {|
   +openIssues: Issues,
   +currentIssue: Issue,
-  +issueComments: []
+  +issueComments: [],
+  +page: number
 |};
 
 export default handleActions(
   {
-    [SET_ISSUES]: (state: IssuesState, { payload }): IssuesState =>
-      set('openIssues', payload.openIssues, state),
+    [SET_ISSUES]: (state: IssuesState, { payload }): IssuesState => {
+      console.log(payload);
+      return set('openIssues', payload.openIssues, state);
+    },
     [SET_CURRENT_ISSUE]: (state: IssuesState, { payload }) => {
       const currentIssue = state.openIssues.find(
         issue => issue.id.toString() === payload.issueId

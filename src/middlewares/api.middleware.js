@@ -24,7 +24,7 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     }
 
     const { payload } = ((action: any): ApiAction);
-    const { path, baseUrl, onSuccess, onError } = payload;
+    const { path, baseUrl, onSuccess, onError, handleHeaders } = payload;
     const { networkLabel, data, method = 'GET' } = payload;
     const headers = {};
     // const requestUrl = urljoin(baseUrl || BASE_URL, path);
@@ -38,7 +38,11 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     dispatch(startNetwork(networkLabel));
     apiUtils
       .request({ method, url: path, data, headers })
-      .then(({ body }) => {
+      .then(({ body, header }) => {
+        console.log(header);
+        if (handleHeaders) {
+          console.log('header: ', header);
+        }
         if (onSuccess) {
           dispatchActions(onSuccess(body));
         }
