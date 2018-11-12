@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Header from './Header';
-import IssueContent from './IssueContent';
+import Header from 'components/issues/details/Header';
+import IssueContent from 'components/issues/details/IssueContent';
 import SideBar from './SideBar';
 import {
   setCurrentIssue,
@@ -46,7 +46,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
       this.props.removeComments();
     }
   }
-
   render() {
     if (!this.props.currentIssue) {
       return null;

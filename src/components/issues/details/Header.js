@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { get } from 'lodash/fp';
 import moment from 'moment';
 
-import warning2 from 'assets/images/warning.svg';
+import warning from 'assets/images/warning-white.svg';
 
 import type { Issue } from 'components/issues/issues.types';
 
@@ -66,9 +66,8 @@ const NewIssueButton = styled.button`
   font-size: 12px;
   padding: 5px 10px;
   font-weight: bold;
-  background-color: #28a745;
-  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  color: #fff;
+  background-image: ${({ theme }) => theme.greenGradient};
+  color: ${({ theme }) => theme.white}
   outline: none;
   cursor: pointer;
 `;
@@ -89,15 +88,14 @@ const StatusDisplay = styled.div`
   align-items: center;
   padding: 3px 10px;
   font-weight: bold;
-  background-color: #28a745;
-  background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
-  color: #fff;
+  background-image: ${({ theme }) => theme.greenGradient};
+  color: ${({ theme }) => theme.white}
   border-radius: 3px;
   margin-right: 8px;
 `;
 
 const StatusIcon = styled.div`
-  background: url(${warning2}) no-repeat center;
+  background: url(${warning}) no-repeat center;
   width: 18px;
   height: 18px;
   margin-top: 4px;
@@ -114,24 +112,19 @@ const DetailsContainer = styled.div`
   justify-content: space-between;
 `;
 
-const Name = styled.h1`
-  color: #586069;
+const Name = styled.h3`
+  color: ${({ theme }) => theme.detailsGrey};
   font-size: 14px;
   font-weight: 600;
   margin-right: 5px;
 `;
 
-const OpenedAt = styled.p`
-  color: #586069;
-  font-size: 14px;
-  line-height: 20px;
-  margin-right: 5px;
+const OpenedAt = styled(Name)`
+  font-weight: 400;
 `;
 
-const Comments = styled.p`
-  color: #586069;
-  font-size: 14px;
-  line-height: 20px;
+const Comments = styled(OpenedAt)`
+  margin: 0;
 `;
 
 export default Header;

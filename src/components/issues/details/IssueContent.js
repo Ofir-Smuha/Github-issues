@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IssueComment from './IssueComment';
+import IssueComment from 'components/issues/details/IssueComment';
 
 import type { Issue, Comments } from 'components/issues/issues.types';
 

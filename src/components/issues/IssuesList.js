@@ -2,9 +2,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import IssuePreview from './IssuePreview';
+import IssuePreview from 'components/issues/IssuePreview';
 
-import type { Issues } from './issues.types';
+import type { Issues } from 'components/issues/issues.types';
 
 const List = styled.ul`
   background-color: #f7f8fb;
