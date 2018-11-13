@@ -15,7 +15,7 @@ export const SET_COMMENTS = 'SET_COMMENTS';
 export const REMOVE_COMMENTS = 'REMOVE_COMMENTS';
 export const SET_ISSUES_PAGING = 'SET_ISSUES_PAGING';
 
-export const fetchIssues = (page = 8) =>
+export const fetchIssues = (page = 1, data = {}) =>
   apiAction({
     type: FETCH_ISSUES,
     payload: {
@@ -23,7 +23,8 @@ export const fetchIssues = (page = 8) =>
       path: `https://api.github.com/repos/facebook/create-react-app/issues?page=${page}`,
       onSuccess: setIssues,
       onError: setError,
-      handleHeaders: setPaging
+      handleHeaders: setPaging,
+      data: data
     }
   });
 

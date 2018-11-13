@@ -31,6 +31,10 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     this.props.fetchIssues();
   }
 
+  componentDidUpdate() {
+    console.log(this.props.openIssues);
+  }
+
   render() {
     return (
       <div>

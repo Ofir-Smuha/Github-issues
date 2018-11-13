@@ -15,7 +15,7 @@ const initialState = {
   openIssues: [],
   currentIssue: {},
   issueComments: [],
-  currentPage: 1,
+  currentPage: 5,
   pageCount: 0
 };
 
@@ -43,7 +43,7 @@ export default handleActions(
       set('issueComments', initialState.issueComments, state),
     [SET_ISSUES_PAGING]: (state, { payload }) => {
       const pageCount = get('header.last.page', payload);
-      return set('pageCount', pageCount, state);
+      return set('pageCount', +pageCount, state);
     }
   },
   initialState
