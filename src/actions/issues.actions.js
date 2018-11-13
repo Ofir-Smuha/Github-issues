@@ -24,7 +24,7 @@ export const fetchIssues = (page = 1, data = {}) =>
       onSuccess: setIssues,
       onError: setError,
       handleHeaders: setPaging,
-      data: data
+      data
     }
   });
 

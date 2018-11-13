@@ -27,22 +27,37 @@ type ConnectedProps = {
 type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
+  state = {
+    issuesState: false
+  };
+
   componentDidMount() {
     this.props.fetchIssues();
   }
 
-  componentDidUpdate() {
-    console.log(this.props.openIssues);
-  }
+  handleFetchByState = issuesState => {
+    this.props.fetchIssues(null, { state: issuesState });
+    this.setState({
+      issuesState: issuesState
+    });
+  };
+
+  handlePageChange = page => {
+    if (this.state.issuesState) {
+      this.props.fetchIssues(page, { state: this.state.issuesState });
+    } else {
+      this.props.fetchIssues(page);
+    }
+  };
 
   render() {
     return (
       <div>
         <ListSortWrapper>
-          <SortIssues />
+          <SortIssues handleFetchByState={this.handleFetchByState} />
           <IssuesList openIssues={this.props.openIssues} />
         </ListSortWrapper>
-        <Paginate />
+        <Paginate handlePageChange={this.handlePageChange} />
       </div>
     );
   }

@@ -17,7 +17,7 @@ type OwnProps = {};
 class Paginate extends Component<ConnectedProps & OwnProps> {
   handlePageChange = page => {
     const selectedPage = page.selected + 1;
-    this.props.fetchIssues(selectedPage);
+    this.props.handlePageChange(selectedPage);
   };
 
   render() {
@@ -112,7 +112,6 @@ const ButtonsContainer = styled.div`
 `;
 
 const mapStateToProps = state => ({
-  currentPage: state.issues.currentPage,
   pageCount: state.issues.pageCount
 });
 

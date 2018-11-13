@@ -15,7 +15,6 @@ const initialState = {
   openIssues: [],
   currentIssue: {},
   issueComments: [],
-  currentPage: 5,
   pageCount: 0
 };
 
@@ -23,7 +22,6 @@ export type IssuesState = {|
   +openIssues: Issues,
   +currentIssue: Issue,
   +issueComments: [],
-  +currentPage: number,
   +pageCount: number
 |};
 
