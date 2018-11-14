@@ -2,13 +2,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 import { setSortStateInState, setSortingInState } from 'actions/issues.actions';
 
 import warning from 'assets/images/warning-black.svg';
 import check from 'assets/images/check.svg';
 import downArrow from 'assets/images/drop-down.svg';
-import type { IssuesState } from '../../reducers/issues.reducer';
 
 type ConnectedProps = {
   setSortStateInState: () => void,
@@ -32,11 +32,20 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
   setFetchBySort = sorting => {
     this.props.setSortingInState(sorting);
+    this.setState({
+      isOpen: false
+    });
   };
 
   toggleSort = () => {
     this.setState({
       isOpen: !this.state.isOpen
+    });
+  };
+
+  handleClickOutSide = () => {
+    this.setState({
+      isOpen: false
     });
   };
 
@@ -58,24 +67,27 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
           <SortIcon />
         </SortSelect>
         <DropDownContainer isOpen={this.state.isOpen}>
-          <TitleContainer>
-            <Title>Sort by</Title>
-          </TitleContainer>
-          <OptionContainer onClick={() => this.setFetchBySort()}>
-            <OptionTitle>Newest</OptionTitle>
-          </OptionContainer>
-          <OptionContainer onClick={() => this.setFetchBySort('updated-asc')}>
-            <OptionTitle>Oldest</OptionTitle>
-          </OptionContainer>
-          <OptionContainer onClick={() => this.setFetchBySort('comments')}>
-            <OptionTitle>Most commented</OptionTitle>
-          </OptionContainer>
-          <OptionContainer onClick={() => this.setFetchBySort('comments-asc')}>
-            <OptionTitle>Least comments</OptionTitle>
-          </OptionContainer>
-          <OptionContainer onClick={() => this.setFetchBySort('updated')}>
-            <OptionTitle>Recently updated</OptionTitle>
-          </OptionContainer>
+          <OutsideClickHandler onOutsideClick={this.handleClickOutSide}>
+            <TitleContainer>
+              <Title>Sort by</Title>
+            </TitleContainer>
+            <OptionContainer onClick={() => this.setFetchBySort()}>
+              <OptionTitle>Newest</OptionTitle>
+            </OptionContainer>
+            <OptionContainer onClick={() => this.setFetchBySort('updated-asc')}>
+              <OptionTitle>Oldest</OptionTitle>
+            </OptionContainer>
+            <OptionContainer onClick={() => this.setFetchBySort('comments')}>
+              <OptionTitle>Most commented</OptionTitle>
+            </OptionContainer>
+            <OptionContainer
+              onClick={() => this.setFetchBySort('comments-asc')}>
+              <OptionTitle>Least comments</OptionTitle>
+            </OptionContainer>
+            <OptionContainer onClick={() => this.setFetchBySort('updated')}>
+              <OptionTitle>Recently updated</OptionTitle>
+            </OptionContainer>
+          </OutsideClickHandler>
         </DropDownContainer>
       </SortContainer>
     );
