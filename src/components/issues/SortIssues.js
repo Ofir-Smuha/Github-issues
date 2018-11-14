@@ -2,49 +2,66 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import { setSortStateInState, setSortingInState } from 'actions/issues.actions';
+
 import warning from 'assets/images/warning-black.svg';
 import check from 'assets/images/check.svg';
 import downArrow from 'assets/images/drop-down.svg';
+import type { IssuesState } from '../../reducers/issues.reducer';
 
 class SortIssues extends Component {
-  handleFetchByState = sorting => {
-    this.props.handleFetchByState(sorting);
+  state = {
+    isOpen: false
+  };
+
+  setFetchByState = issuesState => {
+    this.props.setSortStateInState(issuesState);
+  };
+
+  setFetchBySort = sorting => {
+    this.props.setSortingInState(sorting);
+  };
+
+  toggleSort = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
   };
 
   render() {
     return (
       <SortContainer>
         <OpenClosedContainer>
-          <Open onClick={() => this.handleFetchByState('open')}>
+          <Open onClick={() => this.setFetchByState('open')}>
             <OpenIcon />
             <OpenTitle>Open</OpenTitle>
           </Open>
-          <Closed onClick={() => this.handleFetchByState('closed')}>
+          <Closed onClick={() => this.setFetchByState('closed')}>
             <ClosedIcon />
             <ClosedTitle>Closed</ClosedTitle>
           </Closed>
         </OpenClosedContainer>
-        <SortSelect>
+        <SortSelect onClick={this.toggleSort}>
           <SortText>Sort</SortText>
           <SortIcon />
         </SortSelect>
-        <DropDownContainer>
+        <DropDownContainer isOpen={this.state.isOpen}>
           <TitleContainer>
             <Title>Sort by</Title>
           </TitleContainer>
-          <OptionContainer>
+          <OptionContainer onClick={() => this.setFetchBySort()}>
             <OptionTitle>Newest</OptionTitle>
           </OptionContainer>
-          <OptionContainer>
+          <OptionContainer onClick={() => this.setFetchBySort('updated-asc')}>
             <OptionTitle>Oldest</OptionTitle>
           </OptionContainer>
-          <OptionContainer>
+          <OptionContainer onClick={() => this.setFetchBySort('comments')}>
             <OptionTitle>Most commented</OptionTitle>
           </OptionContainer>
-          <OptionContainer>
+          <OptionContainer onClick={() => this.setFetchBySort('comments-asc')}>
             <OptionTitle>Least comments</OptionTitle>
           </OptionContainer>
-          <OptionContainer>
+          <OptionContainer onClick={() => this.setFetchBySort('updated')}>
             <OptionTitle>Recently updated</OptionTitle>
           </OptionContainer>
         </DropDownContainer>
@@ -118,6 +135,7 @@ const SortIcon = styled(OpenIcon)`
 `;
 
 const DropDownContainer = styled.div`
+  display: none;
   position: absolute;
   bottom: -202px;
   right: 0;
@@ -125,6 +143,12 @@ const DropDownContainer = styled.div`
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 3px;
   box-shadow: 0 3px 12px rgba(27, 31, 35, 0.15);
+
+  ${({ isOpen }) =>
+    isOpen &&
+    `
+    display: block;
+  `};
 `;
 
 const TitleContainer = styled.div`
@@ -155,4 +179,6 @@ const OptionTitle = styled(Title)`
   }
 `;
 
-export default connect(null)(SortIssues);
+export default connect(null, { setSortStateInState, setSortingInState })(
+  SortIssues
+);

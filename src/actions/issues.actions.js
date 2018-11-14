@@ -14,8 +14,11 @@ export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 export const SET_COMMENTS = 'SET_COMMENTS';
 export const REMOVE_COMMENTS = 'REMOVE_COMMENTS';
 export const SET_ISSUES_PAGING = 'SET_ISSUES_PAGING';
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+export const SET_SORT_STATE = 'SET_SORT_STATE';
+export const SET_SORTING = 'SET_SORTING';
 
-export const fetchIssues = (page = 1, data = {}) =>
+export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
   apiAction({
     type: FETCH_ISSUES,
     payload: {
@@ -70,6 +73,27 @@ export const setComments = (comments: Comments) => ({
 export const removeComments = () => ({
   type: REMOVE_COMMENTS,
   payload: {}
+});
+
+export const setCurrentPage = (currentPage: number) => ({
+  type: SET_CURRENT_PAGE,
+  payload: {
+    currentPage
+  }
+});
+
+export const setSortStateInState = (issuesState: string) => ({
+  type: SET_SORT_STATE,
+  payload: {
+    issuesState
+  }
+});
+
+export const setSortingInState = (sorting: string) => ({
+  type: SET_SORTING,
+  payload: {
+    sorting
+  }
 });
 
 export const setError = () => ({

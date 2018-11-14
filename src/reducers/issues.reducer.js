@@ -1,28 +1,37 @@
-import { set, get } from 'lodash/fp';
+import { set, get, flow } from 'lodash/fp';
 import { handleActions } from 'redux-actions';
 
 import {
   SET_ISSUES,
   SET_CURRENT_ISSUE,
   SET_COMMENTS,
-  REMOVE_COMMENTS
+  REMOVE_COMMENTS,
+  SET_ISSUES_PAGING,
+  SET_CURRENT_PAGE,
+  SET_SORT_STATE,
+  SET_SORTING
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
-import { SET_ISSUES_PAGING } from '../actions/issues.actions';
 
 const initialState = {
   openIssues: [],
   currentIssue: {},
   issueComments: [],
-  pageCount: 0
+  pageCount: 0,
+  currentPage: 1,
+  issuesState: null,
+  sorting: null
 };
 
 export type IssuesState = {|
   +openIssues: Issues,
   +currentIssue: Issue,
   +issueComments: [],
-  +pageCount: number
+  +pageCount: number,
+  +currentPage: number,
+  +issuesState: any,
+  +sorting: any
 |};
 
 export default handleActions(
@@ -42,7 +51,15 @@ export default handleActions(
     [SET_ISSUES_PAGING]: (state, { payload }) => {
       const pageCount = get('header.last.page', payload);
       return set('pageCount', +pageCount, state);
-    }
+    },
+    [SET_CURRENT_PAGE]: (state, { payload }) =>
+      set('currentPage', payload.currentPage, state),
+    [SET_SORT_STATE]: (state, { payload }) =>
+      flow([set('issuesState', payload.issuesState), set('currentPage', 1)])(
+        state
+      ),
+    [SET_SORTING]: (state, { payload }) =>
+      flow([set('sorting', payload.sorting), set('currentPage', 1)])(state)
   },
   initialState
 );

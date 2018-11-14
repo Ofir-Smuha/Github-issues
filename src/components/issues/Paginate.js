@@ -4,20 +4,19 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import ReactPaginate from 'react-paginate';
 
-import { fetchIssues } from 'actions/issues.actions';
+import { setCurrentPage } from 'actions/issues.actions';
 
 type ConnectedProps = {
-  currentPage: number,
   pageCount: number,
-  fetchIssues: () => void
+  setCurrentPage: () => void
 };
 
 type OwnProps = {};
 
 class Paginate extends Component<ConnectedProps & OwnProps> {
-  handlePageChange = page => {
+  handlePageChange = (page: number) => {
     const selectedPage = page.selected + 1;
-    this.props.handlePageChange(selectedPage);
+    this.props.setCurrentPage(selectedPage);
   };
 
   render() {
@@ -115,4 +114,4 @@ const mapStateToProps = state => ({
   pageCount: state.issues.pageCount
 });
 
-export default connect(mapStateToProps, { fetchIssues })(Paginate);
+export default connect(mapStateToProps, { setCurrentPage })(Paginate);

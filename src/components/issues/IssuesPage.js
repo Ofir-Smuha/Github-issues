@@ -12,59 +12,66 @@ import type { State } from 'types/redux.types';
 import type { Issues } from 'components/issues/issues.types';
 import type { IssuesState } from 'reducers/issues.reducer';
 
-const ListSortWrapper = styled.div`
-  width: 90%;
-  margin: 0 auto;
-`;
-
 type StateWithIssues = State;
 
 type ConnectedProps = {
   fetchIssues: () => void,
-  openIssues: Issues
+  openIssues: Issues,
+  currentPage: number,
+  issuesState: any,
+  sorting: any
 };
 
 type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
   state = {
-    issuesState: false
+    issuesState: false,
+    sorting: false
   };
 
   componentDidMount() {
     this.props.fetchIssues();
   }
 
-  handleFetchByState = issuesState => {
-    this.props.fetchIssues(null, { state: issuesState });
-    this.setState({
-      issuesState: issuesState
-    });
-  };
-
-  handlePageChange = page => {
-    if (this.state.issuesState) {
-      this.props.fetchIssues(page, { state: this.state.issuesState });
-    } else {
-      this.props.fetchIssues(page);
+  componentDidUpdate(prevProps) {
+    console.log('prevprops', prevProps);
+    console.log(prevProps.issuesState !== this.props.issuesState);
+    if (
+      prevProps.sorting !== this.props.sorting ||
+      prevProps.issuesState !== this.props.issuesState ||
+      prevProps.currentPage !== this.props.currentPage
+    ) {
+      this.props.fetchIssues(this.props.currentPage, {
+        state: this.props.issuesState,
+        sort: this.props.sorting
+      });
     }
-  };
+  }
 
   render() {
     return (
       <div>
         <ListSortWrapper>
-          <SortIssues handleFetchByState={this.handleFetchByState} />
+          <SortIssues />
           <IssuesList openIssues={this.props.openIssues} />
         </ListSortWrapper>
-        <Paginate handlePageChange={this.handlePageChange} />
+        <Paginate />
       </div>
     );
   }
 }
 
+const ListSortWrapper = styled.div`
+  width: 90%;
+  margin: 0 auto;
+`;
+
 const mapStateToProps = (state: StateWithIssues) => ({
-  openIssues: state.issues.openIssues
+  openIssues: state.issues.openIssues,
+  currentPage: state.issues.currentPage,
+  issuesState: state.issues.issuesState,
+  sorting: state.issues.sorting
 });
 
 export default connect(mapStateToProps, { fetchIssues })(IssuesPage);
