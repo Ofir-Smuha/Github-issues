@@ -14,8 +14,8 @@ type ConnectedProps = {
 type OwnProps = {};
 
 class Paginate extends Component<ConnectedProps & OwnProps> {
-  handlePageChange = (page: number) => {
-    const selectedPage = page.selected + 1;
+  handlePageChange = ({ selected }: { selected: number }) => {
+    const selectedPage = selected + 1;
     this.props.setCurrentPage(selectedPage);
   };
 

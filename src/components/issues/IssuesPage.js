@@ -35,8 +35,6 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('prevprops', prevProps);
-    console.log(prevProps.issuesState !== this.props.issuesState);
     if (
       prevProps.sorting !== this.props.sorting ||
       prevProps.issuesState !== this.props.issuesState ||

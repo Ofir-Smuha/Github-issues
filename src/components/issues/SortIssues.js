@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -9,7 +10,18 @@ import check from 'assets/images/check.svg';
 import downArrow from 'assets/images/drop-down.svg';
 import type { IssuesState } from '../../reducers/issues.reducer';
 
-class SortIssues extends Component {
+type ConnectedProps = {
+  setSortStateInState: () => void,
+  setSortingInState: () => void
+};
+
+type OwnProps = {};
+
+type State = {
+  isOpen: boolean
+};
+
+class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
     isOpen: false
   };
