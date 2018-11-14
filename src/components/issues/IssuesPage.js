@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import IssuesReset from 'components/issues/IssuesReset';
 import IssuesList from 'components/issues/IssuesList';
 import SortIssues from 'components/issues/SortIssues';
 import Paginate from 'components/issues/Paginate';
@@ -49,20 +50,23 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
   render() {
     return (
-      <div>
-        <ListSortWrapper>
-          <SortIssues />
-          <IssuesList openIssues={this.props.openIssues} />
-        </ListSortWrapper>
+      <Wrapper>
+        <IssuesReset
+          sorting={this.props.sorting}
+          issuesState={this.props.issuesState}
+        />
+        <SortIssues />
+        <IssuesList openIssues={this.props.openIssues} />
         <Paginate />
-      </div>
+      </Wrapper>
     );
   }
 }
 
-const ListSortWrapper = styled.div`
+const Wrapper = styled.div`
+  margin-top: 70px;
   width: 90%;
-  margin: 0 auto;
+  margin: 70px auto 0;
 `;
 
 const mapStateToProps = (state: StateWithIssues) => ({

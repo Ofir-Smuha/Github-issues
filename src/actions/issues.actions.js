@@ -17,6 +17,7 @@ export const SET_ISSUES_PAGING = 'SET_ISSUES_PAGING';
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
+export const RESET_SORTING = 'RESET_SORTING';
 
 export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
   apiAction({
@@ -94,6 +95,10 @@ export const setSortingInState = (sorting: string) => ({
   payload: {
     sorting
   }
+});
+
+export const ResetIssuesSort = () => ({
+  type: RESET_SORTING
 });
 
 export const setError = () => ({

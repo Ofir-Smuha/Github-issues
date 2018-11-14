@@ -9,7 +9,8 @@ import {
   SET_ISSUES_PAGING,
   SET_CURRENT_PAGE,
   SET_SORT_STATE,
-  SET_SORTING
+  SET_SORTING,
+  RESET_SORTING
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -59,7 +60,9 @@ export default handleActions(
         state
       ),
     [SET_SORTING]: (state, { payload }) =>
-      flow([set('sorting', payload.sorting), set('currentPage', 1)])(state)
+      flow([set('sorting', payload.sorting), set('currentPage', 1)])(state),
+    [RESET_SORTING]: state =>
+      flow([set('issuesState', null), set('sorting', null)])(state)
   },
   initialState
 );

@@ -62,19 +62,19 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
             <ClosedTitle>Closed</ClosedTitle>
           </Closed>
         </OpenClosedContainer>
-        <SortSelect onClick={this.toggleSort}>
-          <SortText>Sort</SortText>
-          <SortIcon />
-        </SortSelect>
-        <DropDownContainer isOpen={this.state.isOpen}>
-          <OutsideClickHandler onOutsideClick={this.handleClickOutSide}>
+        <OutsideClickHandler onOutsideClick={this.handleClickOutSide}>
+          <SortSelect onClick={this.toggleSort}>
+            <SortText>Sort</SortText>
+            <SortIcon />
+          </SortSelect>
+          <DropDownContainer isOpen={this.state.isOpen}>
             <TitleContainer>
               <Title>Sort by</Title>
             </TitleContainer>
-            <OptionContainer onClick={() => this.setFetchBySort()}>
+            <OptionContainer onClick={() => this.setFetchBySort('created')}>
               <OptionTitle>Newest</OptionTitle>
             </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('updated-asc')}>
+            <OptionContainer onClick={() => this.setFetchBySort('created-asc')}>
               <OptionTitle>Oldest</OptionTitle>
             </OptionContainer>
             <OptionContainer onClick={() => this.setFetchBySort('comments')}>
@@ -87,8 +87,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
             <OptionContainer onClick={() => this.setFetchBySort('updated')}>
               <OptionTitle>Recently updated</OptionTitle>
             </OptionContainer>
-          </OutsideClickHandler>
-        </DropDownContainer>
+          </DropDownContainer>
+        </OutsideClickHandler>
       </SortContainer>
     );
   }
