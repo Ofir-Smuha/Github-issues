@@ -50,7 +50,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
 
   componentWillUnmount() {
     this.props.removeCurrentIssue();
-    if (this.props.currentIssue.comments) {
+    if (this.currentIssue && this.props.currentIssue.comments) {
       this.props.removeComments();
     }
   }

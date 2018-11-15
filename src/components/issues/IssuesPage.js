@@ -15,6 +15,7 @@ import loader from 'assets/images/loader.gif';
 import type { State } from 'types/redux.types';
 import type { Issues } from 'components/issues/issues.types';
 import type { IssuesState } from 'reducers/issues.reducer';
+import ErrorBoundary from '../ErrorBoundary';
 
 type StateWithIssues = State;
 
