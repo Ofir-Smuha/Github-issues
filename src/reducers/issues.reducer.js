@@ -14,10 +14,11 @@ import {
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
+import { REMOVE_CURRENT_ISSUE } from '../actions/issues.actions';
 
 const initialState = {
   openIssues: [],
-  currentIssue: {},
+  currentIssue: null,
   issueComments: [],
   pageCount: 0,
   currentPage: 1,
@@ -39,12 +40,10 @@ export default handleActions(
   {
     [SET_ISSUES]: (state: IssuesState, { payload }): IssuesState =>
       set('openIssues', payload.openIssues, state),
-    [SET_CURRENT_ISSUE]: (state: IssuesState, { payload }) => {
-      const currentIssue = state.openIssues.find(
-        issue => issue.id.toString() === payload.issueId
-      );
-      return set('currentIssue', { ...currentIssue }, state);
-    },
+    [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) =>
+      set('currentIssue', issue, state),
+    [REMOVE_CURRENT_ISSUE]: (state, payload) =>
+      set('currentIssue', null, state),
     [SET_COMMENTS]: (state: IssuesState, { payload }) =>
       set('issueComments', payload.comments, state),
     [REMOVE_COMMENTS]: state =>
