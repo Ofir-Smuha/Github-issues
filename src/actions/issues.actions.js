@@ -19,12 +19,15 @@ export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
 
+export const ISSUES_LABEL = 'issues';
+
 export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
   apiAction({
     type: FETCH_ISSUES,
     payload: {
       method: 'GET',
       path: `https://api.github.com/repos/facebook/create-react-app/issues?page=${page}`,
+      networkLabel: ISSUES_LABEL,
       onSuccess: setIssues,
       onError: setError,
       handleHeaders: setPaging,
@@ -59,6 +62,7 @@ export const fetchComments = (commentsURL: string) =>
     payload: {
       method: 'GET',
       path: commentsURL,
+      networkLabel: ISSUES_LABEL,
       onSuccess: setComments,
       onError: setError
     }

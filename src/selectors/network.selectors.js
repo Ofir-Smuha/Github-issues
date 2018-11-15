@@ -12,7 +12,11 @@ export const isLoadingSelector = createSelector(
   (state, networkLabel) => networkLabel,
   (network: NetworkState, networkLabel: string | Array<string>) => {
     const labels = castArray(networkLabel);
-
+    console.log(labels);
+    console.log(
+      'some: ',
+      some(currentLabel => network[currentLabel] > 0, labels)
+    );
     return some(currentLabel => network[currentLabel] > 0, labels);
   }
 );

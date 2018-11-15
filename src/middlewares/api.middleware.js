@@ -34,7 +34,6 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     // }
 
     next(action);
-
     dispatch(startNetwork(networkLabel));
     apiUtils
       .request({ method, url: path, data, headers })
