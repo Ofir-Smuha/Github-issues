@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 
-class ErrorBoundary extends Component {
+type Props = {};
+
+type State = {
+  hasError: boolean
+};
+
+class ErrorBoundary extends Component<Props, State> {
   state = {
     hasError: false
   };
@@ -8,6 +14,10 @@ class ErrorBoundary extends Component {
   // static getDerivedStateFromError(error) {
   //   return { hasError: true };
   // }
+
+  componentDidMount() {
+    console.log(this.props.children);
+  }
 
   componentDidCatch(error, info) {
     this.setState({

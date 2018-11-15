@@ -14,6 +14,8 @@ const IssueContent = (props: Props) => {
     return null;
   }
 
+  console.log(props);
+
   const renderComments = () => {
     if (props.currentIssue.comments) {
       return props.issueComments.map(comment => (

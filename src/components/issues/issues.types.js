@@ -11,7 +11,7 @@ export type Issue = {
 };
 
 export type SideBarIssue = {
-  assignees?: {},
+  assignee?: {},
   labels?: Object[],
   milestone?: any,
   projects?: any

@@ -15,7 +15,6 @@ import loader from 'assets/images/loader.gif';
 import type { State } from 'types/redux.types';
 import type { Issues } from 'components/issues/issues.types';
 import type { IssuesState } from 'reducers/issues.reducer';
-import ErrorBoundary from '../ErrorBoundary';
 
 type StateWithIssues = State;
 
@@ -30,7 +29,12 @@ type ConnectedProps = {
 
 type OwnProps = {};
 
-class IssuesPage extends Component<ConnectedProps & OwnProps> {
+type OwnState = {
+  issuesState: any,
+  sorting: any
+};
+
+class IssuesPage extends Component<ConnectedProps & OwnProps, OwnState> {
   state = {
     issuesState: false,
     sorting: false
