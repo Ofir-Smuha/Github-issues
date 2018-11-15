@@ -32,7 +32,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
   };
 
   componentDidMount() {
-    this.props.fetchIssues();
+    this.handleFetchIssues();
   }
 
   componentDidUpdate(prevProps) {
@@ -41,12 +41,16 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
       prevProps.issuesState !== this.props.issuesState ||
       prevProps.currentPage !== this.props.currentPage
     ) {
-      this.props.fetchIssues(this.props.currentPage, {
-        state: this.props.issuesState,
-        sort: this.props.sorting
-      });
+      this.handleFetchIssues();
     }
   }
+
+  handleFetchIssues = () => {
+    this.props.fetchIssues(this.props.currentPage, {
+      state: this.props.issuesState,
+      sort: this.props.sorting
+    });
+  };
 
   render() {
     return (
