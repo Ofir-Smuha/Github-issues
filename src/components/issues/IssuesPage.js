@@ -40,7 +40,6 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(this.props.openIssues);
     if (
       prevProps.sorting !== this.props.sorting ||
       prevProps.issuesState !== this.props.issuesState ||

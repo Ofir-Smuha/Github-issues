@@ -7,7 +7,8 @@ import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
 import SideBar from 'components/issues/details/SideBar';
 import {
-  setCurrentIssue,
+  fetchIssue,
+  removeCurrentIssue,
   fetchComments,
   removeComments
 } from 'actions/issues.actions';
@@ -18,9 +19,11 @@ import type { Issue, Comments } from '../issues.types';
 type OwnProps = {};
 
 type ConnectedProps = {
-  setCurrentIssue: () => void,
+  fetchIssue: () => void,
+  removeCurrentIssue: () => void,
   fetchComments: () => void,
-  currentIssue: Issue,
+  removeComments: () => void,
+  currentIssue?: Issue,
   issueComments: Comments,
   match: Object,
   params: Object
@@ -28,7 +31,7 @@ type ConnectedProps = {
 
 class IssueDetails extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    this.props.setCurrentIssue(this.props.match.params.issueId);
+    this.props.fetchIssue(this.props.match.params.issueId);
   }
 
   componentDidUpdate(prevProps) {
@@ -41,10 +44,12 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
   }
 
   componentWillUnmount() {
+    this.props.removeCurrentIssue();
     if (this.props.currentIssue.comments) {
       this.props.removeComments();
     }
   }
+
   render() {
     if (!this.props.currentIssue) {
       return null;
@@ -82,7 +87,8 @@ const mapStateToProps = (state: State) => ({
 });
 
 export default connect(mapStateToProps, {
-  setCurrentIssue,
+  fetchIssue,
+  removeCurrentIssue,
   fetchComments,
   removeComments
 })(IssueDetails);
