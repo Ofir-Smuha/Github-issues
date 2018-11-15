@@ -40,7 +40,6 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
       .then(({ body, header }) => {
         if (handleHeaders) {
           const parsedLink = parse(header.link);
-          console.log(header);
           dispatchActions(handleHeaders(parsedLink));
         }
         if (onSuccess) {

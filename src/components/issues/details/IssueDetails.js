@@ -6,12 +6,16 @@ import styled from 'styled-components';
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
 import SideBar from 'components/issues/details/SideBar';
+import { isLoadingSelector } from 'selectors/network.selectors';
 import {
   fetchIssue,
   removeCurrentIssue,
   fetchComments,
-  removeComments
+  removeComments,
+  ISSUE_LABEL
 } from 'actions/issues.actions';
+
+import loader from 'assets/images/loader.gif';
 
 import type { State } from 'types/redux.types';
 import type { Issue, Comments } from '../issues.types';
@@ -36,6 +40,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
 
   componentDidUpdate(prevProps) {
     if (
+      this.propscurrentIssue &&
       this.props.currentIssue.comments &&
       this.props.currentIssue !== prevProps.currentIssue
     ) {
@@ -52,7 +57,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
 
   render() {
     if (!this.props.currentIssue) {
-      return null;
+      return <Loader isLoading={this.props.isLoading} />;
     }
     return (
       <Wrapper>
@@ -81,9 +86,27 @@ const ContentContainer = styled.div`
   justify-content: space-between;
 `;
 
+const Loader = styled.div`
+  display: none;
+  background: url(${loader}) no-repeat center;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  ${({ isLoading }) =>
+    isLoading &&
+    `
+    display: block
+  `};
+`;
+
 const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
-  issueComments: state.issues.issueComments
+  issueComments: state.issues.issueComments,
+  isLoading: isLoadingSelector(state, ISSUE_LABEL)
 });
 
 export default connect(mapStateToProps, {
