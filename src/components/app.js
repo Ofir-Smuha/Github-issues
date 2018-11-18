@@ -9,6 +9,7 @@ import history from 'utils/history.utils';
 import store from 'store';
 import theme from 'constants/themes.constants';
 
+import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import ErrorBoundary from './ErrorBoundary';
@@ -25,6 +26,7 @@ class App extends React.Component<Props> {
               <Switch>
                 <Route exact path="/issues" component={IssuesPage} />
                 <Route exact path="/issues/:issueId" component={IssueDetails} />
+                <Route exact path="/login" component={Login} />
                 <Redirect exact from="/" to="/issues" />
               </Switch>
             </Router>
