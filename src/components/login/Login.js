@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 type connectedProps = {};
 
@@ -9,18 +11,56 @@ type OwnProps = {};
 
 type State = {};
 
+const LoginSchema = yup.object().shape({
+  name: yup.string().required('User name is required'),
+  password: yup
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .required('Password name is required')
+});
+
 class Login extends Component<connectedProps & OwnProps, State> {
   state = {};
+
+  handleLogin = vals => {
+    console.log('vals', vals);
+  };
 
   render() {
     return (
       <Wrapper>
-        <LoginContainer>
-          <Title>Login</Title>
-          <UserName placeholder="Name" />
-          <Password placeholder="Passowrd" />
-          <LoginButton>Login</LoginButton>
-        </LoginContainer>
+        <Formik
+          initialValues={{
+            name: '',
+            password: ''
+          }}
+          validationSchema={LoginSchema}
+          onSubmit={values => {
+            this.handleLogin(values);
+          }}
+          render={({ errors, values, handleSubmit, handleChange, touched }) => (
+            <LoginContainer onSubmit={handleSubmit}>
+              <Title>Login</Title>
+              {touched.name &&
+                errors.name && <FormError>{errors.name}</FormError>}
+              <UserName
+                type="text"
+                name="name"
+                placeholder="Name"
+                onChange={handleChange}
+              />
+              {touched.password &&
+                errors.password && <FormError>{errors.password}</FormError>}
+              <Password
+                type="text"
+                name="password"
+                placeholder="Passowrd"
+                onChange={handleChange}
+              />
+              <LoginButton type="submit">Login</LoginButton>
+            </LoginContainer>
+          )}
+        />
       </Wrapper>
     );
   }
@@ -60,6 +100,12 @@ const UserName = styled.input`
 `;
 
 const Password = styled(UserName)``;
+
+const FormError = styled.label`
+  font-size: 12px;
+  color: red;
+  margin-bottom: 5px;
+`;
 
 const LoginButton = styled.button`
   font-size: 14px;
