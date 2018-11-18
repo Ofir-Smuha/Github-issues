@@ -29,14 +29,14 @@ class Paginate extends Component<ConnectedProps & OwnProps> {
       <PaginateContainer>
         <ButtonsContainer>
           <ReactPaginate
-            previousLabel={'previous'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            breakClassName={'break'}
+            previousLabel="previous"
+            nextLabel="next"
+            breakLabel="..."
+            breakClassName="break"
             pageCount={this.props.pageCount}
             pageRangeDisplayed={5}
             onPageChange={this.handlePageChange}
-            activeClassName={'active'}
+            activeClassName="active"
             pageClassName="pageButton"
             containerClassName="buttonsContainer"
             previousClassName="previous"
