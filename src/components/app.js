@@ -13,7 +13,9 @@ import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import ErrorBoundary from './ErrorBoundary';
 
-class App extends React.Component<{||}> {
+type Props = {};
+
+class App extends React.Component<Props> {
   render() {
     return (
       <Provider store={store}>
@@ -23,7 +25,7 @@ class App extends React.Component<{||}> {
               <Switch>
                 <Route exact path="/issues" component={IssuesPage} />
                 <Route exact path="/issues/:issueId" component={IssueDetails} />
-                <Redirect from="/" to="/issues" />
+                <Redirect exact from="/" to="/issues" />
               </Switch>
             </Router>
           </ErrorBoundary>
