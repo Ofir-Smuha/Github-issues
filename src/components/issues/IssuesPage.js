@@ -26,11 +26,6 @@ type ConnectedProps = {
 type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
-  state = {
-    issuesState: false,
-    sorting: false
-  };
-
   componentDidMount() {
     this.handleFetchIssues();
   }

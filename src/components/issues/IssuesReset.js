@@ -20,7 +20,7 @@ class IssuesReset extends Component<connectedProps & OwnProps> {
     }
 
     return (
-      <Reset onClick={() => this.props.ResetIssuesSort()}>
+      <Reset onClick={this.props.ResetIssuesSort}>
         Clear current search query and sorts
       </Reset>
     );
