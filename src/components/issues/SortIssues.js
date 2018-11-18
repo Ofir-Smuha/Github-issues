@@ -55,16 +55,16 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         <OpenClosedContainer>
           <Open onClick={() => this.setFetchByState('open')}>
             <OpenIcon />
-            <OpenTitle>Open</OpenTitle>
+            <BarText>Open</BarText>
           </Open>
           <Closed onClick={() => this.setFetchByState('closed')}>
             <ClosedIcon />
-            <ClosedTitle>Closed</ClosedTitle>
+            <BarText>Closed</BarText>
           </Closed>
         </OpenClosedContainer>
         <OutsideClickHandler onOutsideClick={this.handleClickOutSide}>
           <SortSelect onClick={this.toggleSort}>
-            <SortText>Sort</SortText>
+            <BarText>Sort</BarText>
             <SortIcon />
           </SortSelect>
           <DropDownContainer isOpen={this.state.isOpen}>
@@ -117,7 +117,7 @@ const Open = styled.div`
   cursor: pointer;
 `;
 
-const OpenTitle = styled.h3`
+const BarText = styled.h3`
   color: #586069;
   font-size: 14px;
   font-weight: 400;
@@ -135,8 +135,6 @@ const Closed = styled(Open)`
   margin-left: 10px;
 `;
 
-const ClosedTitle = styled(OpenTitle)``;
-
 const ClosedIcon = styled(OpenIcon)`
   background: url(${check}) no-repeat center;
   width: 18px;
@@ -148,8 +146,6 @@ const SortSelect = styled.div`
   align-items: center;
   cursor: pointer;
 `;
-
-const SortText = styled(OpenTitle)``;
 
 const SortIcon = styled(OpenIcon)`
   background: url(${downArrow}) no-repeat center;
