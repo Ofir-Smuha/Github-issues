@@ -1,6 +1,6 @@
 // @flow
 import { get, castArray, compact } from 'lodash/fp';
-// import urljoin from 'url-join';
+import parse from 'parse-link-header';
 
 import apiUtils from 'utils/api.utils';
 import { startNetwork, endNetwork } from 'actions/network.actions';
@@ -24,7 +24,7 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     }
 
     const { payload } = ((action: any): ApiAction);
-    const { path, baseUrl, onSuccess, onError } = payload;
+    const { path, baseUrl, onSuccess, onError, handleHeaders } = payload;
     const { networkLabel, data, method = 'GET' } = payload;
     const headers = {};
     // const requestUrl = urljoin(baseUrl || BASE_URL, path);
@@ -38,7 +38,10 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     dispatch(startNetwork(networkLabel));
     apiUtils
       .request({ method, url: path, data, headers })
-      .then(({ body }) => {
+      .then(({ body, header }) => {
+        if (handleHeaders) {
+          dispatchActions(handleHeaders(header));
+        }
         if (onSuccess) {
           dispatchActions(onSuccess(body));
         }

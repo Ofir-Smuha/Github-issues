@@ -1,4 +1,4 @@
-import { set } from 'lodash/fp';
+import { set, get } from 'lodash/fp';
 import { handleActions } from 'redux-actions';
 
 import {
@@ -9,17 +9,22 @@ import {
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
+import { SET_ISSUES_PAGING } from '../actions/issues.actions';
 
 const initialState = {
   openIssues: [],
   currentIssue: {},
-  issueComments: []
+  issueComments: [],
+  currentPage: 5,
+  pageCount: 0
 };
 
 export type IssuesState = {|
   +openIssues: Issues,
   +currentIssue: Issue,
-  +issueComments: []
+  +issueComments: [],
+  +currentPage: number,
+  +pageCount: number
 |};
 
 export default handleActions(
@@ -35,7 +40,11 @@ export default handleActions(
     [SET_COMMENTS]: (state: IssuesState, { payload }) =>
       set('issueComments', payload.comments, state),
     [REMOVE_COMMENTS]: state =>
-      set('issueComments', initialState.issueComments, state)
+      set('issueComments', initialState.issueComments, state),
+    [SET_ISSUES_PAGING]: (state, { payload }) => {
+      const pageCount = get('header.last.page', payload);
+      return set('pageCount', +pageCount, state);
+    }
   },
   initialState
 );

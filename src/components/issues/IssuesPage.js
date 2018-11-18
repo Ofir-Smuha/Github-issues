@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import IssuesList from 'components/issues/IssuesList';
 import SortIssues from 'components/issues/SortIssues';
+import Paginate from 'components/issues/Paginate';
 import { fetchIssues } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
@@ -30,6 +31,8 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     this.props.fetchIssues();
   }
 
+  componentDidUpdate() {}
+
   render() {
     return (
       <div>
@@ -37,6 +40,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
           <SortIssues />
           <IssuesList openIssues={this.props.openIssues} />
         </ListSortWrapper>
+        <Paginate />
       </div>
     );
   }
