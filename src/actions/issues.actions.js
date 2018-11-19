@@ -3,14 +3,15 @@ import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
 
 // import type { BaseAction } from 'types/redux.types';
-import type { Issues, Comments } from 'components/issues/issues.actions';
+import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
 export type Header = {};
 export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
 export const SET_ISSUES = 'SET_ISSUES';
-export const SET_ERROR = 'SET_ERROR';
+export const FETCH_ISSUE = 'FETCH_ISSUE';
 export const SET_CURRENT_ISSUE = 'SET_CURRENT_ISSUE';
+export const REMOVE_CURRENT_ISSUE = 'REMOVE_CURRENT_ISSUE';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 export const SET_COMMENTS = 'SET_COMMENTS';
 export const REMOVE_COMMENTS = 'REMOVE_COMMENTS';
@@ -19,6 +20,10 @@ export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
+export const SET_ERROR = 'SET_ERROR';
+
+export const ISSUES_LABEL = 'issues';
+export const ISSUE_LABEL = 'issue';
 
 export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
   apiAction({
@@ -26,6 +31,7 @@ export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
     payload: {
       method: 'GET',
       path: `https://api.github.com/repos/facebook/create-react-app/issues?page=${page}`,
+      networkLabel: ISSUES_LABEL,
       onSuccess: setIssues,
       onError: setError,
       handleHeaders: setPaging,
@@ -47,11 +53,29 @@ export const setPaging = (header: Header) => ({
   }
 });
 
-export const setCurrentIssue = (issueId: id) => ({
+export const fetchIssue = (issueNumber: number) =>
+  apiAction({
+    type: FETCH_ISSUE,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/repos/facebook/create-react-app/issues/${issueNumber}`,
+      networkLabel: ISSUE_LABEL,
+      onSuccess: setCurrentIssue,
+      onError: setError,
+      issueNumber
+    }
+  });
+
+export const setCurrentIssue = (issue: Issue) => ({
   type: SET_CURRENT_ISSUE,
   payload: {
-    issueId: issueId
+    issue
   }
+});
+
+export const removeCurrentIssue = () => ({
+  type: REMOVE_CURRENT_ISSUE,
+  payload: {}
 });
 
 export const fetchComments = (commentsURL: string) =>
@@ -60,6 +84,7 @@ export const fetchComments = (commentsURL: string) =>
     payload: {
       method: 'GET',
       path: commentsURL,
+      networkLabel: ISSUES_LABEL,
       onSuccess: setComments,
       onError: setError
     }

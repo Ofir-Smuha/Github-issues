@@ -6,11 +6,17 @@ import styled from 'styled-components';
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
 import SideBar from 'components/issues/details/SideBar';
+import Loader from 'components/common/Loader';
+import { isLoadingSelector } from 'selectors/network.selectors';
 import {
-  setCurrentIssue,
+  fetchIssue,
+  removeCurrentIssue,
   fetchComments,
-  removeComments
+  removeComments,
+  ISSUE_LABEL
 } from 'actions/issues.actions';
+
+import loader from 'assets/images/loader.gif';
 
 import type { State } from 'types/redux.types';
 import type { Issue, Comments } from '../issues.types';
@@ -18,9 +24,11 @@ import type { Issue, Comments } from '../issues.types';
 type OwnProps = {};
 
 type ConnectedProps = {
-  setCurrentIssue: () => void,
+  fetchIssue: () => void,
+  removeCurrentIssue: () => void,
   fetchComments: () => void,
-  currentIssue: Issue,
+  removeComments: () => void,
+  currentIssue?: Issue,
   issueComments: Comments,
   match: Object,
   params: Object
@@ -28,11 +36,12 @@ type ConnectedProps = {
 
 class IssueDetails extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    this.props.setCurrentIssue(this.props.match.params.issueId);
+    this.props.fetchIssue(this.props.match.params.issueId);
   }
 
   componentDidUpdate(prevProps) {
     if (
+      this.propscurrentIssue &&
       this.props.currentIssue.comments &&
       this.props.currentIssue !== prevProps.currentIssue
     ) {
@@ -41,13 +50,15 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
   }
 
   componentWillUnmount() {
+    this.props.removeCurrentIssue();
     if (this.props.currentIssue.comments) {
       this.props.removeComments();
     }
   }
+
   render() {
     if (!this.props.currentIssue) {
-      return null;
+      return <Loader isLoading={this.props.isLoading} />;
     }
     return (
       <Wrapper>
@@ -78,11 +89,13 @@ const ContentContainer = styled.div`
 
 const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
-  issueComments: state.issues.issueComments
+  issueComments: state.issues.issueComments,
+  isLoading: isLoadingSelector(state, ISSUE_LABEL)
 });
 
 export default connect(mapStateToProps, {
-  setCurrentIssue,
+  fetchIssue,
+  removeCurrentIssue,
   fetchComments,
   removeComments
 })(IssueDetails);

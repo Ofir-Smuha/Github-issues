@@ -87,7 +87,7 @@ const IssuePreview = (props: Props) => {
     created_at: openedAt,
     comments,
     title,
-    id
+    number
   } = props.openIssue;
 
   return (
@@ -95,7 +95,7 @@ const IssuePreview = (props: Props) => {
       <IconDescriptionContainer>
         <AlertIcon />
         <IssueDescription>
-          <IssueTitle onClick={() => props.history.push(`/issues/${id}`)}>
+          <IssueTitle onClick={() => props.history.push(`/issues/${number}`)}>
             {title}
           </IssueTitle>
           <OpendAt>
