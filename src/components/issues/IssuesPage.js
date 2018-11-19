@@ -7,6 +7,8 @@ import IssuesReset from 'components/issues/IssuesReset';
 import IssuesList from 'components/issues/IssuesList';
 import SortIssues from 'components/issues/SortIssues';
 import Paginate from 'components/issues/Paginate';
+import Loader from 'components/common/Loader';
+
 import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
@@ -29,19 +31,9 @@ type ConnectedProps = {
 
 type OwnProps = {};
 
-type OwnState = {
-  issuesState: any,
-  sorting: any
-};
-
-class IssuesPage extends Component<ConnectedProps & OwnProps, OwnState> {
-  state = {
-    issuesState: false,
-    sorting: false
-  };
-
+class IssuesPage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    this.props.fetchIssues();
+    this.handleFetchIssues();
   }
 
   componentDidUpdate(prevProps) {
@@ -50,12 +42,16 @@ class IssuesPage extends Component<ConnectedProps & OwnProps, OwnState> {
       prevProps.issuesState !== this.props.issuesState ||
       prevProps.currentPage !== this.props.currentPage
     ) {
-      this.props.fetchIssues(this.props.currentPage, {
-        state: this.props.issuesState,
-        sort: this.props.sorting
-      });
+      this.handleFetchIssues();
     }
   }
+
+  handleFetchIssues = () => {
+    this.props.fetchIssues(this.props.currentPage, {
+      state: this.props.issuesState,
+      sort: this.props.sorting
+    });
+  };
 
   render() {
     return (
@@ -77,23 +73,6 @@ const Wrapper = styled.div`
   margin-top: 70px;
   width: 90%;
   margin: 70px auto 0;
-`;
-
-const Loader = styled.div`
-  display: none;
-  background: url(${loader}) no-repeat center;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  ${({ isLoading }) =>
-    isLoading &&
-    `
-    display: block
-  `};
 `;
 
 const mapStateToProps = (state: StateWithIssues) => ({

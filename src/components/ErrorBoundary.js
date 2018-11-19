@@ -11,19 +11,12 @@ class ErrorBoundary extends Component<Props, State> {
     hasError: false
   };
 
-  // static getDerivedStateFromError(error) {
-  //   return { hasError: true };
-  // }
-
-  componentDidMount() {
-    console.log(this.props.children);
-  }
-
   componentDidCatch(error, info) {
     this.setState({
       hasError: true
     });
   }
+
   render() {
     if (this.state.hasError) {
       return <h1>Something went wrong</h1>;
