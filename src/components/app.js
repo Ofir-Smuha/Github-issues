@@ -11,19 +11,24 @@ import theme from 'constants/themes.constants';
 
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
+import ErrorBoundary from './ErrorBoundary';
 
-class App extends React.Component<{||}> {
+type Props = {};
+
+class App extends React.Component<Props> {
   render() {
     return (
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/issues" component={IssuesPage} />
-              <Route exact path="/issues/:issueId" component={IssueDetails} />
-              <Redirect from="/" to="/issues" />
-            </Switch>
-          </Router>
+          <ErrorBoundary>
+            <Router history={history}>
+              <Switch>
+                <Route exact path="/issues" component={IssuesPage} />
+                <Route exact path="/issues/:issueId" component={IssueDetails} />
+                <Redirect exact from="/" to="/issues" />
+              </Switch>
+            </Router>
+          </ErrorBoundary>
         </ThemeProvider>
       </Provider>
     );
