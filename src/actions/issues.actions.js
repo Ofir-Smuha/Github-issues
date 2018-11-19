@@ -1,5 +1,6 @@
 // @flow
 import { apiAction } from 'actions/api.actions';
+import { extractLinkFromHeaders } from 'utils/github.utils';
 
 // import type { BaseAction } from 'types/redux.types';
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
@@ -48,7 +49,7 @@ export const setIssues = (openIssues: Issues) => ({
 export const setPaging = (header: Header) => ({
   type: SET_ISSUES_PAGING,
   payload: {
-    header
+    header: extractLinkFromHeaders(header)
   }
 });
 

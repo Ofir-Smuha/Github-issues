@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
 import SideBar from 'components/issues/details/SideBar';
+import Loader from 'components/common/Loader';
 import { isLoadingSelector } from 'selectors/network.selectors';
 import {
   fetchIssue,
@@ -84,23 +85,6 @@ const Wrapper = styled.div`
 const ContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
-`;
-
-const Loader = styled.div`
-  display: none;
-  background: url(${loader}) no-repeat center;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  ${({ isLoading }) =>
-    isLoading &&
-    `
-    display: block
-  `};
 `;
 
 const mapStateToProps = (state: State) => ({

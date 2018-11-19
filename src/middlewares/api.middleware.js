@@ -34,14 +34,14 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     // }
 
     next(action);
+
     dispatch(startNetwork(networkLabel));
     apiUtils
       .request({ method, url: path, data, headers })
       .then(({ body, header }) => {
         console.log(data, headers);
         if (handleHeaders) {
-          const parsedLink = parse(header.link);
-          dispatchActions(handleHeaders(parsedLink));
+          dispatchActions(handleHeaders(header));
         }
         if (onSuccess) {
           dispatchActions(onSuccess(body));
