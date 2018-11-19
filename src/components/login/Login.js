@@ -31,6 +31,9 @@ class Login extends Component<connectedProps & OwnProps, State> {
   render() {
     return (
       <Wrapper>
+        <a href="https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&redirect_uri=http://localhost:3000/issues">
+          Github
+        </a>
         <Formik
           initialValues={{
             name: '',
