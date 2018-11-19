@@ -38,6 +38,7 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     apiUtils
       .request({ method, url: path, data, headers })
       .then(({ body, header }) => {
+        console.log(data, headers);
         if (handleHeaders) {
           const parsedLink = parse(header.link);
           dispatchActions(handleHeaders(parsedLink));

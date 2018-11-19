@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
+import { authUser } from 'actions/user.actions';
+
 type connectedProps = {};
 
 type OwnProps = {};
@@ -22,8 +24,8 @@ const LoginSchema = yup.object().shape({
 class Login extends Component<connectedProps & OwnProps, State> {
   state = {};
 
-  handleLogin = vals => {
-    console.log('vals', vals);
+  handleLogin = credentials => {
+    this.props.authUser(credentials.name);
   };
 
   render() {
@@ -35,8 +37,8 @@ class Login extends Component<connectedProps & OwnProps, State> {
             password: ''
           }}
           validationSchema={LoginSchema}
-          onSubmit={values => {
-            this.handleLogin(values);
+          onSubmit={credentials => {
+            this.handleLogin(credentials);
           }}
           render={({ errors, values, handleSubmit, handleChange, touched }) => (
             <LoginContainer onSubmit={handleSubmit}>
@@ -117,4 +119,4 @@ const LoginButton = styled.button`
   cursor: pointer;
 `;
 
-export default connect(null)(Login);
+export default connect(null, { authUser })(Login);
