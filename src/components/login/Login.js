@@ -11,7 +11,7 @@ type OwnProps = {};
 type State = {};
 
 const gitHubUrl =
-  'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&redirect_uri=http://localhost:3000/user';
+  'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&redirect_uri=http://localhost:3000/';
 
 class Login extends Component<connectedProps & OwnProps, State> {
   state = {};

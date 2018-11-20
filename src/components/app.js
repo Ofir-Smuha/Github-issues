@@ -12,7 +12,7 @@ import theme from 'constants/themes.constants';
 import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
-import HomePage from 'components/user/HomePage';
+import HomePage from 'components/HomePage';
 import ErrorBoundary from './ErrorBoundary';
 
 type Props = {};
@@ -25,11 +25,18 @@ class App extends React.Component<Props> {
           <ErrorBoundary>
             <Router history={history}>
               <Switch>
-                <Route exact path="/issues" component={IssuesPage} />
-                <Route exact path="/issues/:issueId" component={IssueDetails} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/user" component={HomePage} />
-                <Redirect exact from="/" to="/login" />
+                <Route exact path="/" component={HomePage} />
+                <Route path="/issues" component={IssuesPage} />
+                <Route path="/issues/:issueId" component={IssueDetails} />
+                <Route path="/login" component={Login} />
+                // TODO: add files to new routes
+                {/*<Route path="/user" />*/}
+                {/*<Route path="/user/repositories" />*/}
+                {/*<Route path="/user/repositories/:repo" />*/}
+                {/*<Route exact path="/:org" />*/}
+                {/*<Route path="/:org/:repo" />*/}
+                {/*<Route path="/:org/:repo/issues" />*/}
+                {/*<Route path="/:org/:repo/issues/:issueId" />*/}
               </Switch>
             </Router>
           </ErrorBoundary>
