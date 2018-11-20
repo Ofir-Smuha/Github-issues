@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import qs from 'qs';
+
+import { getUserTokenWithCode } from 'actions/user.actions';
 
 class HomePage extends Component {
   componentDidMount() {
-    console.log(window.location);
+    const codeParams = qs.parse(window.location.search);
+    const userCode = codeParams['?code'];
+    this.props.getUserTokenWithCode(userCode);
   }
   render() {
-    return <div />;
+    return <div>H1</div>;
   }
 }
 
-export default HomePage;
+export default connect(null, { getUserTokenWithCode })(HomePage);

@@ -1,23 +1,28 @@
 import { apiAction } from 'actions/api.actions';
 
-const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+const GET_TOKEN_WITH_CODE = 'ACCESS_USER_WITH_TOKEN';
+const GET_USER_DATA_FROM_TOKEN = 'GET_USER_DATA_FROM_TOKEN';
 
 const LOGIN_LABEL = 'login';
 
-export const authUser = () =>
+export const getUserTokenWithCode = (userCode: string) =>
   apiAction({
-    type: AUTHENTICATE_USER,
+    type: GET_TOKEN_WITH_CODE,
     payload: {
       method: 'GET',
-      path:
-        'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787b&redirect_url=http://localhost:3000',
+      path: `https://get-token-github.herokuapp.com/authenticate/${userCode}`,
       networkLabel: LOGIN_LABEL,
-      onSuccess: null,
+      onSuccess: getUserDataWithToken,
       onError: null,
-      handleHeaders: null,
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
+      handleHeaders: null
+    }
+  });
+
+export const getUserDataWithToken = ({ token }) =>
+  apiAction({
+    type: GET_USER_DATA_FROM_TOKEN,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/user?access_token=${token}`
     }
   });
