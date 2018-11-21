@@ -15,12 +15,12 @@ import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/HomePage';
 import ErrorBoundary from './ErrorBoundary';
 import {
-  getUserDataWithToken,
+  getUserInfoWithToken,
   saveTokenToLocalStorage
 } from 'actions/user.actions';
 
 type connectedProps = {
-  getUserDataWithToken: () => void,
+  getUserInfoWithToken: () => void,
   saveTokenToLocalStorage: () => void
 };
 
@@ -31,7 +31,7 @@ class App extends React.Component<connectedProps & OwnProps> {
     const user = get('user', loadFromStorage('auth'));
     if (user) {
       this.props.saveTokenToLocalStorage(user);
-      this.props.getUserDataWithToken(user);
+      this.props.getUserInfoWithToken(user);
     }
   }
 
@@ -63,6 +63,6 @@ class App extends React.Component<connectedProps & OwnProps> {
   }
 }
 
-export default connect(null, { getUserDataWithToken, saveTokenToLocalStorage })(
+export default connect(null, { getUserInfoWithToken, saveTokenToLocalStorage })(
   App
 );

@@ -7,8 +7,9 @@ import qs from 'qs';
 import type { State } from 'types/redux.types';
 import type { UserState } from 'reducers/user.reducer';
 
+import Header from 'components/common/Header';
+import Footer from 'components/common/Footer';
 import { getUserTokenWithCode } from 'actions/user.actions';
-import type { SampleState } from '../sample/sample.reducer';
 
 type StateWithUser = State & {
   user: UserState
@@ -35,7 +36,13 @@ class HomePage extends Component<connectedProps & OwnProps> {
   }
 
   render() {
-    return <div>HOME PAGE</div>;
+    return (
+      <div>
+        <Header />
+        HOME PAGE
+        <Footer />
+      </div>
+    );
   }
 }
 

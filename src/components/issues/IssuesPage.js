@@ -77,7 +77,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
 const Wrapper = styled.div`
   margin-top: 70px;
-  width: 90%;
+  max-width: 1012px;
   margin: 70px auto 0;
 `;
 
