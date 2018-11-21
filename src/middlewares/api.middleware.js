@@ -43,6 +43,7 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
           dispatchActions(handleHeaders, header);
         }
         if (onSuccess) {
+          ('success');
           dispatchActions(onSuccess, body);
         }
 

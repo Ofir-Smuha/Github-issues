@@ -18,7 +18,7 @@ import {
 
 import type { State } from 'types/redux.types';
 import type { IssuesState } from 'reducers/issues.reducer';
-import type { UserState } from 'reducers/user,reducer';
+import type { UserState } from 'reducers/user.reducer';
 import type { Issue, Comments } from '../issues.types';
 
 type StateWithIssues = State & {
