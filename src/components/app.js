@@ -1,32 +1,49 @@
 // @flow
 import * as React from 'react';
-import { ThemeProvider } from 'styled-components';
+import { connect } from 'react-redux';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
+import { get } from 'lodash/fp';
 
 import history from 'utils/history.utils';
+import { loadFromStorage } from 'utils/local-storage.utils';
 
-import store from 'store';
 import theme from 'constants/themes.constants';
-
 import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/HomePage';
 import ErrorBoundary from './ErrorBoundary';
+import {
+  getUserDataWithToken,
+  saveTokenToLocalStorage
+} from 'actions/user.actions';
 
-type Props = {};
+type connectedProps = {
+  getUserDataWithToken: () => void,
+  saveTokenToLocalStorage: () => void
+};
 
-class App extends React.Component<Props> {
+type OwnProps = {};
+
+class App extends React.Component<connectedProps & OwnProps> {
+  componentWillMount() {
+    const user = get('user', loadFromStorage('auth'));
+    if (user) {
+      this.props.saveTokenToLocalStorage(user);
+      this.props.getUserDataWithToken(user);
+    }
+  }
+
   render() {
     return (
-      <Provider store={store}>
+      <div>
         <ThemeProvider theme={theme}>
           <ErrorBoundary>
             <Router history={history}>
               <Switch>
                 <Route exact path="/" component={HomePage} />
-                <Route path="/issues" component={IssuesPage} />
+                <Route exact path="/issues" component={IssuesPage} />
                 <Route path="/issues/:issueId" component={IssueDetails} />
                 <Route path="/login" component={Login} />
                 // TODO: add files to new routes
@@ -41,9 +58,11 @@ class App extends React.Component<Props> {
             </Router>
           </ErrorBoundary>
         </ThemeProvider>
-      </Provider>
+      </div>
     );
   }
 }
 
-export default App;
+export default connect(null, { getUserDataWithToken, saveTokenToLocalStorage })(
+  App
+);

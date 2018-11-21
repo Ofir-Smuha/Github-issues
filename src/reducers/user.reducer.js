@@ -3,11 +3,11 @@ import { handleActions } from 'redux-actions';
 import { SAVE_TOKEN_TO_LOCAL_STORAGE } from 'actions/user.actions';
 
 const initialState = {
-  token: ''
+  token: null
 };
 
 export type UserState = {|
-  +token: string
+  +token: any
 |};
 
 export default handleActions(

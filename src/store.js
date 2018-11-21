@@ -13,7 +13,7 @@ const isDev = process.env.NODE_ENV !== 'production';
 const composeEnhancers =
   (isDev && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-let engine = createEngine('token');
+let engine = createEngine('auth');
 
 engine = filter(engine, ['whitelisted-key', ['user', 'token']]);
 
