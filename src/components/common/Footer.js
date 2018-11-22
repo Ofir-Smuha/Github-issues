@@ -1,9 +1,14 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import GithubIcon from 'assets/images/mark-github.svg';
 
-const Footer = () => {
+type Props = {
+  history: Object
+};
+
+const Footer = (props: Props) => {
   return (
     <div>
       <Container>
@@ -15,7 +20,7 @@ const Footer = () => {
           <Link>Status</Link>
           <Link>Help</Link>
         </LinksContainer>
-        <Icon />
+        <Icon onClick={() => props.history.push('/')} />
         <LinksContainer>
           <Link>Concatct GitHub</Link>
           <Link>Pricing</Link>
@@ -46,6 +51,7 @@ const LinksContainer = styled.div`
 const Link = styled.a`
   color: #0366d6;
   text-decoration: none;
+  cursor: pointer;
   &:not(:last-child) {
     margin-right: 16px;
   }
@@ -60,6 +66,7 @@ const Icon = styled.div`
   background-size: contain;
   width: 24px;
   height: 24px;
+  cursor: pointer;
 `;
 
-export default Footer;
+export default withRouter(Footer);
