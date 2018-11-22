@@ -17,7 +17,8 @@ type StateWithUser = State & {
 
 type connectedProps = {
   isAuthenticated: any,
-  getUserTokenWithCode: () => void
+  getUserTokenWithCode: () => void,
+  userInfo: Object
 };
 
 type OwnProps = {};
@@ -38,7 +39,7 @@ class HomePage extends Component<connectedProps & OwnProps> {
   render() {
     return (
       <div>
-        <Header />
+        <Header userInfo={this.props.userInfo} />
         HOME PAGE
         <Footer />
       </div>
@@ -47,7 +48,8 @@ class HomePage extends Component<connectedProps & OwnProps> {
 }
 
 const mapStateToProps = (state: StateWithUser) => ({
-  isAuthenticated: state.user.token
+  isAuthenticated: state.user.token,
+  userInfo: state.user.userInfo
 });
 export default withRouter(
   connect(mapStateToProps, { getUserTokenWithCode })(HomePage)
