@@ -7,8 +7,7 @@ import qs from 'qs';
 import type { State } from 'types/redux.types';
 import type { UserState } from 'reducers/user.reducer';
 
-import { getUserTokenWithCode } from 'actions/user.actions';
-import type { SampleState } from '../sample/sample.reducer';
+import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
 
 type StateWithUser = State & {
   user: UserState
@@ -16,7 +15,10 @@ type StateWithUser = State & {
 
 type connectedProps = {
   isAuthenticated: any,
-  getUserTokenWithCode: () => void
+  getUserTokenWithCode: () => void,
+  resetAuthError: () => void,
+  badCode: boolean,
+  history: Object
 };
 
 type OwnProps = {};
@@ -34,14 +36,22 @@ class HomePage extends Component<connectedProps & OwnProps> {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.badCode === true) {
+      this.props.history.push('/login');
+      this.props.resetAuthError();
+    }
+  }
+
   render() {
     return <div>HOME PAGE</div>;
   }
 }
 
 const mapStateToProps = (state: StateWithUser) => ({
-  isAuthenticated: state.user.token
+  isAuthenticated: state.user.token,
+  badCode: state.user.badCode
 });
 export default withRouter(
-  connect(mapStateToProps, { getUserTokenWithCode })(HomePage)
+  connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
 );

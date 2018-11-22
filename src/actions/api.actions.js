@@ -20,7 +20,8 @@ type ApiActionPayload = {|
   baseUrl?: string,
   +onSuccess?: (data: any) => Action | Action[],
   +onError?: (data: any) => Action | Action[],
-  +handleHeaders?: (data: any) => Action | Action[]
+  +handleHeaders?: (data: any) => Action | Action[],
+  +blacklistKeys?: string | string[]
 |};
 
 type ApiActionMeta = {|
