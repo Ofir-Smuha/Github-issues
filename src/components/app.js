@@ -12,7 +12,7 @@ import theme from 'constants/themes.constants';
 import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
-import HomePage from 'components/HomePage';
+import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
 import {
   getUserInfoWithToken,

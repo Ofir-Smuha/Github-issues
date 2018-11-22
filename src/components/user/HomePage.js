@@ -8,6 +8,7 @@ import type { State } from 'types/redux.types';
 import type { UserState } from 'reducers/user.reducer';
 
 import Header from 'components/common/Header';
+import Sidebar from 'components/user/Sidebar';
 import Footer from 'components/common/Footer';
 import { getUserTokenWithCode } from 'actions/user.actions';
 
@@ -41,6 +42,7 @@ class HomePage extends Component<connectedProps & OwnProps> {
       <div>
         <Header userInfo={this.props.userInfo} />
         HOME PAGE
+        <Sidebar userInfo={this.props.userInfo} />
         <Footer />
       </div>
     );
