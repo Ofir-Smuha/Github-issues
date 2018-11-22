@@ -38,7 +38,7 @@ export const saveTokenToLocalStorage = ({ token }: { token: string }) => ({
   }
 });
 
-export const setUserInState = user => ({
+export const setUserInState = (user: Object) => ({
   type: SET_USER_IN_STATE,
   payload: {
     user

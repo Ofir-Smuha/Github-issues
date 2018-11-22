@@ -21,7 +21,7 @@ export default handleActions(
       state: UserState,
       { payload }: { payload: Object }
     ) => set('token', payload.token, state),
-    [SET_USER_IN_STATE]: (state, { payload: { user } }) =>
+    [SET_USER_IN_STATE]: (state: UserState, { payload: { user } }) =>
       set('userInfo', user, state)
   },
   initialState
