@@ -1,6 +1,5 @@
 // @flow
-import { get, castArray, compact, has, includes } from 'lodash/fp';
-import parse from 'parse-link-header';
+import { get, castArray, compact, has } from 'lodash/fp';
 
 import apiUtils from 'utils/api.utils';
 import { startNetwork, endNetwork } from 'actions/network.actions';

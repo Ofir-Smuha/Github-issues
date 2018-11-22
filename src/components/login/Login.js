@@ -40,10 +40,7 @@ const Wrapper = styled.div`
 
 const Link = styled.a`
   cursor: pointer;
-
-  &:active {
-    text-decoration: none;
-  }
+  text-decoration: none;
 `;
 
 const ButtonContainer = styled.div`
