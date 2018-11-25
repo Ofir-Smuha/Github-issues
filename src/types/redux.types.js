@@ -4,6 +4,7 @@ import type { NetworkState } from 'reducers/network.reducer';
 import type { NetworkAction } from 'actions/network.actions';
 import type { LocalizationAction } from 'actions/localization.actions';
 import type { IssuesState } from 'reducers/issues.reducer';
+import type { UserState } from 'reducers/user.reducer';
 import type { ApiAction } from 'actions/api.actions';
 import type { SampleAction } from '../sample/sample.actions'; // TODO: remove sample action
 
@@ -27,7 +28,8 @@ export type Action =
 export type State = {
   network: NetworkState,
   localization: LocalizationState, // TODO: remove if no localization
-  issues: IssuesState
+  issues: IssuesState,
+  user: UserState
 };
 
 export type Dispatch = (action: Action) => any;

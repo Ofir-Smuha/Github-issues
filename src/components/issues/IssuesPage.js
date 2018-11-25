@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import IssuesReset from 'components/issues/IssuesReset';
@@ -13,9 +14,12 @@ import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
 import type { State } from 'types/redux.types';
+import type { IssuesState } from 'reducers/issues.reducer';
 import type { Issues } from 'components/issues/issues.types';
 
-type StateWithIssues = State;
+type StateWithIssues = State & {
+  issues: IssuesState
+};
 
 type ConnectedProps = {
   fetchIssues: () => void,
@@ -23,13 +27,18 @@ type ConnectedProps = {
   currentPage: number,
   issuesState: any,
   sorting: any,
-  isLoading: boolean
+  isLoading: boolean,
+  isAuthenticated: string,
+  history: Object
 };
 
 type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
+    if (!this.props.isAuthenticated) {
+      this.props.history.push('/login');
+    }
     this.handleFetchIssues();
   }
 
@@ -68,7 +77,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
 const Wrapper = styled.div`
   margin-top: 70px;
-  width: 90%;
+  max-width: 1012px;
   margin: 70px auto 0;
 `;
 
@@ -77,7 +86,10 @@ const mapStateToProps = (state: StateWithIssues) => ({
   currentPage: state.issues.currentPage,
   issuesState: state.issues.issuesState,
   sorting: state.issues.sorting,
-  isLoading: isLoadingSelector(state, ISSUES_LABEL)
+  isLoading: isLoadingSelector(state, ISSUES_LABEL),
+  isAuthenticated: state.user.token
 });
 
-export default connect(mapStateToProps, { fetchIssues })(IssuesPage);
+export default withRouter(
+  connect(mapStateToProps, { fetchIssues })(IssuesPage)
+);

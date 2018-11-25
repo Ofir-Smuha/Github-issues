@@ -50,7 +50,6 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
       })
       .catch(error => {
         console.error('API error', error, action);
-
         if (get('response.status', error) === 401) {
           // TODO: handle 401
         }

@@ -16,10 +16,15 @@ import {
   ISSUE_LABEL
 } from 'actions/issues.actions';
 
-import loader from 'assets/images/loader.gif';
-
 import type { State } from 'types/redux.types';
+import type { IssuesState } from 'reducers/issues.reducer';
+import type { UserState } from 'reducers/user.reducer';
 import type { Issue, Comments } from '../issues.types';
+
+type StateWithIssues = State & {
+  issues: IssuesState,
+  user: UserState
+};
 
 type OwnProps = {};
 
@@ -31,11 +36,15 @@ type ConnectedProps = {
   currentIssue?: Issue,
   issueComments: Comments,
   match: Object,
-  params: Object
+  params: Object,
+  isAuthenticated: any
 };
 
 class IssueDetails extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
+    if (!this.props.isAuthenticated) {
+      this.props.history.push('/login');
+    }
     this.props.fetchIssue(this.props.match.params.issueId);
   }
 
@@ -87,9 +96,10 @@ const ContentContainer = styled.div`
   justify-content: space-between;
 `;
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: StateWithIssues) => ({
   currentIssue: state.issues.currentIssue,
   issueComments: state.issues.issueComments,
+  isAuthenticated: state.user.token,
   isLoading: isLoadingSelector(state, ISSUE_LABEL)
 });
 
