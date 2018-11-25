@@ -8,12 +8,15 @@ import type { State } from 'types/redux.types';
 
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
-import { getUserTokenWithCode } from 'actions/user.actions';
+import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
 
 type ConnectedProps = {
+  userInfo: Object,
   isAuthenticated: boolean | null,
   getUserTokenWithCode: () => void,
-  userInfo: Object
+  resetAuthError: () => void,
+  badCode: boolean,
+  history: Object
 };
 
 type OwnProps = {};
@@ -21,14 +24,20 @@ type OwnProps = {};
 class HomePage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
     if (!this.props.isAuthenticated) {
-      return;
+      if (get('location.search', window)) {
+        const codeParams = qs.parse(window.location.search);
+        const userCode = codeParams['?code'];
+        this.props.getUserTokenWithCode(userCode);
+      } else {
+        this.props.history.push('/login');
+      }
     }
-    if (get('location.search', window)) {
-      const codeParams = qs.parse(window.location.search);
-      const userCode = codeParams['?code'];
-      this.props.getUserTokenWithCode(userCode);
-    } else {
+  }
+
+  componentDidUpdate() {
+    if (this.props.badCode === true) {
       this.props.history.push('/login');
+      this.props.resetAuthError();
     }
   }
 
@@ -45,8 +54,10 @@ class HomePage extends Component<ConnectedProps & OwnProps> {
 
 const mapStateToProps = (state: State) => ({
   isAuthenticated: state.user.token,
-  userInfo: state.user.userInfo
+  userInfo: state.user.userInfo,
+  badCode: state.user.badCode
 });
+
 export default withRouter(
-  connect(mapStateToProps, { getUserTokenWithCode })(HomePage)
+  connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
 );
