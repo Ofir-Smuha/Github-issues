@@ -14,8 +14,8 @@ declare var process: any;
 export const BASE_URL: string = process.env.REACT_APP_BASE_URL;
 
 const apiMiddleware: Middleware = ({ dispatch, getState }) => {
-  const dispatchActions = actions => {
-    compact(castArray(actions)).forEach(action => dispatch(action));
+  const dispatchActions = (actions, data) => {
+    compact(castArray(actions)).forEach(action => dispatch(action(data)));
   };
 
   return next => action => {
@@ -39,11 +39,12 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     apiUtils
       .request({ method, url: path, data, headers })
       .then(({ body, header }) => {
+        console.log(body);
         if (handleHeaders) {
-          dispatchActions(handleHeaders(header));
+          dispatchActions(handleHeaders, header);
         }
         if (onSuccess) {
-          dispatchActions(onSuccess(body));
+          dispatchActions(onSuccess, body);
         }
 
         dispatch(endNetwork(networkLabel));
@@ -56,7 +57,7 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
         }
 
         if (onError) {
-          dispatchActions(onError(error));
+          dispatchActions(onError, error);
         }
         dispatch(endNetwork(networkLabel));
       });
