@@ -4,31 +4,25 @@ import styled from 'styled-components';
 
 import gitHubIcon from 'assets/images/github-mark.png';
 
-type connectedProps = {};
+type ConnectedProps = {};
 
 type OwnProps = {};
-
-type State = {};
 
 const gitHubUrl =
   'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&redirect_uri=http://localhost:3000/';
 
-class Login extends Component<connectedProps & OwnProps, State> {
-  state = {};
-
-  render() {
-    return (
-      <Wrapper>
-        <Link href={gitHubUrl}>
-          <ButtonContainer>
-            <GitHubIcon />
-            <Text>Log in with GitHub</Text>
-          </ButtonContainer>
-        </Link>
-      </Wrapper>
-    );
-  }
-}
+const Login = (props: OwnProps) => {
+  return (
+    <Wrapper>
+      <Link href={gitHubUrl}>
+        <ButtonContainer>
+          <GitHubIcon />
+          <Text>Log in with GitHub</Text>
+        </ButtonContainer>
+      </Link>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   width: 100vw;

@@ -1,6 +1,6 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { RESTORE_LOCAL_STORAGE_KEY } from 'constants/restore.constants';
-import * as storage from 'redux-storage';
+import { createMiddleware } from 'redux-storage';
 import createEngine from 'redux-storage-engine-localstorage';
 import filter from 'redux-storage-decorator-filter';
 
@@ -17,7 +17,7 @@ let engine = createEngine('auth');
 
 engine = filter(engine, ['whitelisted-key', ['user', 'token']]);
 
-const localStorageMiddleWare = storage.createMiddleware(
+const localStorageMiddleWare = createMiddleware(
   engine,
   [],
   [SAVE_TOKEN_TO_LOCAL_STORAGE]
