@@ -12,11 +12,8 @@ import Loader from 'components/common/Loader';
 import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
-import loader from 'assets/images/loader.gif';
-
 import type { State } from 'types/redux.types';
 import type { Issues } from 'components/issues/issues.types';
-import type { IssuesState } from 'reducers/issues.reducer';
 
 type StateWithIssues = State;
 
