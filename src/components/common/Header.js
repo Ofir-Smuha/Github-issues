@@ -9,24 +9,26 @@ type Props = {
   history: Object
 };
 
-class Header extends Component<Props> {
-  render() {
-    const avatarUrl = this.props.userInfo.avatar_url;
-
-    return (
-      <Wrapper>
-        <ContentContainer>
-          <ActionsContainer>
-            <Icon onClick={() => this.props.history.push('/')} />
-          </ActionsContainer>
-          <UserInfoContainer>
-            <Avatar avatar={avatarUrl} />
-          </UserInfoContainer>
-        </ContentContainer>
-      </Wrapper>
-    );
+const Header = (props: Props) => {
+  if (!props.userInfo) {
+    return null;
   }
-}
+
+  const avatarUrl = props.userInfo.avatar_url;
+
+  return (
+    <Wrapper>
+      <ContentContainer>
+        <ActionsContainer>
+          <Icon onClick={() => props.history.push('/')} />
+        </ActionsContainer>
+        <UserInfoContainer>
+          <Avatar avatar={avatarUrl} />
+        </UserInfoContainer>
+      </ContentContainer>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.div`
   padding: 12px 0;

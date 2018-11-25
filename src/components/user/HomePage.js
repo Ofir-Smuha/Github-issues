@@ -6,26 +6,24 @@ import { get } from 'lodash/fp';
 import qs from 'qs';
 
 import type { State } from 'types/redux.types';
-import type { UserState } from 'reducers/user.reducer';
 
 import Header from 'components/common/Header';
 import Sidebar from 'components/user/sidebar/Sidebar';
 import Footer from 'components/common/Footer';
-import { getUserTokenWithCode } from 'actions/user.actions';
+import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
 
-type StateWithUser = State & {
-  user: UserState
-};
-
-type connectedProps = {
-  isAuthenticated: any,
+type ConnectedProps = {
+  userInfo: Object,
+  isAuthenticated: boolean | null,
   getUserTokenWithCode: () => void,
-  userInfo: Object
+  resetAuthError: () => void,
+  badCode: boolean,
+  history: Object
 };
 
 type OwnProps = {};
 
-class HomePage extends Component<connectedProps & OwnProps> {
+class HomePage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
     if (!this.props.isAuthenticated) {
       if (get('location.search', window)) {
@@ -38,13 +36,19 @@ class HomePage extends Component<connectedProps & OwnProps> {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.badCode === true) {
+      this.props.history.push('/login');
+      this.props.resetAuthError();
+    }
+  }
+
   render() {
     return (
       <div>
         <Header userInfo={this.props.userInfo} />
         <Content>
-          HOME PAGE
-          <Sidebar userInfo={this.props.userInfo} />
+          <Sidebar />
         </Content>
         <Footer />
       </div>
@@ -57,11 +61,12 @@ const Content = styled.div`
   margin: 0 auto;
 `;
 
-const mapStateToProps = (state: StateWithUser) => ({
+const mapStateToProps = (state: State) => ({
   isAuthenticated: state.user.token,
-  userInfo: state.user.userInfo
+  userInfo: state.user.userInfo,
+  badCode: state.user.badCode
 });
 
 export default withRouter(
-  connect(mapStateToProps, { getUserTokenWithCode })(HomePage)
+  connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
 );

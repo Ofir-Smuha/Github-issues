@@ -8,6 +8,7 @@ export type Header = {};
 export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
+export const FETCH_ISSUE_GENERIC = 'FETCH_ISSUE_GENERIC';
 export const SET_ISSUES = 'SET_ISSUES';
 export const FETCH_ISSUE = 'FETCH_ISSUE';
 export const SET_CURRENT_ISSUE = 'SET_CURRENT_ISSUE';
@@ -25,12 +26,37 @@ export const SET_ERROR = 'SET_ERROR';
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
 
-export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
+export const fetchIssues = (
+  page = 1,
+  data = { state: null, sort: null },
+  search = { name: 'facebook', repo: 'create-react-app' }
+) =>
   apiAction({
     type: FETCH_ISSUES,
     payload: {
       method: 'GET',
-      path: `https://api.github.com/repos/facebook/create-react-app/issues?page=${page}`,
+      path: `https://api.github.com/repos/${search.name}/${
+        search.repo
+      }/issues?page=${page}`,
+      networkLabel: ISSUES_LABEL,
+      onSuccess: setIssues,
+      onError: setError,
+      handleHeaders: setPaging,
+      data
+    }
+  });
+
+export const fetchIssuesGeneric = (
+  page = 1,
+  name = '',
+  repo = '',
+  data = { state: null, sort: null }
+) =>
+  apiAction({
+    type: FETCH_ISSUES,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/repos/${name}/${repo}/issues?page=${page}`,
       networkLabel: ISSUES_LABEL,
       onSuccess: setIssues,
       onError: setError,

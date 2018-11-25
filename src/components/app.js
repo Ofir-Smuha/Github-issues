@@ -19,14 +19,14 @@ import {
   saveTokenToLocalStorage
 } from 'actions/user.actions';
 
-type connectedProps = {
+type ConnectedProps = {
   getUserInfoWithToken: () => void,
   saveTokenToLocalStorage: () => void
 };
 
 type OwnProps = {};
 
-class App extends React.Component<connectedProps & OwnProps> {
+class App extends React.Component<ConnectedProps & OwnProps> {
   componentWillMount() {
     const user = get('user', loadFromStorage('auth'));
     if (user) {
@@ -37,28 +37,19 @@ class App extends React.Component<connectedProps & OwnProps> {
 
   render() {
     return (
-      <div>
-        <ThemeProvider theme={theme}>
-          <ErrorBoundary>
-            <Router history={history}>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route exact path="/issues" component={IssuesPage} />
-                <Route path="/issues/:issueId" component={IssueDetails} />
-                <Route path="/login" component={Login} />
-                // TODO: add files to new routes
-                {/*<Route path="/user" />*/}
-                {/*<Route path="/user/repositories" />*/}
-                {/*<Route path="/user/repositories/:repo" />*/}
-                {/*<Route exact path="/:org" />*/}
-                {/*<Route path="/:org/:repo" />*/}
-                {/*<Route path="/:org/:repo/issues" />*/}
-                {/*<Route path="/:org/:repo/issues/:issueId" />*/}
-              </Switch>
-            </Router>
-          </ErrorBoundary>
-        </ThemeProvider>
-      </div>
+      <ThemeProvider theme={theme}>
+        <ErrorBoundary>
+          <Router history={history}>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              {/*<Route exact path="/issues" component={IssuesPage} />*/}
+              <Route path="/issues/:issueId" component={IssueDetails} />
+              <Route path="/login" component={Login} />
+              <Route path="/:name/:repo/issues" component={IssuesPage} />
+            </Switch>
+          </Router>
+        </ErrorBoundary>
+      </ThemeProvider>
     );
   }
 }

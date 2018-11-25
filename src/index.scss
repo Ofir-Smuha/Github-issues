@@ -1,8 +1,11 @@
-@import './reset.scss';
+@import 'reset.scss';
+
+* {
+  box-sizing: border-box;
+  font-family: Helvetica;
+}
 
 body {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
 }
