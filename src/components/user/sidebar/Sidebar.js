@@ -15,6 +15,9 @@ const Sidebar = (props: Props) => {
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  width: 333px;
+  border-radius: 1px solid #e1e4e8;
+`;
 
 export default Sidebar;
