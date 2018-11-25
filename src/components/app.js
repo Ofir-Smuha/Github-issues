@@ -29,14 +29,6 @@ class App extends React.Component<Props> {
                 <Route path="/issues" component={IssuesPage} />
                 <Route path="/issues/:issueId" component={IssueDetails} />
                 <Route path="/login" component={Login} />
-                // TODO: add files to new routes
-                {/*<Route path="/user" />*/}
-                {/*<Route path="/user/repositories" />*/}
-                {/*<Route path="/user/repositories/:repo" />*/}
-                {/*<Route exact path="/:org" />*/}
-                {/*<Route path="/:org/:repo" />*/}
-                {/*<Route path="/:org/:repo/issues" />*/}
-                {/*<Route path="/:org/:repo/issues/:issueId" />*/}
               </Switch>
             </Router>
           </ErrorBoundary>
