@@ -12,9 +12,7 @@ export const getUserTokenWithCode = (userCode: string) =>
       method: 'GET',
       path: `https://get-token-github.herokuapp.com/authenticate/${userCode}`,
       networkLabel: LOGIN_LABEL,
-      onSuccess: getUserDataWithToken,
-      onError: null,
-      handleHeaders: null
+      onSuccess: getUserDataWithToken
     }
   });
 
