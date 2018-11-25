@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export type UserState = {|
-  +token: any,
+  +token: boolean | null,
   userInfo: Object
 |};
 

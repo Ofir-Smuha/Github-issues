@@ -5,34 +5,30 @@ import { get } from 'lodash/fp';
 import qs from 'qs';
 
 import type { State } from 'types/redux.types';
-import type { UserState } from 'reducers/user.reducer';
 
 import Header from 'components/common/Header';
 import Footer from 'components/common/Footer';
 import { getUserTokenWithCode } from 'actions/user.actions';
 
-type StateWithUser = State & {
-  user: UserState
-};
-
-type connectedProps = {
-  isAuthenticated: any,
+type ConnectedProps = {
+  isAuthenticated: boolean | null,
   getUserTokenWithCode: () => void,
   userInfo: Object
 };
 
 type OwnProps = {};
 
-class HomePage extends Component<connectedProps & OwnProps> {
+class HomePage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
     if (!this.props.isAuthenticated) {
-      if (get('location.search', window)) {
-        const codeParams = qs.parse(window.location.search);
-        const userCode = codeParams['?code'];
-        this.props.getUserTokenWithCode(userCode);
-      } else {
-        this.props.history.push('/login');
-      }
+      return;
+    }
+    if (get('location.search', window)) {
+      const codeParams = qs.parse(window.location.search);
+      const userCode = codeParams['?code'];
+      this.props.getUserTokenWithCode(userCode);
+    } else {
+      this.props.history.push('/login');
     }
   }
 
@@ -47,7 +43,7 @@ class HomePage extends Component<connectedProps & OwnProps> {
   }
 }
 
-const mapStateToProps = (state: StateWithUser) => ({
+const mapStateToProps = (state: State) => ({
   isAuthenticated: state.user.token,
   userInfo: state.user.userInfo
 });

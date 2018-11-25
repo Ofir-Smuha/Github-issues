@@ -19,14 +19,14 @@ import {
   saveTokenToLocalStorage
 } from 'actions/user.actions';
 
-type connectedProps = {
+type ConnectedProps = {
   getUserInfoWithToken: () => void,
   saveTokenToLocalStorage: () => void
 };
 
 type OwnProps = {};
 
-class App extends React.Component<connectedProps & OwnProps> {
+class App extends React.Component<ConnectedProps & OwnProps> {
   componentWillMount() {
     const user = get('user', loadFromStorage('auth'));
     if (user) {
@@ -37,20 +37,18 @@ class App extends React.Component<connectedProps & OwnProps> {
 
   render() {
     return (
-      <div>
-        <ThemeProvider theme={theme}>
-          <ErrorBoundary>
-            <Router history={history}>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route exact path="/issues" component={IssuesPage} />
-                <Route path="/issues/:issueId" component={IssueDetails} />
-                <Route path="/login" component={Login} />
-              </Switch>
-            </Router>
-          </ErrorBoundary>
-        </ThemeProvider>
-      </div>
+      <ThemeProvider theme={theme}>
+        <ErrorBoundary>
+          <Router history={history}>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/issues" component={IssuesPage} />
+              <Route path="/issues/:issueId" component={IssueDetails} />
+              <Route path="/login" component={Login} />
+            </Switch>
+          </Router>
+        </ErrorBoundary>
+      </ThemeProvider>
     );
   }
 }
