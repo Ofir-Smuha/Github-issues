@@ -15,54 +15,44 @@ import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/HomePage';
 import ErrorBoundary from './ErrorBoundary';
 import {
-  getUserDataWithToken,
+  getUserInfoWithToken,
   saveTokenToLocalStorage
 } from 'actions/user.actions';
 
-type connectedProps = {
-  getUserDataWithToken: () => void,
+type ConnectedProps = {
+  getUserInfoWithToken: () => void,
   saveTokenToLocalStorage: () => void
 };
 
 type OwnProps = {};
 
-class App extends React.Component<connectedProps & OwnProps> {
+class App extends React.Component<ConnectedProps & OwnProps> {
   componentWillMount() {
     const user = get('user', loadFromStorage('auth'));
     if (user) {
       this.props.saveTokenToLocalStorage(user);
-      this.props.getUserDataWithToken(user);
+      this.props.getUserInfoWithToken(user);
     }
   }
 
   render() {
     return (
-      <div>
-        <ThemeProvider theme={theme}>
-          <ErrorBoundary>
-            <Router history={history}>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route exact path="/issues" component={IssuesPage} />
-                <Route path="/issues/:issueId" component={IssueDetails} />
-                <Route path="/login" component={Login} />
-                // TODO: add files to new routes
-                {/*<Route path="/user" />*/}
-                {/*<Route path="/user/repositories" />*/}
-                {/*<Route path="/user/repositories/:repo" />*/}
-                {/*<Route exact path="/:org" />*/}
-                {/*<Route path="/:org/:repo" />*/}
-                {/*<Route path="/:org/:repo/issues" />*/}
-                {/*<Route path="/:org/:repo/issues/:issueId" />*/}
-              </Switch>
-            </Router>
-          </ErrorBoundary>
-        </ThemeProvider>
-      </div>
+      <ThemeProvider theme={theme}>
+        <ErrorBoundary>
+          <Router history={history}>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/issues" component={IssuesPage} />
+              <Route path="/issues/:issueId" component={IssueDetails} />
+              <Route path="/login" component={Login} />
+            </Switch>
+          </Router>
+        </ErrorBoundary>
+      </ThemeProvider>
     );
   }
 }
 
-export default connect(null, { getUserDataWithToken, saveTokenToLocalStorage })(
+export default connect(null, { getUserInfoWithToken, saveTokenToLocalStorage })(
   App
 );

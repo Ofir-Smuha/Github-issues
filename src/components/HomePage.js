@@ -5,16 +5,14 @@ import { get } from 'lodash/fp';
 import qs from 'qs';
 
 import type { State } from 'types/redux.types';
-import type { UserState } from 'reducers/user.reducer';
 
+import Header from 'components/common/Header';
+import Footer from 'components/common/Footer';
 import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
 
-type StateWithUser = State & {
-  user: UserState
-};
-
-type connectedProps = {
-  isAuthenticated: any,
+type ConnectedProps = {
+  userInfo: Object,
+  isAuthenticated: boolean | null,
   getUserTokenWithCode: () => void,
   resetAuthError: () => void,
   badCode: boolean,
@@ -23,7 +21,7 @@ type connectedProps = {
 
 type OwnProps = {};
 
-class HomePage extends Component<connectedProps & OwnProps> {
+class HomePage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
     if (!this.props.isAuthenticated) {
       if (get('location.search', window)) {
@@ -44,14 +42,22 @@ class HomePage extends Component<connectedProps & OwnProps> {
   }
 
   render() {
-    return <div>HOME PAGE</div>;
+    return (
+      <div>
+        <Header userInfo={this.props.userInfo} />
+        HOME PAGE
+        <Footer />
+      </div>
+    );
   }
 }
 
-const mapStateToProps = (state: StateWithUser) => ({
+const mapStateToProps = (state: State) => ({
   isAuthenticated: state.user.token,
+  userInfo: state.user.userInfo,
   badCode: state.user.badCode
 });
+
 export default withRouter(
   connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
 );
