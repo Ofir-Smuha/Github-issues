@@ -21,7 +21,8 @@ export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
-export const SET_ERROR = 'SET_ERROR';
+export const SET_ISSUES_ERROR = 'SET_ISSUES_ERROR';
+export const RESET_ERROR = 'RESET_ERROR';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -46,25 +47,6 @@ export const fetchIssues = (
     }
   });
 
-export const fetchIssuesGeneric = (
-  page = 1,
-  name = '',
-  repo = '',
-  data = { state: null, sort: null }
-) =>
-  apiAction({
-    type: FETCH_ISSUES,
-    payload: {
-      method: 'GET',
-      path: `https://api.github.com/repos/${name}/${repo}/issues?page=${page}`,
-      networkLabel: ISSUES_LABEL,
-      onSuccess: setIssues,
-      onError: setError,
-      handleHeaders: setPaging,
-      data
-    }
-  });
-
 export const setIssues = (openIssues: Issues) => ({
   type: SET_ISSUES,
   payload: {
@@ -79,16 +61,20 @@ export const setPaging = (header: Header) => ({
   }
 });
 
-export const fetchIssue = (issueNumber: number) =>
+export const fetchIssue = (
+  search = { name: 'facebook', repo: 'create-react-app', number: 1 }
+) =>
   apiAction({
     type: FETCH_ISSUE,
     payload: {
       method: 'GET',
-      path: `https://api.github.com/repos/facebook/create-react-app/issues/${issueNumber}`,
+      path: `https://api.github.com/repos/${search.name}/${
+        search.repo
+      }/issues/${search.number}`,
       networkLabel: ISSUE_LABEL,
       onSuccess: setCurrentIssue,
       onError: setError,
-      issueNumber
+      issueNumber: search.number
     }
   });
 
@@ -154,6 +140,11 @@ export const ResetIssuesSort = () => ({
 });
 
 export const setError = () => ({
-  type: SET_ERROR,
+  type: SET_ISSUES_ERROR,
+  payload: {}
+});
+
+export const resetError = () => ({
+  type: RESET_ERROR,
   payload: {}
 });

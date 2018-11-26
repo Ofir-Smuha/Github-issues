@@ -10,7 +10,6 @@ type Props = {
 };
 
 const Repositories = (props: Props) => {
-  console.log(props.repositories);
   return (
     <div>
       <Header>

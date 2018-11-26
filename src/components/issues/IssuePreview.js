@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
 import { get } from 'lodash/fp';
@@ -9,6 +9,47 @@ import commentIcon from 'assets/images/comments.svg';
 import warning from 'assets/images/warning.svg';
 
 import type { Issue } from 'components/issues/issues.types';
+import IssueDetails from './details/IssueDetails';
+
+type Props = {|
+  openIssue: Issue,
+  history: [],
+  match: Object
+|};
+
+const IssuePreview = (props: Props) => {
+  const { name, repo } = props.match.params;
+  const userName = get('user.login', props.openIssue);
+  const {
+    number: issueSerial,
+    created_at: openedAt,
+    comments,
+    title,
+    number
+  } = props.openIssue;
+  return (
+    <OpenIssueContainer>
+      <IconDescriptionContainer>
+        <AlertIcon />
+        <IssueDescription>
+          <IssueTitle
+            onClick={() =>
+              props.history.push(`/${name}/${repo}/issues/${number}`)
+            }>
+            {title}
+          </IssueTitle>
+          <OpendAt>
+            #{issueSerial} opened {moment(openedAt).fromNow()} by {userName}
+          </OpendAt>
+        </IssueDescription>
+      </IconDescriptionContainer>
+      <CommentsContainer>
+        <CommentIcon />
+        <Comments>{comments}</Comments>
+      </CommentsContainer>
+    </OpenIssueContainer>
+  );
+};
 
 const OpenIssueContainer = styled.li`
   display: flex;
@@ -74,41 +115,5 @@ const CommentIcon = styled.div`
 const Comments = styled.div`
   font-size: 0.9rem;
 `;
-
-type Props = {|
-  openIssue: Issue,
-  history: []
-|};
-
-const IssuePreview = (props: Props) => {
-  const userName = get('user.login', props.openIssue);
-  const {
-    number: issueSerial,
-    created_at: openedAt,
-    comments,
-    title,
-    number
-  } = props.openIssue;
-
-  return (
-    <OpenIssueContainer>
-      <IconDescriptionContainer>
-        <AlertIcon />
-        <IssueDescription>
-          <IssueTitle onClick={() => props.history.push(`/issues/${number}`)}>
-            {title}
-          </IssueTitle>
-          <OpendAt>
-            #{issueSerial} opened {moment(openedAt).fromNow()} by {userName}
-          </OpendAt>
-        </IssueDescription>
-      </IconDescriptionContainer>
-      <CommentsContainer>
-        <CommentIcon />
-        <Comments>{comments}</Comments>
-      </CommentsContainer>
-    </OpenIssueContainer>
-  );
-};
 
 export default withRouter(IssuePreview);

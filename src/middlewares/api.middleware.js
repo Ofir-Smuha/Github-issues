@@ -52,7 +52,6 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
         if (handleHeaders) {
           dispatchActions(handleHeaders, header);
         }
-        console.log(body);
         if (blacklistKeys && searchBlacklistKeys(body, blacklistKeys)) {
           throw new Error('Error 401: Found in blacklist');
         } else if (onSuccess) {

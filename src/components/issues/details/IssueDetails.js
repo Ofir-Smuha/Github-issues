@@ -45,7 +45,8 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     }
-    this.props.fetchIssue(this.props.match.params.issueId);
+    const { name, repo, number } = this.props.match.params;
+    this.props.fetchIssue({ name, repo, number });
   }
 
   componentDidUpdate(prevProps) {

@@ -14,6 +14,7 @@ import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
+import Error404 from 'components/error/404';
 import {
   getUserInfoWithToken,
   saveTokenToLocalStorage
@@ -42,10 +43,13 @@ class App extends React.Component<ConnectedProps & OwnProps> {
           <Router history={history}>
             <Switch>
               <Route exact path="/" component={HomePage} />
-              {/*<Route exact path="/issues" component={IssuesPage} />*/}
-              <Route path="/issues/:issueId" component={IssueDetails} />
               <Route path="/login" component={Login} />
-              <Route path="/:name/:repo/issues" component={IssuesPage} />
+              <Route exact path="/:name/:repo/issues" component={IssuesPage} />
+              <Route
+                path="/:name/:repo/issues/:number"
+                component={IssueDetails}
+              />
+              <Route exact path="/404" component={Error404} />
             </Switch>
           </Router>
         </ErrorBoundary>

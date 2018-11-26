@@ -17,7 +17,6 @@ type OwnProps = {};
 
 class Sidebar extends Component<ConnectedProps, OwnProps> {
   componentDidUpdate(prevProps) {
-    console.log(this.props);
     if (this.props.userInfo && prevProps.userInfo !== this.props.userInfo) {
       this.props.fetchUserRepositories(this.props.userInfo.repos_url);
     }
