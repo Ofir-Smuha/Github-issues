@@ -10,7 +10,7 @@ import SortIssues from 'components/issues/SortIssues';
 import Paginate from 'components/issues/Paginate';
 import Loader from 'components/common/Loader';
 
-import { fetchIssues, resetError, ISSUES_LABEL } from 'actions/issues.actions';
+import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
 import type { State } from 'types/redux.types';
@@ -45,10 +45,6 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
       prevProps.currentPage !== this.props.currentPage
     ) {
       this.handleFetchIssues();
-    }
-    if (this.props.error) {
-      this.props.history.push('/404');
-      this.props.resetError();
     }
   }
 
@@ -93,10 +89,9 @@ const mapStateToProps = (state: State) => ({
   issuesState: state.issues.issuesState,
   sorting: state.issues.sorting,
   isLoading: isLoadingSelector(state, ISSUES_LABEL),
-  isAuthenticated: state.user.token,
-  error: state.issues.error
+  isAuthenticated: state.user.token
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchIssues, resetError })(IssuesPage)
+  connect(mapStateToProps, { fetchIssues })(IssuesPage)
 );

@@ -26,6 +26,7 @@ const IssuePreview = (props: Props) => {
     title,
     number
   } = props.openIssue;
+  const openedAtWithMoment = moment(openedAt).fromNow();
   return (
     <OpenIssueContainer>
       <IconDescriptionContainer>
@@ -38,7 +39,7 @@ const IssuePreview = (props: Props) => {
             {title}
           </IssueTitle>
           <OpendAt>
-            #{issueSerial} opened {moment(openedAt).fromNow()} by {userName}
+            #{issueSerial} opened {openedAtWithMoment} by {userName}
           </OpendAt>
         </IssueDescription>
       </IconDescriptionContainer>

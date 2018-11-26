@@ -10,9 +10,7 @@ import {
   SET_CURRENT_PAGE,
   SET_SORT_STATE,
   SET_SORTING,
-  RESET_SORTING,
-  SET_ISSUES_ERROR,
-  RESET_ERROR
+  RESET_SORTING
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -25,8 +23,7 @@ const initialState = {
   pageCount: 0,
   currentPage: 1,
   issuesState: null,
-  sorting: null,
-  error: false
+  sorting: null
 };
 
 export type IssuesState = {|
@@ -36,8 +33,7 @@ export type IssuesState = {|
   +pageCount: number,
   +currentPage: number,
   +issuesState: any,
-  +sorting: any,
-  error: boolean
+  +sorting: any
 |};
 
 export default handleActions(
@@ -64,9 +60,10 @@ export default handleActions(
     [SET_SORTING]: (state, { payload }) =>
       flow([set('sorting', payload.sorting), set('currentPage', 1)])(state),
     [RESET_SORTING]: state =>
-      flow([set('issuesState', null), set('sorting', null)])(state),
-    [SET_ISSUES_ERROR]: state => set('error', true, state),
-    [RESET_ERROR]: state => set('error', false, state)
+      flow([
+        set('issuesState', initialState.issuesState),
+        set('sorting', initialState.sorting)
+      ])(state)
   },
   initialState
 );

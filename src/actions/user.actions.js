@@ -1,5 +1,4 @@
 import { apiAction } from 'actions/api.actions';
-import Repositories from '../components/user/sidebar/Repositories';
 
 export const GET_TOKEN_WITH_CODE = 'GET_TOKEN_WITH_CODE';
 export const GET_USER_DATA_FROM_TOKEN = 'GET_USER_DATA_FROM_TOKEN';

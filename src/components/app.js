@@ -14,7 +14,7 @@ import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
-import Error404 from 'components/error/404';
+import ErrorPage from 'components/error/ErrorPage';
 import {
   getUserInfoWithToken,
   saveTokenToLocalStorage
@@ -49,7 +49,7 @@ class App extends React.Component<ConnectedProps & OwnProps> {
                 path="/:name/:repo/issues/:number"
                 component={IssueDetails}
               />
-              <Route exact path="/404" component={Error404} />
+              <Route exact path="/error" component={ErrorPage} />
             </Switch>
           </Router>
         </ErrorBoundary>
