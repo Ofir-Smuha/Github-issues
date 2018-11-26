@@ -9,7 +9,6 @@ import commentIcon from 'assets/images/comments.svg';
 import warning from 'assets/images/warning.svg';
 
 import type { Issue } from 'components/issues/issues.types';
-import IssueDetails from './details/IssueDetails';
 
 type Props = {|
   openIssue: Issue,

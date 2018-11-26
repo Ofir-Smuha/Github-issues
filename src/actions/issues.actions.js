@@ -2,13 +2,11 @@
 import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
 
-// import type { BaseAction } from 'types/redux.types';
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
 export type Header = {};
 export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
-export const FETCH_ISSUE_GENERIC = 'FETCH_ISSUE_GENERIC';
 export const SET_ISSUES = 'SET_ISSUES';
 export const FETCH_ISSUE = 'FETCH_ISSUE';
 export const SET_CURRENT_ISSUE = 'SET_CURRENT_ISSUE';

@@ -17,14 +17,7 @@ import {
 } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
-import type { IssuesState } from 'reducers/issues.reducer';
-import type { UserState } from 'reducers/user.reducer';
 import type { Issue, Comments } from '../issues.types';
-
-type StateWithIssues = State & {
-  issues: IssuesState,
-  user: UserState
-};
 
 type OwnProps = {};
 
@@ -97,7 +90,7 @@ const ContentContainer = styled.div`
   justify-content: space-between;
 `;
 
-const mapStateToProps = (state: StateWithIssues) => ({
+const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
   issueComments: state.issues.issueComments,
   isAuthenticated: state.user.token,
