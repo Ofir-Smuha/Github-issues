@@ -1,7 +1,7 @@
 {
-  "root": "build/",
+  "root": "src/",
   "clean_urls": false,
   "routes": {
-    "/**": "http://localhost:3000"
+    "/**": "index.html"
   }
 }
