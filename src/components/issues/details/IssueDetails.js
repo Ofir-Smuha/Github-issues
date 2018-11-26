@@ -17,14 +17,7 @@ import {
 } from 'actions/issues.actions';
 
 import type { State } from 'types/redux.types';
-import type { IssuesState } from 'reducers/issues.reducer';
-import type { UserState } from 'reducers/user.reducer';
 import type { Issue, Comments } from '../issues.types';
-
-type StateWithIssues = State & {
-  issues: IssuesState,
-  user: UserState
-};
 
 type OwnProps = {};
 
@@ -45,7 +38,8 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     }
-    this.props.fetchIssue(this.props.match.params.issueId);
+    const { name, repo, number } = this.props.match.params;
+    this.props.fetchIssue({ name, repo, number });
   }
 
   componentDidUpdate(prevProps) {
@@ -96,7 +90,7 @@ const ContentContainer = styled.div`
   justify-content: space-between;
 `;
 
-const mapStateToProps = (state: StateWithIssues) => ({
+const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
   issueComments: state.issues.issueComments,
   isAuthenticated: state.user.token,

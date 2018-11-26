@@ -12,8 +12,9 @@ import theme from 'constants/themes.constants';
 import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
-import HomePage from 'components/HomePage';
+import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
+import ErrorPage from 'components/error/ErrorPage';
 import {
   getUserInfoWithToken,
   saveTokenToLocalStorage
@@ -42,9 +43,13 @@ class App extends React.Component<ConnectedProps & OwnProps> {
           <Router history={history}>
             <Switch>
               <Route exact path="/" component={HomePage} />
-              <Route exact path="/issues" component={IssuesPage} />
-              <Route path="/issues/:issueId" component={IssueDetails} />
               <Route path="/login" component={Login} />
+              <Route exact path="/:name/:repo/issues" component={IssuesPage} />
+              <Route
+                path="/:name/:repo/issues/:number"
+                component={IssueDetails}
+              />
+              <Route exact path="/error" component={ErrorPage} />
             </Switch>
           </Router>
         </ErrorBoundary>

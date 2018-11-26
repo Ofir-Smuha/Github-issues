@@ -10,6 +10,10 @@ type Props = {
 };
 
 const Header = (props: Props) => {
+  if (!props.userInfo) {
+    return null;
+  }
+
   const avatarUrl = props.userInfo.avatar_url;
 
   return (

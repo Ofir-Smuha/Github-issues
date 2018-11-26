@@ -14,12 +14,7 @@ import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
 import type { State } from 'types/redux.types';
-import type { IssuesState } from 'reducers/issues.reducer';
 import type { Issues } from 'components/issues/issues.types';
-
-type StateWithIssues = State & {
-  issues: IssuesState
-};
 
 type ConnectedProps = {
   fetchIssues: () => void,
@@ -29,7 +24,8 @@ type ConnectedProps = {
   sorting: any,
   isLoading: boolean,
   isAuthenticated: string,
-  history: Object
+  history: Object,
+  error: boolean
 };
 
 type OwnProps = {};
@@ -53,10 +49,16 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
   }
 
   handleFetchIssues = () => {
-    this.props.fetchIssues(this.props.currentPage, {
-      state: this.props.issuesState,
-      sort: this.props.sorting
-    });
+    const { name, repo } = this.props.match.params;
+
+    this.props.fetchIssues(
+      this.props.currentPage,
+      {
+        state: this.props.issuesState,
+        sort: this.props.sorting
+      },
+      { name, repo }
+    );
   };
 
   render() {
@@ -81,7 +83,7 @@ const Wrapper = styled.div`
   margin: 70px auto 0;
 `;
 
-const mapStateToProps = (state: StateWithIssues) => ({
+const mapStateToProps = (state: State) => ({
   openIssues: state.issues.openIssues,
   currentPage: state.issues.currentPage,
   issuesState: state.issues.issuesState,

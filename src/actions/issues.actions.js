@@ -2,7 +2,6 @@
 import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
 
-// import type { BaseAction } from 'types/redux.types';
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
 export type Header = {};
 export type id = number;
@@ -20,20 +19,24 @@ export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
-export const SET_ERROR = 'SET_ERROR';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
 
-export const fetchIssues = (page = 1, data = { state: null, sort: null }) =>
+export const fetchIssues = (
+  page = 1,
+  data = { state: null, sort: null },
+  query = { name: 'facebook', repo: 'create-react-app' }
+) =>
   apiAction({
     type: FETCH_ISSUES,
     payload: {
       method: 'GET',
-      path: `https://api.github.com/repos/facebook/create-react-app/issues?page=${page}`,
+      path: `https://api.github.com/repos/${query.name}/${
+        query.repo
+      }/issues?page=${page}`,
       networkLabel: ISSUES_LABEL,
       onSuccess: setIssues,
-      onError: setError,
       handleHeaders: setPaging,
       data
     }
@@ -53,16 +56,19 @@ export const setPaging = (header: Header) => ({
   }
 });
 
-export const fetchIssue = (issueNumber: number) =>
+export const fetchIssue = (
+  query = { name: 'facebook', repo: 'create-react-app', number: 1 }
+) =>
   apiAction({
     type: FETCH_ISSUE,
     payload: {
       method: 'GET',
-      path: `https://api.github.com/repos/facebook/create-react-app/issues/${issueNumber}`,
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }`,
       networkLabel: ISSUE_LABEL,
       onSuccess: setCurrentIssue,
-      onError: setError,
-      issueNumber
+      issueNumber: query.number
     }
   });
 
@@ -85,8 +91,7 @@ export const fetchComments = (commentsURL: string) =>
       method: 'GET',
       path: commentsURL,
       networkLabel: ISSUES_LABEL,
-      onSuccess: setComments,
-      onError: setError
+      onSuccess: setComments
     }
   });
 
@@ -125,9 +130,4 @@ export const setSortingInState = (sorting: string) => ({
 
 export const ResetIssuesSort = () => ({
   type: RESET_SORTING
-});
-
-export const setError = () => ({
-  type: SET_ERROR,
-  payload: {}
 });

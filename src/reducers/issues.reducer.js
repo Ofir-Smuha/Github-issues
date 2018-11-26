@@ -42,8 +42,7 @@ export default handleActions(
       set('openIssues', payload.openIssues, state),
     [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) =>
       set('currentIssue', issue, state),
-    [REMOVE_CURRENT_ISSUE]: (state, payload) =>
-      set('currentIssue', null, state),
+    [REMOVE_CURRENT_ISSUE]: state => set('currentIssue', null, state),
     [SET_COMMENTS]: (state: IssuesState, { payload }) =>
       set('issueComments', payload.comments, state),
     [REMOVE_COMMENTS]: state =>
@@ -61,7 +60,10 @@ export default handleActions(
     [SET_SORTING]: (state, { payload }) =>
       flow([set('sorting', payload.sorting), set('currentPage', 1)])(state),
     [RESET_SORTING]: state =>
-      flow([set('issuesState', null), set('sorting', null)])(state)
+      flow([
+        set('issuesState', initialState.issuesState),
+        set('sorting', initialState.sorting)
+      ])(state)
   },
   initialState
 );
