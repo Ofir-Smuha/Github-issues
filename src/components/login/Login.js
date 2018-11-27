@@ -4,13 +4,10 @@ import styled from 'styled-components';
 
 import gitHubIcon from 'assets/images/github-mark.png';
 
-type ConnectedProps = {};
-
 type OwnProps = {};
 
 const gitHubUrl =
-  'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&redirect_uri=https://github123123.herokuapp.com/';
-
+  'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&redirect_uri=https://github123123.herokuapp.com/&scope=user%20repo';
 const Login = (props: OwnProps) => {
   return (
     <Wrapper>

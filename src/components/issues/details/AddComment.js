@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import MarkDown from 'react-markdown/with-html';
 import { isEmpty } from 'lodash/fp';
 
-type Props = {};
+import { postComment } from 'actions/issues.actions';
+
+type ConnectedProps = {
+  postComment: () => void
+};
 
 type State = {
   comment: string,
@@ -12,7 +17,7 @@ type State = {
   typeError: boolean
 };
 
-class AddComment extends Component<Props, State> {
+class AddComment extends Component<ConnectedProps, State> {
   state = {
     comment: '',
     editMode: true,
@@ -32,12 +37,9 @@ class AddComment extends Component<Props, State> {
   };
 
   handleCommentChange = e => {
-    this.setState(
-      {
-        comment: e.target.value
-      },
-      console.log(this.state.comment)
-    );
+    this.setState({
+      comment: e.target.value
+    });
   };
 
   handleCommentSubmit = () => {
@@ -47,12 +49,13 @@ class AddComment extends Component<Props, State> {
       });
       return;
     }
+    console.log('props: ', this.props.match.params);
+    this.props.postComment(this.state.comment);
     this.setState({
       comment: '',
       editMode: true,
       typeError: false
     });
-    console.log('more than 1');
   };
 
   render() {
@@ -195,4 +198,4 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-export default connect(null)(AddComment);
+export default withRouter(connect(null, { postComment })(AddComment));

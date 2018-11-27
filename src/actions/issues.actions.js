@@ -19,9 +19,11 @@ export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
+export const POST_COMMENT = 'POST_COMMENT';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
+export const COMMENT_LABEL = 'COMMENT_LABEL';
 
 export const fetchIssues = (
   page = 1,
@@ -131,3 +133,16 @@ export const setSortingInState = (sorting: string) => ({
 export const ResetIssuesSort = () => ({
   type: RESET_SORTING
 });
+
+export const postComment = (query: Object, comment: string) =>
+  apiAction({
+    type: POST_COMMENT,
+    payload: {
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }/comments`,
+      method: 'POST',
+      data: comment,
+      networkLabel: COMMENT_LABEL
+    }
+  });
