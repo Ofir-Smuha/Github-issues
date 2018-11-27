@@ -17,6 +17,8 @@ type Props = {|
 |};
 
 const IssuePreview = (props: Props) => {
+  console.log('props', props);
+
   const { name, repo } = props.match.params;
   const userName = get('user.login', props.openIssue);
   const {
@@ -32,21 +34,30 @@ const IssuePreview = (props: Props) => {
       <IconDescriptionContainer>
         <AlertIcon />
         <IssueDescription>
-          <IssueTitle
-            onClick={() =>
-              props.history.push(`/${name}/${repo}/issues/${number}`)
-            }>
-            {title}
-          </IssueTitle>
+          <TitleLabelContainer>
+            <IssueTitle
+              onClick={() =>
+                props.history.push(`/${name}/${repo}/issues/${number}`)
+              }>
+              {title}
+            </IssueTitle>
+          </TitleLabelContainer>
           <OpendAt>
             #{issueSerial} opened {openedAtWithMoment} by {userName}
           </OpendAt>
         </IssueDescription>
       </IconDescriptionContainer>
-      <CommentsContainer>
-        <CommentIcon />
-        <Comments>{comments}</Comments>
-      </CommentsContainer>
+      <CommentsLabelsContainer>
+        <CommentContainer>
+          <CommentIcon />
+          <Comments>{comments}</Comments>
+        </CommentContainer>
+        <LabelsContainer>
+          {props.openIssue.labels.map(label => (
+            <Label labelColor={label.color}>{label.name}</Label>
+          ))}
+        </LabelsContainer>
+      </CommentsLabelsContainer>
     </OpenIssueContainer>
   );
 };
@@ -68,6 +79,7 @@ const OpenIssueContainer = styled.li`
 
 const IconDescriptionContainer = styled.div`
   display: flex;
+  max-width: 70%;
 `;
 
 const AlertIcon = styled.div`
@@ -79,13 +91,17 @@ const AlertIcon = styled.div`
 
 const IssueDescription = styled.div``;
 
-const IssueTitle = styled.h1`
+const TitleLabelContainer = styled.div`
+  display: flex;
+`;
+
+const IssueTitle = styled.h3`
+  display: inline-block;
   font-weight: bold;
   margin-bottom: 10px;
   font-size: 14px;
   line-height: 18px;
   color: #444;
-  max-width: 90%;
   cursor: pointer;
 
   &:hover {
@@ -98,10 +114,16 @@ const OpendAt = styled.h1`
   color: #444;
 `;
 
-const CommentsContainer = styled.div`
+const CommentsLabelsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
+
+const CommentContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  justify-content: flex-end;
 `;
 
 const CommentIcon = styled.div`
@@ -114,6 +136,23 @@ const CommentIcon = styled.div`
 
 const Comments = styled.div`
   font-size: 0.9rem;
+`;
+
+const LabelsContainer = styled.div`
+  display: flex;
+`;
+
+const Label = styled.span`
+  font-size: 12px;
+  font-weight: 600;
+  height: 20px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  background-color: #${({ labelColor }) => labelColor};
+
+  &:not(:last-child) {
+    margin-right: 5px;
+  }
 `;
 
 export default withRouter(IssuePreview);
