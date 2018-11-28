@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { get, size } from 'lodash/fp';
 
+import IssueAction from 'components/issues/details/IssueAction';
+
+import gear from 'assets/images/gear.svg';
+
 import type { SideBarIssue } from 'components/issues/issues.types';
 
 type Props = {
@@ -44,7 +48,11 @@ const SideBar = (props: Props) => {
   return (
     <Wrapper>
       <AssignContainer>
-        <Title>Assignees</Title>
+        <TitleActionsContainer>
+          <Title>Assignees</Title>
+          <GearIcon />
+          <IssueAction>Assign up to 10 people to this issue</IssueAction>
+        </TitleActionsContainer>
         <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
       </AssignContainer>
       <LabelsContainer>
@@ -71,7 +79,22 @@ const Wrapper = styled.div`
   width: 230px;
 `;
 
-const Title = styled.div`
+const TitleActionsContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const GearIcon = styled.div`
+  background: url(${gear}) no-repeat center;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+`;
+
+const Title = styled.h1`
   color: #586069;
   font-size: 12px;
   font-weight: 600;
