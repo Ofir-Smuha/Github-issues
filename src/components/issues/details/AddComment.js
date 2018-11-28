@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import MarkDown from 'react-markdown/with-html';
 import { isEmpty } from 'lodash/fp';
+import { get } from 'lodash/fp';
 
 import { postComment } from 'actions/issues.actions';
 
@@ -50,7 +51,15 @@ class AddComment extends Component<ConnectedProps, State> {
       return;
     }
     console.log('props: ', this.props.match.params);
-    this.props.postComment(this.state.comment);
+    const user = JSON.parse(localStorage.getItem('auth'));
+    const token = get('user.token', user);
+    this.props.postComment(
+      this.props.match.params,
+      {
+        body: this.state.comment
+      },
+      token
+    );
     this.setState({
       comment: '',
       editMode: true,
