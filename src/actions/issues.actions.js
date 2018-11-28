@@ -9,6 +9,7 @@ export type id = number;
 export const FETCH_ISSUES = 'FETCH_ISSUES';
 export const SET_ISSUES = 'SET_ISSUES';
 export const FETCH_ISSUE = 'FETCH_ISSUE';
+export const FETCH_ISSUE_AFTER_COMMENT = 'FETCH_ISSUE_AFTER_COMMENT';
 export const SET_CURRENT_ISSUE = 'SET_CURRENT_ISSUE';
 export const REMOVE_CURRENT_ISSUE = 'REMOVE_CURRENT_ISSUE';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
@@ -74,6 +75,17 @@ export const fetchIssue = (
     }
   });
 
+export const fetchIssueAfterComment = ({ issue_url }) =>
+  apiAction({
+    type: FETCH_ISSUE_AFTER_COMMENT,
+    payload: {
+      method: 'GET',
+      path: issue_url,
+      networkLabel: ISSUE_LABEL,
+      onSuccess: setCurrentIssue
+    }
+  });
+
 export const setCurrentIssue = (issue: Issue) => ({
   type: SET_CURRENT_ISSUE,
   payload: {
@@ -134,7 +146,11 @@ export const ResetIssuesSort = () => ({
   type: RESET_SORTING
 });
 
-export const postComment = (query: Object, comment: Object, token) =>
+export const handlePostComment = (
+  query: Object,
+  comment: Object,
+  token: string
+) =>
   apiAction({
     type: POST_COMMENT,
     payload: {
@@ -143,6 +159,6 @@ export const postComment = (query: Object, comment: Object, token) =>
       }/comments?access_token=${token}`,
       method: 'POST',
       data: comment,
-      networkLabel: COMMENT_LABEL
+      onSuccess: fetchIssueAfterComment
     }
   });

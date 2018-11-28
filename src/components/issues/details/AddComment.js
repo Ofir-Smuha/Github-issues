@@ -6,10 +6,10 @@ import MarkDown from 'react-markdown/with-html';
 import { isEmpty } from 'lodash/fp';
 import { get } from 'lodash/fp';
 
-import { postComment } from 'actions/issues.actions';
+import { handlePostComment } from 'actions/issues.actions';
 
 type ConnectedProps = {
-  postComment: () => void
+  handlePostComment: () => void
 };
 
 type State = {
@@ -50,10 +50,9 @@ class AddComment extends Component<ConnectedProps, State> {
       });
       return;
     }
-    console.log('props: ', this.props.match.params);
     const user = JSON.parse(localStorage.getItem('auth'));
     const token = get('user.token', user);
-    this.props.postComment(
+    this.props.handlePostComment(
       this.props.match.params,
       {
         body: this.state.comment
@@ -72,8 +71,16 @@ class AddComment extends Component<ConnectedProps, State> {
       <Wrapper>
         <AddCommentContainer>
           <DashBoard>
-            <DisplayMode onClick={this.renderEditMode}>Write</DisplayMode>
-            <DisplayMode onClick={this.renderDisplayMode}>Preview</DisplayMode>
+            <WriteMode
+              active={this.state.editMode}
+              onClick={this.renderEditMode}>
+              Write
+            </WriteMode>
+            <PreviewMode
+              active={this.state.editMode}
+              onClick={this.renderDisplayMode}>
+              Preview
+            </PreviewMode>
           </DashBoard>
           <DisplayContainer>
             <ErrorDisplay active={this.state.typeError}>
@@ -112,22 +119,41 @@ const AddCommentContainer = styled.div`
 `;
 
 const DashBoard = styled.div`
-  padding-top: 6px;
-  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
   margin-bottom: 10px;
   background-color: #f6f8fa;
   border-bottom: 1px solid #d1d5da;
 `;
 
-const DisplayMode = styled.button`
+const WriteMode = styled.button`
   padding: 8px 12px;
   font-size: 14px;
   border: none;
+  background-color: transparent;
+  cursor: pointer;
+  margin-right: 5px;
+
+  ${({ active }) =>
+    active &&
+    `
+    color: blue;
+  `};
+`;
+
+const PreviewMode = styled.div`
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  background-color: transparent;
   cursor: pointer;
 
-  &:first-child {
-    margin-right: 5px;
-  }
+  ${({ active }) =>
+    !active &&
+    `
+    color: blue;
+  `};
 `;
 
 const DisplayContainer = styled.div`
@@ -207,4 +233,4 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-export default withRouter(connect(null, { postComment })(AddComment));
+export default withRouter(connect(null, { handlePostComment })(AddComment));
