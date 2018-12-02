@@ -3,6 +3,11 @@ import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
 
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
+import { get } from 'lodash/fp';
+
+const user = JSON.parse(localStorage.getItem('auth'));
+const token = get('user.token', user);
+
 export type Header = {};
 export type id = number;
 
@@ -21,6 +26,7 @@ export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
 export const POST_COMMENT = 'POST_COMMENT';
+export const DELETE_LABEL = 'DELETE_LABEL';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -75,7 +81,7 @@ export const fetchIssue = (
     }
   });
 
-export const fetchIssueAfterComment = ({ issue_url }) =>
+export const fetchIssueAfterComment = ({ issue_url }: { issue_url: string }) =>
   apiAction({
     type: FETCH_ISSUE_AFTER_COMMENT,
     payload: {
@@ -160,5 +166,16 @@ export const handlePostComment = (
       method: 'POST',
       data: comment,
       onSuccess: fetchIssueAfterComment
+    }
+  });
+
+export const deleteLabel = (query: Object, labelName: string) =>
+  apiAction({
+    type: DELETE_LABEL,
+    payload: {
+      method: 'DELETE',
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }/labels/${labelName}?access_token=${token}`
     }
   });
