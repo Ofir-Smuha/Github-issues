@@ -40,10 +40,8 @@ export default handleActions(
   {
     [SET_ISSUES]: (state: IssuesState, { payload }): IssuesState =>
       set('openIssues', payload.openIssues, state),
-    [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) => {
-      console.log('issue', issue);
-      return set('currentIssue', issue, state);
-    },
+    [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) =>
+      set('currentIssue', issue, state),
     [REMOVE_CURRENT_ISSUE]: state => set('currentIssue', null, state),
     [SET_COMMENTS]: (state: IssuesState, { payload }) =>
       set('issueComments', payload.comments, state),

@@ -54,7 +54,7 @@ const IssuePreview = (props: Props) => {
         </CommentContainer>
         <LabelsContainer>
           {props.openIssue.labels.map(label => (
-            <Label labelColor={label.color}>{label.name}</Label>
+            <Label color={label.color}>{label.name}</Label>
           ))}
         </LabelsContainer>
       </CommentsLabelsContainer>
@@ -148,7 +148,7 @@ const Label = styled.span`
   height: 20px;
   padding: 2px 4px;
   border-radius: 2px;
-  background-color: #${({ labelColor }) => labelColor};
+  background-color: #${({ color }) => color};
 
   &:not(:last-child) {
     margin-right: 5px;
