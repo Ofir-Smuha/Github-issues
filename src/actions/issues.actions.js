@@ -26,7 +26,9 @@ export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
 export const POST_COMMENT = 'POST_COMMENT';
+export const ADD_LABEL = 'ADD_LABEL';
 export const DELETE_LABEL = 'DELETE_LABEL';
+export const SET_LABELS = 'SET_LABELS';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -76,7 +78,7 @@ export const fetchIssue = (
         query.number
       }`,
       networkLabel: ISSUE_LABEL,
-      onSuccess: setCurrentIssue,
+      onSuccess: [setCurrentIssue, setInitialLabels],
       issueNumber: query.number
     }
   });
@@ -169,6 +171,19 @@ export const handlePostComment = (
     }
   });
 
+export const addLabel = (query: Object, name) =>
+  apiAction({
+    type: ADD_LABEL,
+    payload: {
+      method: 'POST',
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }/labels?access_token=${token}`,
+      data: { labels: [name] },
+      onSuccess: setLabels
+    }
+  });
+
 export const deleteLabel = (query: Object, labelName: string) =>
   apiAction({
     type: DELETE_LABEL,
@@ -176,6 +191,21 @@ export const deleteLabel = (query: Object, labelName: string) =>
       method: 'DELETE',
       path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
         query.number
-      }/labels/${labelName}?access_token=${token}`
+      }/labels/${labelName}?access_token=${token}`,
+      onSuccess: setLabels
     }
   });
+
+export const setInitialLabels = ({ labels }) => ({
+  type: SET_LABELS,
+  payload: {
+    labels
+  }
+});
+
+export const setLabels = labels => ({
+  type: SET_LABELS,
+  payload: {
+    labels
+  }
+});

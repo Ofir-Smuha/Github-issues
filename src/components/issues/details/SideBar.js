@@ -14,6 +14,11 @@ type Props = {
   currentIssue: SideBarIssue
 };
 
+type OwnState = {
+  isLabelsOpen: boolean,
+  isAssigneesOpen: boolean
+};
+
 const SideBar = (props: Props) => {
   const { labels, milestone, projects, assignee } = props.currentIssue;
   const assigneeName = get('login', assignee);

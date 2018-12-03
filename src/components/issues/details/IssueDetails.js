@@ -34,7 +34,7 @@ type ConnectedProps = {
   isAuthenticated: any
 };
 
-class IssueDetails extends Component<ConnectedProps & OwnProps> {
+class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
   componentDidMount() {
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');

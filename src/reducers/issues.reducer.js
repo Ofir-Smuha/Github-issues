@@ -10,7 +10,8 @@ import {
   SET_CURRENT_PAGE,
   SET_SORT_STATE,
   SET_SORTING,
-  RESET_SORTING
+  RESET_SORTING,
+  SET_LABELS
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -19,6 +20,7 @@ import { REMOVE_CURRENT_ISSUE } from '../actions/issues.actions';
 const initialState = {
   openIssues: [],
   currentIssue: null,
+  issueLabels: null,
   issueComments: [],
   pageCount: 0,
   currentPage: 1,
@@ -33,17 +35,16 @@ export type IssuesState = {|
   +pageCount: number,
   +currentPage: number,
   +issuesState: any,
-  +sorting: any
+  +sorting: any,
+  +issueLabels: null | []
 |};
 
 export default handleActions(
   {
     [SET_ISSUES]: (state: IssuesState, { payload }): IssuesState =>
       set('openIssues', payload.openIssues, state),
-    [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) => {
-      console.log('issue', issue);
-      return set('currentIssue', issue, state);
-    },
+    [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) =>
+      set('currentIssue', issue, state),
     [REMOVE_CURRENT_ISSUE]: state => set('currentIssue', null, state),
     [SET_COMMENTS]: (state: IssuesState, { payload }) =>
       set('issueComments', payload.comments, state),
@@ -65,7 +66,9 @@ export default handleActions(
       flow([
         set('issuesState', initialState.issuesState),
         set('sorting', initialState.sorting)
-      ])(state)
+      ])(state),
+    [SET_LABELS]: (state, { payload: { labels } }) =>
+      set('issueLabels', labels, state)
   },
   initialState
 );

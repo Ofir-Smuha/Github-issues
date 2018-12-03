@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { concat, uniqBy, includes } from 'lodash/fp';
 
-import { deleteLabel } from 'actions/issues.actions';
+import { deleteLabel, addLabel } from 'actions/issues.actions';
 
 import check from 'assets/images/check.svg';
 import exit from 'assets/images/exit.svg';
@@ -21,11 +21,14 @@ type State = {
 };
 
 type OwnProps = {
-  labels: {}[]
+  labels: {}[],
+  match: Object
 };
 
 type ConnectedProps = {
-  deleteLabel: () => void
+  deleteLabel: () => void,
+  addLabel: () => void,
+  labels: {}[]
 };
 
 class LabelsDropDown extends Component<OwnProps & ConnectedProps, State> {
@@ -33,49 +36,49 @@ class LabelsDropDown extends Component<OwnProps & ConnectedProps, State> {
     labelOptions: [
       {
         name: 'bug',
-        // text: "Somthing isn't working",
+        description: "Somthing isn't working",
         color: 'd23b46',
         active: false
       },
       {
         name: 'duplicate',
-        // text: 'this issue or pull request already exists',
+        description: 'this issue or pull request already exists',
         color: 'cfd3d7',
         active: false
       },
       {
         name: 'enhancement',
-        // text: 'New feature or request',
+        description: 'New feature or request',
         color: 'a2eeef',
         active: false
       },
       {
-        name: 'good-first-issue',
-        // text: 'Good for newcomers',
+        name: 'good first issue',
+        description: 'Good for newcomers',
         color: '7057ff',
         active: false
       },
       {
         name: 'help wanted',
-        // text: 'Extra attention is needed',
+        description: 'Extra attention is needed',
         color: '008672',
         active: false
       },
       {
         name: 'invalid',
-        // text: "This dosn'nt seem right",
+        description: "This dosn'nt seem right",
         color: 'e4e669',
         active: false
       },
       {
         name: 'question',
-        // text: 'Further information is requested',
+        description: 'Further information is requested',
         color: 'd876e3',
         active: false
       },
       {
         name: 'wontfix',
-        // text: 'this will not be worked on',
+        description: 'this will not be worked on',
         color: 'fff',
         active: false
       }
@@ -87,13 +90,14 @@ class LabelsDropDown extends Component<OwnProps & ConnectedProps, State> {
     const uniqLabels = uniqBy('name', rawLabels);
 
     return uniqLabels.map(label => (
-      <LabelContainer key={label.color}>
+      <LabelContainer
+        key={label.color}
+        onClick={() => this.handleActiveLabel(label)}>
         <Active active={'default' in label} />
         <ColorTitleContainer>
           <LabelColor color={label.color} />
           <LabelTitle>{label.name}</LabelTitle>
         </ColorTitleContainer>
-        {/*<Text>{label.text}</Text>*/}
         <DeActivate
           active={'default' in label}
           onClick={() => this.handleDeActiveLabel(label)}
@@ -103,28 +107,21 @@ class LabelsDropDown extends Component<OwnProps & ConnectedProps, State> {
   };
 
   handleDeActiveLabel = ({ name }) => {
-    console.log(name);
-    console.log(this.props.match.params);
     this.props.deleteLabel(this.props.match.params, name);
   };
 
+  handleActiveLabel = label => {
+    if ('default' in label) {
+      return;
+    }
+    this.props.addLabel(this.props.match.params, label.name);
+  };
+
   render() {
-    return (
-      <Fragment>
-        {this.renderLabels(this.props.labels)}
-        {/*{this.state.labelOptions.map(label => (*/}
-        {/*<LabelContainer key={label.color}>*/}
-        {/*<Active />*/}
-        {/*<ColorTitleContainer>*/}
-        {/*<LabelColor color={label.color} />*/}
-        {/*<LabelTitle>{label.name}</LabelTitle>*/}
-        {/*</ColorTitleContainer>*/}
-        {/*/!*<Text>{label.text}</Text>*!/*/}
-        {/*<DeActivate />*/}
-        {/*</LabelContainer>*/}
-        {/*))}*/}
-      </Fragment>
-    );
+    if (!this.props.labels) {
+      return null;
+    }
+    return <Fragment>{this.renderLabels(this.props.labels)}</Fragment>;
   }
 }
 
@@ -187,4 +184,10 @@ const LabelColor = styled.div`
 
 const Text = styled.h3``;
 
-export default withRouter(connect(null, { deleteLabel })(LabelsDropDown));
+const mapStateToProps = state => ({
+  labels: state.issues.issueLabels
+});
+
+export default withRouter(
+  connect(mapStateToProps, { deleteLabel, addLabel })(LabelsDropDown)
+);
