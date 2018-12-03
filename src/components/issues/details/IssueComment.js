@@ -37,11 +37,6 @@ const Wrapper = styled.div`
   margin-bottom: 20px;
   padding-left: 50px;
   position: relative;
-
-  &:last-child {
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e6ebf1;
-  }
 `;
 
 const Gravatar = styled.div`

@@ -36,13 +36,13 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
     const { path, baseUrl, onSuccess, onError, handleHeaders } = payload;
     const { networkLabel, data, method = 'GET' } = payload;
     const headers = {};
-    // const headers = {};
     const { blacklistKeys } = meta;
     // const requestUrl = urljoin(baseUrl || BASE_URL, path);
     // TODO: if using token authentication
     // if (getState().user.token) {
     //   headers['auth'] = getState().user.token;
     // }
+
     next(action);
 
     dispatch(startNetwork(networkLabel));
