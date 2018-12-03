@@ -32,6 +32,7 @@ DropDownContainer.propTypes = {
 };
 
 const Wrapper = styled.div`
+  display: none;
   z-index: 1;
   position: absolute;
   right: 0;

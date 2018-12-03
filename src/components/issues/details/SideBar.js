@@ -5,6 +5,7 @@ import { get, size } from 'lodash/fp';
 import DropDownContainer from 'components/issues/details/DropDownContainer';
 import AssigneesDropDown from 'components/issues/details/AssigneesDropDown';
 import LabelsDropDown from 'components/issues/details/LabelsDropDown';
+import ListSelect from 'components/common/ListSelect';
 
 import gear from 'assets/images/gear.svg';
 
@@ -58,13 +59,14 @@ const SideBar = (props: Props) => {
         <TitleActionsContainer>
           <Title>Assignees</Title>
           <GearIcon />
-          <DropDownContainer
-            items={[assignee]}
-            itemsRenderer={assignees => (
-              <AssigneesDropDown assignees={assignees} />
-            )}>
-            Assign up to 10 people to this issue
-          </DropDownContainer>
+          <ListSelect>Hello</ListSelect>
+          {/*<DropDownContainer*/}
+          {/*items={[assignee]}*/}
+          {/*itemsRenderer={assignees => (*/}
+          {/*<AssigneesDropDown assignees={assignees} />*/}
+          {/*)}>*/}
+          {/*Assign up to 10 people to this issue*/}
+          {/*</DropDownContainer>*/}
         </TitleActionsContainer>
         <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
       </AssignContainer>
