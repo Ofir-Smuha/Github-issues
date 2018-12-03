@@ -7,7 +7,8 @@ export type Issue = {
   number: number,
   title: string,
   user: { login: string },
-  comments_url: string
+  comments_url: string,
+  labels: []
 };
 
 export type SideBarIssue = {
