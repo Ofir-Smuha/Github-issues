@@ -50,6 +50,9 @@ const apiMiddleware: Middleware = ({ dispatch, getState }) => {
       .request({ method, url: path, data, headers })
       .then(({ body, header, status }) => {
         console.log('PR check');
+
+        console.log('PR check');
+        console.log('PR check');
         if (handleHeaders) {
           dispatchActions(handleHeaders, header);
         }
