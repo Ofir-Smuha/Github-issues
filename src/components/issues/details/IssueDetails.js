@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
-import AddComment from 'components/issues/details/AddComment';
 import SideBar from 'components/issues/details/SideBar';
 import Loader from 'components/common/Loader';
 import { isLoadingSelector } from 'selectors/network.selectors';
@@ -74,7 +73,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps> {
           />
           <SideBar currentIssue={this.props.currentIssue} />
         </ContentContainer>
-        <AddComment />
       </Wrapper>
     );
   }
@@ -84,6 +82,7 @@ const Wrapper = styled.div`
   width: 80%;
   max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
 `;
 
 const ContentContainer = styled.div`
