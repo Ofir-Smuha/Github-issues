@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 type OwnProps = {
-  items: [],
+  isOpen: boolean,
   searchable?: boolean,
   placeholder?: string,
+  items: [],
   handleInputChange?: string => void
 };
 
@@ -15,7 +16,7 @@ type State = {};
 
 class ListSelect extends Component<OwnProps & ConnectedProps, State> {
   render() {
-    if (!this.props.items) {
+    if (!this.props.isOpen || !this.props.items) {
       return null;
     }
     return (
@@ -37,12 +38,16 @@ class ListSelect extends Component<OwnProps & ConnectedProps, State> {
 }
 
 ListSelect.defaultProps = {
-  searchable: true,
+  isOpen: false,
+  searchable: false,
   placeholder: 'Search...'
 };
 
 ListSelect.propTypes = {
-  items: PropTypes.array
+  items: PropTypes.array.isRequired,
+  isOpen: PropTypes.boolean,
+  searchable: PropTypes.boolean,
+  handleInputChange: PropTypes.func
 };
 
 const Wrapper = styled.div`

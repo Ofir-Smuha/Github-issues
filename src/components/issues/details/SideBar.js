@@ -4,29 +4,32 @@ import styled from 'styled-components';
 import { get, size } from 'lodash/fp';
 import uuid from 'uuid/v4';
 
-import DropDownContainer from 'components/issues/details/DropDownContainer';
-import AssigneesDropDown from 'components/issues/details/AssigneesDropDown';
-import LabelsDropDown from 'components/issues/details/LabelsDropDown';
-import Label from 'components/issues/details/Label';
 import ListSelect from 'components/common/ListSelect';
+import Label from 'components/issues/details/Label';
 import labelsSelector from 'selectors/labels.selector';
 
 import gear from 'assets/images/gear.svg';
 
 import type { SideBarIssue } from 'components/issues/issues.types';
 
-type Props = {
+type OwnProps = {
   currentIssue: SideBarIssue
 };
 
-type OwnState = {
-  isLabelsOpen: boolean,
-  isAssigneesOpen: boolean
+type ConnectedProps = {
+  labels: {}[]
 };
 
-class SideBar extends Component {
+type State = {};
+
+class SideBar extends Component<OwnProps & ConnectedProps, State> {
+  state = {
+    isLabelsOpen: false,
+    isAssigneesOpen: false
+  };
+
   renderLabels = () => {
-    if (this.props.labels && size(this.props.labelslabels)) {
+    if (this.props.labels && size(this.props.labels)) {
       return this.props.labels.map(label => (
         <Label key={label.id}>{label.name}</Label>
       ));
@@ -56,8 +59,10 @@ class SideBar extends Component {
     return <Info>No milestone</Info>;
   };
 
-  handleInputChange = ({ target }) => {
-    console.log(target.value);
+  toggleState = property => {
+    this.setState({
+      [property]: !this.state[property]
+    });
   };
 
   render() {
@@ -68,32 +73,20 @@ class SideBar extends Component {
         <AssignContainer>
           <TitleActionsContainer>
             <Title>Assignees</Title>
-            <GearIcon />
-            <ListSelect
-              items={this.props.labels}
-              handleInputChange={this.handleInputChange}
-              render={label => <Label key={uuid()} label={label} />}>
-              Hello
-            </ListSelect>
-            {/*<DropDownContainer*/}
-            {/*items={[assignee]}*/}
-            {/*itemsRenderer={assignees => (*/}
-            {/*<AssigneesDropDown assignees={assignees} />*/}
-            {/*)}>*/}
-            {/*Assign up to 10 people to this issue*/}
-            {/*</DropDownContainer>*/}
+            <GearIcon onClick={() => this.toggleState('isAssigneesOpen')} />
           </TitleActionsContainer>
           <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
         </AssignContainer>
         <LabelsContainer>
           <TitleActionsContainer>
             <Title>Labels</Title>
-            <GearIcon />
-            {/*<DropDownContainer*/}
-            {/*items={labels}*/}
-            {/*itemsRenderer={label => <Label labels={labels} />}>*/}
-            {/*Apply labels to this issue*/}
-            {/*</DropDownContainer>*/}
+            <GearIcon onClick={() => this.toggleState('isLabelsOpen')} />
+            <ListSelect
+              isOpen={this.state.isLabelsOpen}
+              items={this.props.labels}
+              render={label => <Label key={uuid()} label={label} />}>
+              Apply labels to this issue
+            </ListSelect>
           </TitleActionsContainer>
           {this.renderLabels()}
         </LabelsContainer>
@@ -105,10 +98,6 @@ class SideBar extends Component {
           <Title>Milestone</Title>
           {this.renderProgress()}
         </MilestoneContainer>
-        {/*<NotificationsContainer>*/}
-        {/*<Title>Notifications</Title>*/}
-        {/*<Info />*/}
-        {/*</NotificationsContainer>*/}
       </Wrapper>
     );
   }
@@ -145,22 +134,6 @@ const Info = styled.h3`
   color: #586069;
   font-size: 12px;
 `;
-
-// const Label = styled.div`
-//   height: 20px;
-//   border: 1px solid #ed0700;
-//   border-radius: 5px;
-//   box-shadow: #ed0700 0px 0px 2px;
-//   display: flex;
-//   align-items: center;
-//   padding-left: 5px;
-//   font-size: 12px;
-//   font-weight: 600;
-//
-//   &:not(:last-child) {
-//     margin-bottom: 10px;
-//   }
-// `;
 
 const ProgressContainer = styled.div`
   border-radius: 2px;
@@ -205,10 +178,6 @@ const ProjectsContainer = styled.div`
 
 const MilestoneContainer = styled.div`
   padding: 10px 0;
-`;
-
-const NotificationsContainer = styled.div`
-  border-bottom: 1px solid #e6ebf1;
 `;
 
 const mapStateToProps = state => ({

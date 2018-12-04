@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import check from '../../../assets/images/check.svg';
-import exit from '../../../assets/images/exit.svg';
 import { withRouter } from 'react-router-dom';
 import { addLabel, deleteLabel } from '../../../actions/issues.actions';
 
 import labelsSelector from 'selectors/labels.selector';
+
+import check from '../../../assets/images/check.svg';
+import exit from '../../../assets/images/exit.svg';
 
 type OwnProps = {
   match: Object
