@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { get, size } from 'lodash/fp';
+import uuid from 'uuid/v4';
 
 import DropDownContainer from 'components/issues/details/DropDownContainer';
 import AssigneesDropDown from 'components/issues/details/AssigneesDropDown';
 import LabelsDropDown from 'components/issues/details/LabelsDropDown';
+import Label from 'components/issues/details/Label';
 import ListSelect from 'components/common/ListSelect';
+import labelsSelector from 'selectors/labels.selector';
 
 import gear from 'assets/images/gear.svg';
 
@@ -20,21 +24,20 @@ type OwnState = {
   isAssigneesOpen: boolean
 };
 
-const SideBar = (props: Props) => {
-  const { labels, milestone, projects, assignee } = props.currentIssue;
-  const assigneeName = get('login', assignee);
-
-  const renderLabels = () => {
-    if (labels && size(labels)) {
-      return labels.map(label => <Label key={label.id}>{label.name}</Label>);
+class SideBar extends Component {
+  renderLabels = () => {
+    if (this.props.labels && size(this.props.labelslabels)) {
+      return this.props.labels.map(label => (
+        <Label key={label.id}>{label.name}</Label>
+      ));
     }
     return <Info>None yet</Info>;
   };
 
-  const renderProgress = () => {
-    if (milestone) {
-      const completed = milestone.closed_issues;
-      const toComplete = milestone.open_issues;
+  renderProgress = () => {
+    if (this.props.milestone) {
+      const completed = this.props.milestone.closed_issues;
+      const toComplete = this.props.milestone.open_issues;
       const progress = toComplete / completed * 100;
       if (isNaN(progress)) {
         return 0;
@@ -44,8 +47,8 @@ const SideBar = (props: Props) => {
           <ProgressContainer>
             <ProgressBar progress={progress} />
           </ProgressContainer>
-          <BarTitle target="_blank" href={milestone.html_url}>
-            {milestone.title}
+          <BarTitle target="_blank" href={this.props.milestone.html_url}>
+            {this.props.milestone.title}
           </BarTitle>
         </div>
       );
@@ -53,61 +56,63 @@ const SideBar = (props: Props) => {
     return <Info>No milestone</Info>;
   };
 
-  const handleInputChange = ({ target }) => {
+  handleInputChange = ({ target }) => {
     console.log(target.value);
   };
 
-  return (
-    <Wrapper>
-      <AssignContainer>
-        <TitleActionsContainer>
-          <Title>Assignees</Title>
-          <GearIcon />
-          <ListSelect
-            items={labels}
-            handleInputChange={handleInputChange}
-            render={label => (
-              <LabelsDropDown key={label.color} label={label} />
-            )}>
-            Hello
-          </ListSelect>
-          {/*<DropDownContainer*/}
-          {/*items={[assignee]}*/}
-          {/*itemsRenderer={assignees => (*/}
-          {/*<AssigneesDropDown assignees={assignees} />*/}
-          {/*)}>*/}
-          {/*Assign up to 10 people to this issue*/}
-          {/*</DropDownContainer>*/}
-        </TitleActionsContainer>
-        <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
-      </AssignContainer>
-      <LabelsContainer>
-        <TitleActionsContainer>
-          <Title>Labels</Title>
-          <GearIcon />
-          <DropDownContainer
-            items={labels}
-            itemsRenderer={label => <LabelsDropDown labels={labels} />}>
-            Apply labels to this issue
-          </DropDownContainer>
-        </TitleActionsContainer>
-        {renderLabels()}
-      </LabelsContainer>
-      <ProjectsContainer>
-        <Title>Projects</Title>
-        <Info>{projects ? projects : 'None yet'}</Info>
-      </ProjectsContainer>
-      <MilestoneContainer>
-        <Title>Milestone</Title>
-        {renderProgress()}
-      </MilestoneContainer>
-      {/*<NotificationsContainer>*/}
-      {/*<Title>Notifications</Title>*/}
-      {/*<Info />*/}
-      {/*</NotificationsContainer>*/}
-    </Wrapper>
-  );
-};
+  render() {
+    const { projects, assignee } = this.props.currentIssue;
+    const assigneeName = get('login', assignee);
+    return (
+      <Wrapper>
+        <AssignContainer>
+          <TitleActionsContainer>
+            <Title>Assignees</Title>
+            <GearIcon />
+            <ListSelect
+              items={this.props.labels}
+              handleInputChange={this.handleInputChange}
+              render={label => <Label key={uuid()} label={label} />}>
+              Hello
+            </ListSelect>
+            {/*<DropDownContainer*/}
+            {/*items={[assignee]}*/}
+            {/*itemsRenderer={assignees => (*/}
+            {/*<AssigneesDropDown assignees={assignees} />*/}
+            {/*)}>*/}
+            {/*Assign up to 10 people to this issue*/}
+            {/*</DropDownContainer>*/}
+          </TitleActionsContainer>
+          <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
+        </AssignContainer>
+        <LabelsContainer>
+          <TitleActionsContainer>
+            <Title>Labels</Title>
+            <GearIcon />
+            {/*<DropDownContainer*/}
+            {/*items={labels}*/}
+            {/*itemsRenderer={label => <Label labels={labels} />}>*/}
+            {/*Apply labels to this issue*/}
+            {/*</DropDownContainer>*/}
+          </TitleActionsContainer>
+          {this.renderLabels()}
+        </LabelsContainer>
+        <ProjectsContainer>
+          <Title>Projects</Title>
+          <Info>{projects ? projects : 'None yet'}</Info>
+        </ProjectsContainer>
+        <MilestoneContainer>
+          <Title>Milestone</Title>
+          {this.renderProgress()}
+        </MilestoneContainer>
+        {/*<NotificationsContainer>*/}
+        {/*<Title>Notifications</Title>*/}
+        {/*<Info />*/}
+        {/*</NotificationsContainer>*/}
+      </Wrapper>
+    );
+  }
+}
 
 const Wrapper = styled.div`
   width: 230px;
@@ -141,21 +146,21 @@ const Info = styled.h3`
   font-size: 12px;
 `;
 
-const Label = styled.div`
-  height: 20px;
-  border: 1px solid #ed0700;
-  border-radius: 5px;
-  box-shadow: #ed0700 0px 0px 2px;
-  display: flex;
-  align-items: center;
-  padding-left: 5px;
-  font-size: 12px;
-  font-weight: 600;
-
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
-`;
+// const Label = styled.div`
+//   height: 20px;
+//   border: 1px solid #ed0700;
+//   border-radius: 5px;
+//   box-shadow: #ed0700 0px 0px 2px;
+//   display: flex;
+//   align-items: center;
+//   padding-left: 5px;
+//   font-size: 12px;
+//   font-weight: 600;
+//
+//   &:not(:last-child) {
+//     margin-bottom: 10px;
+//   }
+// `;
 
 const ProgressContainer = styled.div`
   border-radius: 2px;
@@ -206,4 +211,8 @@ const NotificationsContainer = styled.div`
   border-bottom: 1px solid #e6ebf1;
 `;
 
-export default SideBar;
+const mapStateToProps = state => ({
+  labels: labelsSelector(state)
+});
+
+export default connect(mapStateToProps)(SideBar);
