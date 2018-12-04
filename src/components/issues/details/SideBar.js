@@ -53,13 +53,24 @@ const SideBar = (props: Props) => {
     return <Info>No milestone</Info>;
   };
 
+  const handleInputChange = ({ target }) => {
+    console.log(target.value);
+  };
+
   return (
     <Wrapper>
       <AssignContainer>
         <TitleActionsContainer>
           <Title>Assignees</Title>
           <GearIcon />
-          <ListSelect>Hello</ListSelect>
+          <ListSelect
+            items={labels}
+            handleInputChange={handleInputChange}
+            render={label => (
+              <LabelsDropDown key={label.color} label={label} />
+            )}>
+            Hello
+          </ListSelect>
           {/*<DropDownContainer*/}
           {/*items={[assignee]}*/}
           {/*itemsRenderer={assignees => (*/}
@@ -76,7 +87,7 @@ const SideBar = (props: Props) => {
           <GearIcon />
           <DropDownContainer
             items={labels}
-            itemsRenderer={labels => <LabelsDropDown labels={labels} />}>
+            itemsRenderer={label => <LabelsDropDown labels={labels} />}>
             Apply labels to this issue
           </DropDownContainer>
         </TitleActionsContainer>

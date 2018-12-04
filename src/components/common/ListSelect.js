@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 type OwnProps = {
-  searchable: boolean
+  items: [],
+  searchable?: boolean,
+  placeholder?: string,
+  handleInputChange?: string => void
 };
 
 type ConnectedProps = {};
@@ -12,25 +15,35 @@ type State = {};
 
 class ListSelect extends Component<OwnProps & ConnectedProps, State> {
   render() {
+    if (!this.props.items) {
+      return null;
+    }
     return (
       <Wrapper>
         <Title>{this.props.children}</Title>
         {this.props.searchable && (
           <FilterContainer>
-            <Filter type="text" placeholder="temporary" />
+            <Filter
+              type="text"
+              placeholder={this.props.placeholder}
+              onChange={e => this.props.handleInputChange(e)}
+            />
           </FilterContainer>
         )}
-        {/*{this.props.itemsRenderer(this.props.items)}*/}
+        {this.props.items.map(item => this.props.render(item))}
       </Wrapper>
     );
   }
 }
 
 ListSelect.defaultProps = {
-  searchable: false
+  searchable: true,
+  placeholder: 'Search...'
 };
 
-ListSelect.PropTypes = {};
+ListSelect.propTypes = {
+  items: PropTypes.array
+};
 
 const Wrapper = styled.div`
   z-index: 1;
