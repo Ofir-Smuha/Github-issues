@@ -10,17 +10,25 @@ import labelsSelector from 'selectors/labels.selector';
 
 import gear from 'assets/images/gear.svg';
 
-import type { SideBarIssue } from 'components/issues/issues.types';
+import type {
+  SideBarIssue,
+  IssueLabel,
+  OptionLabel
+} from 'components/issues/issues.types';
 
 type OwnProps = {
   currentIssue: SideBarIssue
 };
 
 type ConnectedProps = {
-  labels: {}[]
+  labels: OptionLabel[],
+  issueLabels: IssueLabel[]
 };
 
-type State = {};
+type State = {
+  isLabelsOpen: boolean,
+  isAssigneesOpen: boolean
+};
 
 class SideBar extends Component<OwnProps & ConnectedProps, State> {
   state = {

@@ -17,8 +17,6 @@ type Props = {|
 |};
 
 const IssuePreview = (props: Props) => {
-  console.log('props', props);
-
   const { name, repo } = props.match.params;
   const userName = get('user.login', props.openIssue);
   const {
