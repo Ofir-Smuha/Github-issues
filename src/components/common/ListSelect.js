@@ -53,7 +53,11 @@ ListSelect.propTypes = {
   items: PropTypes.array.isRequired,
   isOpen: PropTypes.boolean,
   searchable: PropTypes.boolean,
-  handleInputChange: PropTypes.func
+  handleInputChange: PropTypes.func,
+  top: PropTypes.string,
+  right: PropTypes.string,
+  bottom: PropTypes.string,
+  left: PropTypes.string
 };
 
 const Wrapper = styled.div`
