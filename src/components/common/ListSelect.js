@@ -7,7 +7,8 @@ type OwnProps = {
   searchable?: boolean,
   placeholder?: string,
   items: [],
-  handleInputChange?: string => void
+  handleInputChange?: string => void,
+  position: Object
 };
 
 type ConnectedProps = {};
@@ -16,11 +17,12 @@ type State = {};
 
 class ListSelect extends Component<OwnProps & ConnectedProps, State> {
   render() {
+    const { top, right, left, bottom } = this.props;
     if (!this.props.isOpen || !this.props.items) {
       return null;
     }
     return (
-      <Wrapper>
+      <Wrapper top={top} right={right} left={left} bottom={bottom}>
         <Title>{this.props.children}</Title>
         {this.props.searchable && (
           <FilterContainer>
@@ -40,7 +42,11 @@ class ListSelect extends Component<OwnProps & ConnectedProps, State> {
 ListSelect.defaultProps = {
   isOpen: false,
   searchable: false,
-  placeholder: 'Search...'
+  placeholder: 'Search...',
+  top: '',
+  right: '',
+  bottom: '',
+  left: ''
 };
 
 ListSelect.propTypes = {
@@ -53,8 +59,10 @@ ListSelect.propTypes = {
 const Wrapper = styled.div`
   z-index: 1;
   position: absolute;
-  right: 0;
-  top: -100%;
+  top: ${({ top }) => top};
+  right: ${({ right }) => right};
+  bottom: ${({ bottom }) => bottom};
+  top: ${({ left }) => left};
   width: 300px;
   border: 1px solid #e1e4e8;
   border-radius: 3px;

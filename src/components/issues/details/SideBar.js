@@ -29,9 +29,11 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   };
 
   renderLabels = () => {
-    if (this.props.labels && size(this.props.labels)) {
-      return this.props.labels.map(label => (
-        <Label key={label.id}>{label.name}</Label>
+    if (this.props.issueLabels && size(this.props.issueLabels)) {
+      return this.props.issueLabels.map(label => (
+        <LabelBar color={label.color} key={label.id}>
+          <LabelText>{label.name}</LabelText>
+        </LabelBar>
       ));
     }
     return <Info>None yet</Info>;
@@ -82,6 +84,8 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
             <Title>Labels</Title>
             <GearIcon onClick={() => this.toggleState('isLabelsOpen')} />
             <ListSelect
+              top={'23px'}
+              right={'-2px'}
               isOpen={this.state.isLabelsOpen}
               items={this.props.labels}
               render={label => <Label key={uuid()} label={label} />}>
@@ -171,6 +175,24 @@ const LabelsContainer = styled.div`
   padding: 10px 0;
 `;
 
+const LabelBar = styled.div`
+  width: 100%;
+  background-color: #${({ color }) => color};
+  height: 20px;
+  display: flex;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+`;
+
+const LabelText = styled.h3`
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 5px;
+`;
+
 const ProjectsContainer = styled.div`
   border-bottom: 1px solid #e6ebf1;
   padding: 10px 0;
@@ -181,7 +203,8 @@ const MilestoneContainer = styled.div`
 `;
 
 const mapStateToProps = state => ({
-  labels: labelsSelector(state)
+  labels: labelsSelector(state),
+  issueLabels: state.issues.issueLabels
 });
 
 export default connect(mapStateToProps)(SideBar);
