@@ -8,7 +8,8 @@ type OwnProps = {
   placeholder?: string,
   items: [],
   handleInputChange?: string => void,
-  position: Object
+  position: Object,
+  fallBack?: [] | boolean
 };
 
 type ConnectedProps = {};
@@ -16,9 +17,21 @@ type ConnectedProps = {};
 type State = {};
 
 class ListSelect extends Component<OwnProps & ConnectedProps, State> {
+  renderItems = () => {
+    if (this.props.items) {
+      return this.props.items.map(item => this.props.render(item));
+    } else if (this.props.fallBack) {
+      if (Array.isArray(this.props.fallBack)) {
+        return this.props.fallBack.map(item => this.props.render(item));
+      }
+      return this.props.fallBack.map(item => this.props.render(item));
+    }
+  };
+
   render() {
     const { top, right, left, bottom } = this.props;
-    if (!this.props.isOpen || !this.props.items) {
+    if (!this.props.isOpen || (!this.props.items && !this.props.fallBack)) {
+      console.log('null');
       return null;
     }
     return (
@@ -33,7 +46,7 @@ class ListSelect extends Component<OwnProps & ConnectedProps, State> {
             />
           </FilterContainer>
         )}
-        {this.props.items.map(item => this.props.render(item))}
+        {this.renderItems()}
       </Wrapper>
     );
   }
@@ -46,7 +59,8 @@ ListSelect.defaultProps = {
   top: '',
   right: '',
   bottom: '',
-  left: ''
+  left: '',
+  fallBack: false
 };
 
 ListSelect.propTypes = {

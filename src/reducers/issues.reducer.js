@@ -11,7 +11,8 @@ import {
   SET_SORT_STATE,
   SET_SORTING,
   RESET_SORTING,
-  SET_LABELS
+  SET_LABELS,
+  SET_COLLABORATORS
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -68,7 +69,11 @@ export default handleActions(
         set('sorting', initialState.sorting)
       ])(state),
     [SET_LABELS]: (state, { payload: { labels } }) =>
-      set('issueLabels', labels, state)
+      set('issueLabels', labels, state),
+    [SET_COLLABORATORS]: (state, { payload: { collaborators } }) => {
+      console.log('colab: ', collaborators);
+      return state;
+    }
   },
   initialState
 );

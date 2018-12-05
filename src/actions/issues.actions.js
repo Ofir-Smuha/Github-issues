@@ -29,6 +29,8 @@ export const POST_COMMENT = 'POST_COMMENT';
 export const ADD_LABEL = 'ADD_LABEL';
 export const DELETE_LABEL = 'DELETE_LABEL';
 export const SET_LABELS = 'SET_LABELS';
+export const FETCH_COLLABORATORS = 'FETCH_COLLABORATORS';
+export const SET_COLLABORATORS = 'SET_COLLABORATORS';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -207,5 +209,22 @@ export const setLabels = labels => ({
   type: SET_LABELS,
   payload: {
     labels
+  }
+});
+
+export const fetchCollaborators = (name, repo, number) =>
+  apiAction({
+    type: FETCH_COLLABORATORS,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/repos/${name}/${repo}/collaborators?access_token=${token}`,
+      onSuccess: setCollaborators
+    }
+  });
+
+export const setCollaborators = collaborators => ({
+  type: SET_COLLABORATORS,
+  payload: {
+    collaborators
   }
 });

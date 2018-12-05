@@ -15,8 +15,7 @@ type OwnProps = {
 
 type ConnectedProps = {
   deleteLabel: () => void,
-  addLabel: () => void,
-  labels: {}[]
+  addLabel: () => void
 };
 
 class Label extends Component<OwnProps & ConnectedProps> {
@@ -110,9 +109,5 @@ const LabelColor = styled.div`
   background-color: #${({ color }) => color};
   margin-right: 5px;
 `;
-
-const mapStateToProps = state => ({
-  labels: labelsSelector(state)
-});
 
 export default withRouter(connect(null, { deleteLabel, addLabel })(Label));
