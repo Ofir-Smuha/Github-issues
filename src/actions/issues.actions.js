@@ -3,12 +3,18 @@ import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
 
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
+import { get } from 'lodash/fp';
+
+const user = JSON.parse(localStorage.getItem('auth'));
+const token = get('user.token', user);
+
 export type Header = {};
 export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
 export const SET_ISSUES = 'SET_ISSUES';
 export const FETCH_ISSUE = 'FETCH_ISSUE';
+export const FETCH_ISSUE_AFTER_COMMENT = 'FETCH_ISSUE_AFTER_COMMENT';
 export const SET_CURRENT_ISSUE = 'SET_CURRENT_ISSUE';
 export const REMOVE_CURRENT_ISSUE = 'REMOVE_CURRENT_ISSUE';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
@@ -19,9 +25,14 @@ export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const SET_SORT_STATE = 'SET_SORT_STATE';
 export const SET_SORTING = 'SET_SORTING';
 export const RESET_SORTING = 'RESET_SORTING';
+export const POST_COMMENT = 'POST_COMMENT';
+export const ADD_LABEL = 'ADD_LABEL';
+export const DELETE_LABEL = 'DELETE_LABEL';
+export const SET_LABELS = 'SET_LABELS';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
+export const COMMENT_LABEL = 'COMMENT_LABEL';
 
 export const fetchIssues = (
   page = 1,
@@ -67,8 +78,19 @@ export const fetchIssue = (
         query.number
       }`,
       networkLabel: ISSUE_LABEL,
-      onSuccess: setCurrentIssue,
+      onSuccess: [setCurrentIssue, setInitialLabels],
       issueNumber: query.number
+    }
+  });
+
+export const fetchIssueAfterComment = ({ issue_url }: { issue_url: string }) =>
+  apiAction({
+    type: FETCH_ISSUE_AFTER_COMMENT,
+    payload: {
+      method: 'GET',
+      path: issue_url,
+      networkLabel: ISSUE_LABEL,
+      onSuccess: setCurrentIssue
     }
   });
 
@@ -130,4 +152,60 @@ export const setSortingInState = (sorting: string) => ({
 
 export const ResetIssuesSort = () => ({
   type: RESET_SORTING
+});
+
+export const handlePostComment = (
+  query: Object,
+  comment: Object,
+  token: string
+) =>
+  apiAction({
+    type: POST_COMMENT,
+    payload: {
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }/comments?access_token=${token}`,
+      method: 'POST',
+      data: comment,
+      onSuccess: fetchIssueAfterComment
+    }
+  });
+
+export const addLabel = (query: Object, name) =>
+  apiAction({
+    type: ADD_LABEL,
+    payload: {
+      method: 'POST',
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }/labels?access_token=${token}`,
+      data: { labels: [name] },
+      onSuccess: setLabels
+    }
+  });
+
+export const deleteLabel = (query: Object, labelName: string) =>
+  apiAction({
+    type: DELETE_LABEL,
+    payload: {
+      method: 'DELETE',
+      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
+        query.number
+      }/labels/${labelName}?access_token=${token}`,
+      onSuccess: setLabels
+    }
+  });
+
+export const setInitialLabels = ({ labels }) => ({
+  type: SET_LABELS,
+  payload: {
+    labels
+  }
+});
+
+export const setLabels = labels => ({
+  type: SET_LABELS,
+  payload: {
+    labels
+  }
 });

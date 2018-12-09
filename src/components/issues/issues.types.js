@@ -30,3 +30,18 @@ export type Comment = {
 };
 
 export type Comments = Comment[];
+
+export type IssueLabel = {
+  id: number,
+  name: string,
+  color: string,
+  default: boolean
+};
+
+export type OptionLabel = {
+  name: string,
+  description: string,
+  color: string,
+  id?: number,
+  default?: boolean
+};
