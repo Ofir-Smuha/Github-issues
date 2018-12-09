@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import { addLabel, deleteLabel } from '../../../actions/issues.actions';
+import { addLabel, deleteLabel } from 'actions/issues.actions';
 
 import labelsSelector from 'selectors/labels.selector';
 
-import check from '../../../assets/images/check.svg';
-import exit from '../../../assets/images/exit.svg';
+import check from 'assets/images/check.svg';
+import exit from 'assets/images/exit.svg';
 
 type OwnProps = {
   match: Object
@@ -36,7 +36,7 @@ class Label extends Component<OwnProps & ConnectedProps> {
       return null;
     }
 
-    const label = this.props.label;
+    const { label } = this.props;
 
     return (
       <LabelContainer onClick={() => this.handleActiveLabel(label)}>

@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-type OwnProps = {
+type Props = {
   isOpen: boolean,
   searchable?: boolean,
   placeholder?: string,
@@ -11,33 +11,27 @@ type OwnProps = {
   position: Object
 };
 
-type ConnectedProps = {};
-
-type State = {};
-
-class ListSelect extends Component<OwnProps & ConnectedProps, State> {
-  render() {
-    const { top, right, left, bottom } = this.props;
-    if (!this.props.isOpen || !this.props.items) {
-      return null;
-    }
-    return (
-      <Wrapper top={top} right={right} left={left} bottom={bottom}>
-        <Title>{this.props.children}</Title>
-        {this.props.searchable && (
-          <FilterContainer>
-            <Filter
-              type="text"
-              placeholder={this.props.placeholder}
-              onChange={e => this.props.handleInputChange(e)}
-            />
-          </FilterContainer>
-        )}
-        {this.props.items.map(item => this.props.render(item))}
-      </Wrapper>
-    );
+const ListSelect = (props: Props) => {
+  const { top, right, left, bottom } = props;
+  if (!props.isOpen || !props.items) {
+    return null;
   }
-}
+  return (
+    <Wrapper top={top} right={right} left={left} bottom={bottom}>
+      <Title>{props.children}</Title>
+      {props.searchable && (
+        <FilterContainer>
+          <Filter
+            type="text"
+            placeholder={props.placeholder}
+            onChange={e => props.handleInputChange(e)}
+          />
+        </FilterContainer>
+      )}
+      {props.items.map(item => props.render(item))}
+    </Wrapper>
+  );
+};
 
 ListSelect.defaultProps = {
   isOpen: false,
@@ -63,11 +57,16 @@ ListSelect.propTypes = {
 const Wrapper = styled.div`
   z-index: 1;
   position: absolute;
-  top: ${({ top }) => top};
-  right: ${({ right }) => right};
-  bottom: ${({ bottom }) => bottom};
-  top: ${({ left }) => left};
-  width: 300px;
+
+  ${({ top }) =>
+    top &&
+    `
+    top: ${top};
+  `} ${({ right }) =>
+      right &&
+      `
+    right: ${right};
+  `} width: 300px;
   border: 1px solid #e1e4e8;
   border-radius: 3px;
 `;

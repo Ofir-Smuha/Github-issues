@@ -8,11 +8,11 @@ const optionLabelsSelector = () => labelOptions;
 
 const labelsSelector = createSelector(
   [optionLabelsSelector, userLabelsSelector],
-  (LabelOptions, userLabels) => {
+  (labelOptions, userLabels) => {
     if (!userLabels) {
-      return LabelOptions;
+      return labelOptions;
     }
-    const rawLabels = concat(userLabels, LabelOptions);
+    const rawLabels = concat(userLabels, labelOptions);
     const labels = uniqBy('name', rawLabels);
     return labels;
   }

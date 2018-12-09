@@ -37,7 +37,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   };
 
   renderLabels = () => {
-    if (this.props.issueLabels && size(this.props.issueLabels)) {
+    if (size(this.props.issueLabels)) {
       return this.props.issueLabels.map(label => (
         <LabelBar color={label.color} key={label.id}>
           <LabelText>{label.name}</LabelText>
@@ -92,8 +92,8 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
             <Title>Labels</Title>
             <GearIcon onClick={() => this.toggleState('isLabelsOpen')} />
             <ListSelect
-              top={'23px'}
-              right={'-2px'}
+              top="23px"
+              right="-2px"
               isOpen={this.state.isLabelsOpen}
               items={this.props.labels}
               render={label => <Label key={uuid()} label={label} />}>
