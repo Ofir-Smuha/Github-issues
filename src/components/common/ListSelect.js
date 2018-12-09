@@ -31,9 +31,9 @@ class ListSelect extends Component<OwnProps & ConnectedProps, State> {
   render() {
     const { top, right, left, bottom } = this.props;
     if (!this.props.isOpen || (!this.props.items && !this.props.fallBack)) {
-      console.log('null');
       return null;
     }
+
     return (
       <Wrapper top={top} right={right} left={left} bottom={bottom}>
         <Title>{this.props.children}</Title>

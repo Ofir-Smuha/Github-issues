@@ -31,6 +31,7 @@ export const DELETE_LABEL = 'DELETE_LABEL';
 export const SET_LABELS = 'SET_LABELS';
 export const FETCH_COLLABORATORS = 'FETCH_COLLABORATORS';
 export const SET_COLLABORATORS = 'SET_COLLABORATORS';
+export const SET_ASSIGNEES = 'SET_ASSIGNEES';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -80,7 +81,7 @@ export const fetchIssue = (
         query.number
       }`,
       networkLabel: ISSUE_LABEL,
-      onSuccess: [setCurrentIssue, setInitialLabels],
+      onSuccess: [setCurrentIssue, setInitialLabels, setAssignees],
       issueNumber: query.number
     }
   });
@@ -212,7 +213,7 @@ export const setLabels = labels => ({
   }
 });
 
-export const fetchCollaborators = (name, repo, number) =>
+export const fetchCollaborators = (name, repo) =>
   apiAction({
     type: FETCH_COLLABORATORS,
     payload: {
@@ -226,5 +227,12 @@ export const setCollaborators = collaborators => ({
   type: SET_COLLABORATORS,
   payload: {
     collaborators
+  }
+});
+
+export const setAssignees = ({ assignees }: { assignees: [] }) => ({
+  type: SET_ASSIGNEES,
+  payload: {
+    assignees
   }
 });

@@ -6,6 +6,7 @@ import uuid from 'uuid/v4';
 
 import ListSelect from 'components/common/ListSelect';
 import Label from 'components/issues/details/Label';
+import Assignee from 'components/issues/details/Assignee';
 import labelsSelector from 'selectors/labels.selector';
 
 import gear from 'assets/images/gear.svg';
@@ -76,7 +77,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   };
 
   render() {
-    const { projects, assignee } = this.props.currentIssue;
+    const { projects, assignee, assignees } = this.props.currentIssue;
     const assigneeName = get('login', assignee);
     return (
       <Wrapper>
@@ -84,6 +85,16 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
           <TitleActionsContainer>
             <Title>Assignees</Title>
             <GearIcon onClick={() => this.toggleState('isAssigneesOpen')} />
+            <ListSelect
+              top={'23px'}
+              right={'-2px'}
+              isOpen={this.state.isAssigneesOpen}
+              items={assignees}
+              render={assignee => (
+                <Assignee key={uuid()} assignee={assignee} />
+              )}>
+              Assign up to 10 people to this issue
+            </ListSelect>
           </TitleActionsContainer>
           <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
         </AssignContainer>

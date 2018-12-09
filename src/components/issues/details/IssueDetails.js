@@ -42,7 +42,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
     }
     const { name, repo, number } = this.props.match.params;
     this.props.fetchIssue({ name, repo, number });
-    this.props.fetchCollaborators(name, repo, number);
+    this.props.fetchCollaborators(name, repo);
   }
 
   componentDidUpdate(prevProps) {
