@@ -46,9 +46,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.currentIssue) {
-      console.log(this.props.currentIssue);
-    }
     if (
       this.props.currentIssue &&
       this.props.currentIssue.comments &&

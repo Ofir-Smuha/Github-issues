@@ -18,13 +18,6 @@ type ConnectedProps = {
 };
 
 class Assignee extends Component<OwnProps, ConnectedProps> {
-  componentDidUpdate() {
-    console.log('DDD', this.props.assignee);
-  }
-  componentDidMount() {
-    const x = hasIn('isAssignee ', this.props.assignee);
-    console.log('MMM', x);
-  }
   handleAssigneeSelect = assignee => {
     const { repo, name, number } = this.props.match.params;
     const query = {
@@ -37,10 +30,8 @@ class Assignee extends Component<OwnProps, ConnectedProps> {
     };
 
     if (hasIn('isAssignee', assignee)) {
-      console.log('HAS');
       this.props.deleteAssignee(query);
     } else {
-      console.log('DONT HAS');
       this.props.addAssignee(query);
     }
   };

@@ -260,10 +260,3 @@ export const deleteAssignee = ({ repo, name, number, assignees }) =>
       onSuccess: setAssignees
     }
   });
-
-export const setAssigneesAfterAction = assignees => ({
-  type: SET_ASSIGNEES,
-  payload: {
-    assignees
-  }
-});

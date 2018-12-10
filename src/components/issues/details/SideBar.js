@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { get, size } from 'lodash/fp';
+import { get, size, isEmpty, hasIn, compact } from 'lodash/fp';
 import uuid from 'uuid/v4';
 
 import ListSelect from 'components/common/ListSelect';
@@ -38,12 +38,26 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     isAssigneesOpen: false
   };
 
-  componentDidUpdate() {
-    console.log('AAA', this.props.assignees);
-  }
+  renderAssignees = () => {
+    const assignees = this.props.assignees.map(assignee => {
+      if (hasIn('isAssignee', assignee)) {
+        return (
+          <AssigneeContainer>
+            <AssigneeAvatar avatar={assignee.avatar_url} />
+            <AssigneeName>{assignee.login}</AssigneeName>
+          </AssigneeContainer>
+        );
+      }
+    });
+
+    if (isEmpty(compact(assignees))) {
+      return <Info>No one assigned</Info>;
+    }
+    return assignees;
+  };
 
   renderLabels = () => {
-    if (this.props.issueLabels && size(this.props.issueLabels)) {
+    if (size(this.props.issueLabels)) {
       return this.props.issueLabels.map(label => (
         <LabelBar color={label.color} key={label.id}>
           <LabelText>{label.name}</LabelText>
@@ -82,8 +96,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   };
 
   render() {
-    const { projects, assignee } = this.props.currentIssue;
-    const assigneeName = get('login', assignee);
+    const { projects } = this.props.currentIssue;
     return (
       <Wrapper>
         <AssignContainer>
@@ -99,7 +112,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               Assign up to 10 people to this issue
             </ListSelect>
           </TitleActionsContainer>
-          <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
+          {this.renderAssignees()}
         </AssignContainer>
         <LabelsContainer>
           <TitleActionsContainer>
@@ -159,6 +172,25 @@ const Title = styled.h1`
 const Info = styled.h3`
   color: #586069;
   font-size: 12px;
+`;
+
+const AssigneeContainer = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: 5px;
+`;
+
+const AssigneeAvatar = styled.div`
+  background: url(${({ avatar }) => avatar}) no-repeat center;
+  background-size: contain;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+`;
+
+const AssigneeName = styled.h3`
+  color: #586069;
+  font-size: 14px;
 `;
 
 const ProgressContainer = styled.div`
