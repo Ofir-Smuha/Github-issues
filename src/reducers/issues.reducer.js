@@ -75,10 +75,14 @@ export default handleActions(
       ])(state),
     [SET_LABELS]: (state, { payload: { labels } }) =>
       set('issueLabels', labels, state),
-    [SET_COLLABORATORS]: (state, { payload: { collaborators } }) =>
-      set('collaborators', collaborators, state),
-    [SET_ASSIGNEES]: (state, { payload: { assignees } }) =>
-      set('assignees', assignees, state)
+    [SET_COLLABORATORS]: (state, { payload: { collaborators } }) => {
+      console.log('colab in state', collaborators);
+      return set('collaborators', collaborators, state);
+    },
+    [SET_ASSIGNEES]: (state, { payload: { assignees } }) => {
+      console.log('assignees in state', assignees);
+      return set('assignees', assignees, state);
+    }
   },
   initialState
 );

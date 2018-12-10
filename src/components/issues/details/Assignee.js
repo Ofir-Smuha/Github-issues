@@ -1,28 +1,68 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import { hasIn } from 'lodash/fp';
+
+import { addAssignee, deleteAssignee } from 'actions/issues.actions';
 
 import check from 'assets/images/check.svg';
-import exit from 'assets/images/exit.svg';
 
 type OwnProps = {
   assignee: Object
 };
 
-type ConnectedProps = {};
+type ConnectedProps = {
+  deleteAssignee: () => void,
+  addAssignee: () => void
+};
 
 class Assignee extends Component<OwnProps, ConnectedProps> {
+  componentDidUpdate() {
+    console.log('DDD', this.props.assignee);
+  }
   componentDidMount() {
-    console.log(this.props);
+    const x = hasIn('isAssignee ', this.props.assignee);
+    console.log('MMM', x);
   }
-  componentWillUpdate() {
-    console.log('props: ', this.props);
-  }
+  handleAssigneeSelect = assignee => {
+    const { repo, name, number } = this.props.match.params;
+    const query = {
+      repo,
+      name,
+      number,
+      assignees: {
+        assignees: [this.props.assignee.login]
+      }
+    };
+
+    if (hasIn('isAssignee', assignee)) {
+      console.log('HAS');
+      this.props.deleteAssignee(query);
+    } else {
+      console.log('DONT HAS');
+      this.props.addAssignee(query);
+    }
+  };
+
   render() {
+    const { login } = this.props.assignee;
+    const isAssignee = hasIn('isAssignee', this.props.assignee);
+
     return (
-      <AssigneeContainer>
-        <Active />
-        <Avatar />
-        <Name />
+      <AssigneeContainer
+        onClick={() => this.handleAssigneeSelect(this.props.assignee)}>
+        <Active active={isAssignee} />
+        <NameAvatarContainer>
+          <Avatar
+            avatar={
+              hasIn(this.props.assignee)
+                ? this.props.assignee.avatar_url
+                : this.props.assignee.user.avatar_url
+            }
+          />
+          <Name>{login}</Name>
+        </NameAvatarContainer>
       </AssigneeContainer>
     );
   }
@@ -30,6 +70,16 @@ class Assignee extends Component<OwnProps, ConnectedProps> {
 
 const AssigneeContainer = styled.div`
   position: relative;
+  padding: 8px 8px 8px 30px;
+  color: #24292e;
+  background-color: #fff;
+  z-index: 2;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1f68da;
+    color: #fff;
+  }
 `;
 
 const Active = styled.div`
@@ -48,23 +98,24 @@ const Active = styled.div`
   `};
 `;
 
-const Avatar = styled.div``;
-
-const Name = styled.h1``;
-
-const DeActivate = styled.div`
-  position: absolute;
-  background: url(${exit}) no-repeat center;
-  width: 10px;
-  height: 10px;
-  right: 10px;
-  top: 12px;
-  display: none;
-  ${({ active }) =>
-    active &&
-    `
-    display: block;
-  `};
+const NameAvatarContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
-export default Assignee;
+const Avatar = styled.div`
+  background: url(${({ avatar }) => avatar}) no-repeat center;
+  width: 15px;
+  height: 15px;
+  background-size: contain;
+  margin-right: 10px;
+`;
+
+const Name = styled.h1`
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+export default withRouter(
+  connect(null, { addAssignee, deleteAssignee })(Assignee)
+);

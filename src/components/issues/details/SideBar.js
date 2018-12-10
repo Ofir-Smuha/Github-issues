@@ -8,6 +8,7 @@ import ListSelect from 'components/common/ListSelect';
 import Label from 'components/issues/details/Label';
 import Assignee from 'components/issues/details/Assignee';
 import labelsSelector from 'selectors/labels.selector';
+import { assigneesSelector } from 'selectors/assignees.selector';
 
 import gear from 'assets/images/gear.svg';
 
@@ -36,6 +37,10 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     isLabelsOpen: false,
     isAssigneesOpen: false
   };
+
+  componentDidUpdate() {
+    console.log('AAA', this.props.assignees);
+  }
 
   renderLabels = () => {
     if (this.props.issueLabels && size(this.props.issueLabels)) {
@@ -77,7 +82,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   };
 
   render() {
-    const { projects, assignee, assignees } = this.props.currentIssue;
+    const { projects, assignee } = this.props.currentIssue;
     const assigneeName = get('login', assignee);
     return (
       <Wrapper>
@@ -89,10 +94,8 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               top={'23px'}
               right={'-2px'}
               isOpen={this.state.isAssigneesOpen}
-              items={assignees}
-              render={assignee => (
-                <Assignee key={uuid()} assignee={assignee} />
-              )}>
+              items={this.props.assignees}
+              render={e => <Assignee key={uuid()} assignee={e} />}>
               Assign up to 10 people to this issue
             </ListSelect>
           </TitleActionsContainer>
@@ -222,6 +225,7 @@ const MilestoneContainer = styled.div`
 `;
 
 const mapStateToProps = state => ({
+  assignees: assigneesSelector(state),
   labels: labelsSelector(state),
   issueLabels: state.issues.issueLabels
 });

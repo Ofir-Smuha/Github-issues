@@ -32,6 +32,8 @@ export const SET_LABELS = 'SET_LABELS';
 export const FETCH_COLLABORATORS = 'FETCH_COLLABORATORS';
 export const SET_COLLABORATORS = 'SET_COLLABORATORS';
 export const SET_ASSIGNEES = 'SET_ASSIGNEES';
+export const ADD_ASSIGNEE = 'ADD_ASSIGNEE';
+export const DELETE_ASSIGNEE = 'DELETE_ASSIGNEE';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -231,6 +233,35 @@ export const setCollaborators = collaborators => ({
 });
 
 export const setAssignees = ({ assignees }: { assignees: [] }) => ({
+  type: SET_ASSIGNEES,
+  payload: {
+    assignees
+  }
+});
+
+export const addAssignee = ({ repo, name, number, assignees }) =>
+  apiAction({
+    type: ADD_ASSIGNEE,
+    payload: {
+      method: 'POST',
+      path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/assignees?access_token=${token}`,
+      data: assignees,
+      onSuccess: setAssignees
+    }
+  });
+
+export const deleteAssignee = ({ repo, name, number, assignees }) =>
+  apiAction({
+    type: DELETE_ASSIGNEE,
+    payload: {
+      method: 'DELETE',
+      path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/assignees?access_token=${token}`,
+      data: assignees,
+      onSuccess: setAssignees
+    }
+  });
+
+export const setAssigneesAfterAction = assignees => ({
   type: SET_ASSIGNEES,
   payload: {
     assignees
