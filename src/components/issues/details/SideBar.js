@@ -42,7 +42,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     const assignees = this.props.assignees.map(assignee => {
       if (hasIn('isAssignee', assignee)) {
         return (
-          <AssigneeContainer>
+          <AssigneeContainer key={assignee.id}>
             <AssigneeAvatar avatar={assignee.avatar_url} />
             <AssigneeName>{assignee.login}</AssigneeName>
           </AssigneeContainer>
