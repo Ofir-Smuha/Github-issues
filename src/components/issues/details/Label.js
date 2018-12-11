@@ -35,7 +35,7 @@ class Label extends Component<OwnProps & ConnectedProps> {
       return null;
     }
 
-    const label = this.props.label;
+    const { label } = this.props;
 
     return (
       <LabelContainer onClick={() => this.handleActiveLabel(label)}>

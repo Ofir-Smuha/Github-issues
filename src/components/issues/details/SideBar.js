@@ -119,8 +119,8 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
             <Title>Labels</Title>
             <GearIcon onClick={() => this.toggleState('isLabelsOpen')} />
             <ListSelect
-              top={'23px'}
-              right={'-2px'}
+              top="23px"
+              right="-2px"
               isOpen={this.state.isLabelsOpen}
               items={this.props.labels}
               render={label => <Label key={uuid()} label={label} />}>
