@@ -1,0 +1,35 @@
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import styled from 'styled-components';
+
+class FilterAddBar extends Component {
+  componentDidMount() {
+    console.log(this.props);
+  }
+  // onClick(this.props.history.push('/))
+  render() {
+    return (
+      <FilterAddContainer>
+        <NewIssueBtn>New issue</NewIssueBtn>
+      </FilterAddContainer>
+    );
+  }
+}
+
+const FilterAddContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+const NewIssueBtn = styled.div`
+  padding: 6px 12px;
+  font-weight: 600;
+  color: #fff;
+  background-image: ${({ theme }) => theme.greenGradient};
+  border: 1px solid rgba(27, 31, 35, 0.2);
+  border-radius: 3px;
+  cursor: pointer;
+`;
+
+export default withRouter(FilterAddBar);

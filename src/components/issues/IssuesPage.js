@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
+import FillterAddBar from 'components/issues/FilterAddBar';
 import IssuesReset from 'components/issues/IssuesReset';
 import IssuesList from 'components/issues/IssuesList';
 import SortIssues from 'components/issues/SortIssues';
@@ -65,6 +66,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     return (
       <Wrapper>
         <Loader isLoading={this.props.isLoading} />
+        <FillterAddBar />
         <IssuesReset
           sorting={this.props.sorting}
           issuesState={this.props.issuesState}
