@@ -14,6 +14,10 @@ const IssueComment = (props: Props) => {
   const avatar = get('user.avatar_url', props.context);
   const { created_at: createdAt } = props.context;
 
+  const image = props => {
+    return <img {...props} style={{ maxWidth: '100%' }} />;
+  };
+
   return (
     <Wrapper>
       <Gravatar avatar={avatar} />
@@ -25,7 +29,11 @@ const IssueComment = (props: Props) => {
           </Details>
         </UserDetails>
         <CommentBody>
-          <MarkDown source={props.context.body} escapeHtml={false} />
+          <MarkDown
+            source={props.context.body}
+            escapeHtml={false}
+            renderers={{ image: image }}
+          />
         </CommentBody>
       </CommentContainer>
     </Wrapper>
