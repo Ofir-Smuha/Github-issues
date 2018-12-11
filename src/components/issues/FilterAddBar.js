@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import { get } from 'lodash/fp';
 
 class FilterAddBar extends Component {
   componentDidMount() {
     console.log(this.props);
   }
-  // onClick(this.props.history.push('/))
+
+  handleRedirect = () => {
+    const path = get('pathname', this.props.location) + '/new-issue';
+    console.log(path);
+    this.props.history.push(path);
+  };
   render() {
     return (
       <FilterAddContainer>
-        <NewIssueBtn>New issue</NewIssueBtn>
+        <NewIssueBtn onClick={this.handleRedirect}>New issue</NewIssueBtn>
       </FilterAddContainer>
     );
   }
