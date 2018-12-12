@@ -5,10 +5,11 @@ import { get, size, isEmpty, hasIn, compact } from 'lodash/fp';
 import uuid from 'uuid/v4';
 
 import ListSelect from 'components/common/ListSelect';
-import Label from 'components/issues/details/Label';
+import Label from 'components/common/Label';
 import Assignee from 'components/issues/details/Assignee';
 import labelsSelector from 'selectors/labels.selector';
 import { assigneesSelector } from 'selectors/assignees.selector';
+import { addLabel, deleteLabel } from 'actions/issues.actions';
 
 import gear from 'assets/images/gear.svg';
 
@@ -67,6 +68,16 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     return <Info>None yet</Info>;
   };
 
+  handleDeActiveLabel = (params, name) => {
+    console.log('params deactive: ', params);
+    this.props.deleteLabel(params, name);
+  };
+
+  handleActiveLabel = (params, label) => {
+    console.log('param-active ', label);
+    this.props.addLabel(params, label);
+  };
+
   renderProgress = () => {
     if (this.props.milestone) {
       const completed = this.props.milestone.closed_issues;
@@ -123,7 +134,14 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               right="-2px"
               isOpen={this.state.isLabelsOpen}
               items={this.props.labels}
-              render={label => <Label key={uuid()} label={label} />}>
+              render={label => (
+                <Label
+                  handleAddLabel={this.handleActiveLabel}
+                  handleDeleteLabel={this.handleDeActiveLabel}
+                  key={uuid()}
+                  label={label}
+                />
+              )}>
               Apply labels to this issue
             </ListSelect>
           </TitleActionsContainer>
@@ -262,4 +280,7 @@ const mapStateToProps = state => ({
   issueLabels: state.issues.issueLabels
 });
 
-export default connect(mapStateToProps)(SideBar);
+export default connect(mapStateToProps, {
+  addLabel,
+  deleteLabel
+})(SideBar);
