@@ -8,23 +8,12 @@ import exit from 'assets/images/exit.svg';
 
 type Props = {
   match: Object,
-  handleDeleteLabel: () => void,
-  handleAddLabel: () => void
+  handleActionCall: () => void
 };
 
 class Label extends Component<Props> {
-  componentDidMount() {
-    console.log('11', this.props);
-  }
-  handleDeleteLabel = ({ name }) => {
-    this.props.handleDeleteLabel(this.props.match.params, name);
-  };
-
-  handleAddLabel = label => {
-    if ('default' in label) {
-      return;
-    }
-    this.props.handleAddLabel(this.props.match.params, label.name);
+  handleLabelClick = label => {
+    this.props.handleLabelClick(this.props.match.params, label);
   };
 
   render() {
@@ -35,24 +24,20 @@ class Label extends Component<Props> {
     const { label } = this.props;
 
     return (
-      <LabelContainer onClick={() => this.handleAddLabel(label)}>
+      <LabelContainer onClick={() => this.handleLabelClick(label)}>
         <Active active={'default' in label} />
         <ColorTitleContainer>
           <LabelColor color={label.color} />
           <LabelTitle>{label.name}</LabelTitle>
         </ColorTitleContainer>
-        <DeActivate
-          active={'default' in label}
-          onClick={() => this.handleDeleteLabel(label)}
-        />
+        <DeActivate active={'default' in label} />
       </LabelContainer>
     );
   }
 }
 
 Label.propTypes = {
-  handleAddLabel: PropTypes.func,
-  handleDeleteLabel: PropTypes.func
+  handleLabelClick: PropTypes.func
 };
 
 const LabelContainer = styled.div`

@@ -68,14 +68,12 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     return <Info>None yet</Info>;
   };
 
-  handleDeActiveLabel = (params, name) => {
-    console.log('params deactive: ', params);
-    this.props.deleteLabel(params, name);
-  };
-
-  handleActiveLabel = (params, label) => {
-    console.log('param-active ', label);
-    this.props.addLabel(params, label);
+  handleLabelActionsCall = (params, label) => {
+    if (hasIn('default', label)) {
+      this.props.deleteLabel(params, label.name);
+    } else {
+      this.props.addLabel(params, label.name);
+    }
   };
 
   renderProgress = () => {
@@ -136,8 +134,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               items={this.props.labels}
               render={label => (
                 <Label
-                  handleAddLabel={this.handleActiveLabel}
-                  handleDeleteLabel={this.handleDeActiveLabel}
+                  handleLabelClick={this.handleLabelActionsCall}
                   key={uuid()}
                   label={label}
                 />
