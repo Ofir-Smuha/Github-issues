@@ -34,6 +34,8 @@ export const SET_COLLABORATORS = 'SET_COLLABORATORS';
 export const SET_ASSIGNEES = 'SET_ASSIGNEES';
 export const ADD_ASSIGNEE = 'ADD_ASSIGNEE';
 export const DELETE_ASSIGNEE = 'DELETE_ASSIGNEE';
+export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
+// export const SET_NEW_ISSUE = 'SET_NEW_ISSUE';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -260,3 +262,24 @@ export const deleteAssignee = ({ repo, name, number, assignees }) =>
       onSuccess: setAssignees
     }
   });
+
+export const addNewIssue = (
+  { name, repo }: { name: string, repo: string },
+  content: Object
+) =>
+  apiAction({
+    type: ADD_NEW_ISSUE,
+    payload: {
+      method: 'POST',
+      path: `https://api.github.com/repos/${name}/${repo}/issues?access_token=${token}`,
+      data: content
+      // onSuccess: setNewIssue
+    }
+  });
+//
+// export const setNewIssue = newIssue => ({
+//   type: SET_NEW_ISSUE,
+//   payload: {
+//     newIssue
+//   }
+// });

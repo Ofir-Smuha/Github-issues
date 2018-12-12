@@ -15,7 +15,7 @@ import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
 import ErrorPage from 'components/error/ErrorPage';
-import NewIssue from 'components/issues/NewIssue';
+import NewIssue from 'components/issues/new-issue/NewIssue';
 
 import {
   getUserInfoWithToken,
@@ -48,12 +48,12 @@ class App extends React.Component<ConnectedProps & OwnProps> {
               <Route path="/login" component={Login} />
               <Route exact path="/:name/:repo/issues" component={IssuesPage} />
               <Route
-                path="/:name/:repo/issues/:number"
-                component={IssueDetails}
-              />
-              <Route
                 path="/:name/:repo/issues/new-issue"
                 component={NewIssue}
+              />
+              <Route
+                path="/:name/:repo/issues/:number"
+                component={IssueDetails}
               />
               <Route exact path="/error" component={ErrorPage} />
             </Switch>

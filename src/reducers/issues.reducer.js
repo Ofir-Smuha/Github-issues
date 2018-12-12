@@ -13,7 +13,8 @@ import {
   RESET_SORTING,
   SET_LABELS,
   SET_COLLABORATORS,
-  SET_ASSIGNEES
+  SET_ASSIGNEES,
+  SET_NEW_ISSUE
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -79,6 +80,10 @@ export default handleActions(
       set('collaborators', collaborators, state),
     [SET_ASSIGNEES]: (state, { payload: { assignees } }) =>
       set('assignees', assignees, state)
+    // [SET_NEW_ISSUE]: (state, newIssue: Object) => {
+    //   console.log(newIssue);
+    //   return set('openIssues', [...this.state.openIssues, ...newIssue], state);
+    // }
   },
   initialState
 );
