@@ -35,11 +35,9 @@ export const SET_ASSIGNEES = 'SET_ASSIGNEES';
 export const ADD_ASSIGNEE = 'ADD_ASSIGNEE';
 export const DELETE_ASSIGNEE = 'DELETE_ASSIGNEE';
 export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
-// export const SET_NEW_ISSUE = 'SET_NEW_ISSUE';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
-export const COMMENT_LABEL = 'COMMENT_LABEL';
 
 export const fetchIssues = (
   page = 1,
@@ -276,10 +274,3 @@ export const addNewIssue = (
       // onSuccess: setNewIssue
     }
   });
-//
-// export const setNewIssue = newIssue => ({
-//   type: SET_NEW_ISSUE,
-//   payload: {
-//     newIssue
-//   }
-// });

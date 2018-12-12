@@ -80,10 +80,6 @@ export default handleActions(
       set('collaborators', collaborators, state),
     [SET_ASSIGNEES]: (state, { payload: { assignees } }) =>
       set('assignees', assignees, state)
-    // [SET_NEW_ISSUE]: (state, newIssue: Object) => {
-    //   console.log(newIssue);
-    //   return set('openIssues', [...this.state.openIssues, ...newIssue], state);
-    // }
   },
   initialState
 );
