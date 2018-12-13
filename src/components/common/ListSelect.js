@@ -8,7 +8,11 @@ type Props = {
   placeholder?: string,
   items: [],
   handleInputChange?: string => void,
-  position: Object
+  position: Object,
+  top: string,
+  right: string,
+  bottom: string,
+  left: string
 };
 
 const ListSelect = (props: Props) => {

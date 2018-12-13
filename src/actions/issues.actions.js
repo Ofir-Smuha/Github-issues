@@ -29,6 +29,11 @@ export const POST_COMMENT = 'POST_COMMENT';
 export const ADD_LABEL = 'ADD_LABEL';
 export const DELETE_LABEL = 'DELETE_LABEL';
 export const SET_LABELS = 'SET_LABELS';
+export const FETCH_COLLABORATORS = 'FETCH_COLLABORATORS';
+export const SET_COLLABORATORS = 'SET_COLLABORATORS';
+export const SET_ASSIGNEES = 'SET_ASSIGNEES';
+export const ADD_ASSIGNEE = 'ADD_ASSIGNEE';
+export const DELETE_ASSIGNEE = 'DELETE_ASSIGNEE';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -78,7 +83,7 @@ export const fetchIssue = (
         query.number
       }`,
       networkLabel: ISSUE_LABEL,
-      onSuccess: [setCurrentIssue, setInitialLabels],
+      onSuccess: [setCurrentIssue, setInitialLabels, setAssignees],
       issueNumber: query.number
     }
   });
@@ -209,3 +214,49 @@ export const setLabels = labels => ({
     labels
   }
 });
+
+export const fetchCollaborators = (name, repo) =>
+  apiAction({
+    type: FETCH_COLLABORATORS,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/repos/${name}/${repo}/collaborators?access_token=${token}`,
+      onSuccess: setCollaborators
+    }
+  });
+
+export const setCollaborators = collaborators => ({
+  type: SET_COLLABORATORS,
+  payload: {
+    collaborators
+  }
+});
+
+export const setAssignees = ({ assignees }: { assignees: [] }) => ({
+  type: SET_ASSIGNEES,
+  payload: {
+    assignees
+  }
+});
+
+export const addAssignee = ({ repo, name, number, assignees }) =>
+  apiAction({
+    type: ADD_ASSIGNEE,
+    payload: {
+      method: 'POST',
+      path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/assignees?access_token=${token}`,
+      data: assignees,
+      onSuccess: setAssignees
+    }
+  });
+
+export const deleteAssignee = ({ repo, name, number, assignees }) =>
+  apiAction({
+    type: DELETE_ASSIGNEE,
+    payload: {
+      method: 'DELETE',
+      path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/assignees?access_token=${token}`,
+      data: assignees,
+      onSuccess: setAssignees
+    }
+  });

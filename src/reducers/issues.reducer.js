@@ -11,7 +11,9 @@ import {
   SET_SORT_STATE,
   SET_SORTING,
   RESET_SORTING,
-  SET_LABELS
+  SET_LABELS,
+  SET_COLLABORATORS,
+  SET_ASSIGNEES
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -25,7 +27,9 @@ const initialState = {
   pageCount: 0,
   currentPage: 1,
   issuesState: null,
-  sorting: null
+  sorting: null,
+  collaborators: [],
+  assignees: []
 };
 
 export type IssuesState = {|
@@ -36,7 +40,9 @@ export type IssuesState = {|
   +currentPage: number,
   +issuesState: any,
   +sorting: any,
-  +issueLabels: null | []
+  +issueLabels: null | [],
+  +collaborators: [],
+  +assignees: []
 |};
 
 export default handleActions(
@@ -68,7 +74,11 @@ export default handleActions(
         set('sorting', initialState.sorting)
       ])(state),
     [SET_LABELS]: (state, { payload: { labels } }) =>
-      set('issueLabels', labels, state)
+      set('issueLabels', labels, state),
+    [SET_COLLABORATORS]: (state, { payload: { collaborators } }) =>
+      set('collaborators', collaborators, state),
+    [SET_ASSIGNEES]: (state, { payload: { assignees } }) =>
+      set('assignees', assignees, state)
   },
   initialState
 );

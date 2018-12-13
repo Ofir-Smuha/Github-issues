@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { get, size } from 'lodash/fp';
+import { get, size, isEmpty, hasIn, compact } from 'lodash/fp';
 import uuid from 'uuid/v4';
 
 import ListSelect from 'components/common/ListSelect';
 import Label from 'components/issues/details/Label';
+import Assignee from 'components/issues/details/Assignee';
 import labelsSelector from 'selectors/labels.selector';
+import { assigneesSelector } from 'selectors/assignees.selector';
 
 import gear from 'assets/images/gear.svg';
 
@@ -34,6 +36,24 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   state = {
     isLabelsOpen: false,
     isAssigneesOpen: false
+  };
+
+  renderAssignees = () => {
+    const assignees = this.props.assignees.map(assignee => {
+      if (hasIn('isAssignee', assignee)) {
+        return (
+          <AssigneeContainer key={assignee.id}>
+            <AssigneeAvatar avatar={assignee.avatar_url} />
+            <AssigneeName>{assignee.login}</AssigneeName>
+          </AssigneeContainer>
+        );
+      }
+    });
+
+    if (isEmpty(compact(assignees))) {
+      return <Info>No one assigned</Info>;
+    }
+    return assignees;
   };
 
   renderLabels = () => {
@@ -76,16 +96,23 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
   };
 
   render() {
-    const { projects, assignee } = this.props.currentIssue;
-    const assigneeName = get('login', assignee);
+    const { projects } = this.props.currentIssue;
     return (
       <Wrapper>
         <AssignContainer>
           <TitleActionsContainer>
             <Title>Assignees</Title>
             <GearIcon onClick={() => this.toggleState('isAssigneesOpen')} />
+            <ListSelect
+              top={'23px'}
+              right={'-2px'}
+              isOpen={this.state.isAssigneesOpen}
+              items={this.props.assignees}
+              render={e => <Assignee key={uuid()} assignee={e} />}>
+              Assign up to 10 people to this issue
+            </ListSelect>
           </TitleActionsContainer>
-          <Info>{assigneeName ? assigneeName : 'No one assigned'}</Info>
+          {this.renderAssignees()}
         </AssignContainer>
         <LabelsContainer>
           <TitleActionsContainer>
@@ -145,6 +172,25 @@ const Title = styled.h1`
 const Info = styled.h3`
   color: #586069;
   font-size: 12px;
+`;
+
+const AssigneeContainer = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: 5px;
+`;
+
+const AssigneeAvatar = styled.div`
+  background: url(${({ avatar }) => avatar}) no-repeat center;
+  background-size: contain;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+`;
+
+const AssigneeName = styled.h3`
+  color: #586069;
+  font-size: 14px;
 `;
 
 const ProgressContainer = styled.div`
@@ -211,6 +257,7 @@ const MilestoneContainer = styled.div`
 `;
 
 const mapStateToProps = state => ({
+  assignees: assigneesSelector(state),
   labels: labelsSelector(state),
   issueLabels: state.issues.issueLabels
 });
