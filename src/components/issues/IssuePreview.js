@@ -52,7 +52,9 @@ const IssuePreview = (props: Props) => {
         </CommentContainer>
         <LabelsContainer>
           {props.openIssue.labels.map(label => (
-            <Label labelColor={label.color}>{label.name}</Label>
+            <Label key={label.color} labelColor={label.color}>
+              {label.name}
+            </Label>
           ))}
         </LabelsContainer>
       </CommentsLabelsContainer>
