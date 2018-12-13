@@ -8,8 +8,11 @@ import { addAssignee, deleteAssignee } from 'actions/issues.actions';
 
 import check from 'assets/images/check.svg';
 
+import type { AssigneeType } from 'components/issues/issues.types';
+
 type OwnProps = {
-  assignee: Object
+  assignee: AssigneeType,
+  match: Object
 };
 
 type ConnectedProps = {
@@ -37,6 +40,7 @@ class Assignee extends Component<OwnProps, ConnectedProps> {
   };
 
   render() {
+    console.log('assignee', this.props.assignee);
     const { login } = this.props.assignee;
     const isAssignee = hasIn('isAssignee', this.props.assignee);
 
