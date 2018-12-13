@@ -45,3 +45,10 @@ export type OptionLabel = {
   id?: number,
   default?: boolean
 };
+
+export type AssigneeType = {
+  avatar_url: string,
+  id: number,
+  login: string,
+  permissions: Object
+};

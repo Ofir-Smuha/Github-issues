@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import moment from 'moment';
 import { get } from 'lodash/fp';
+import uuid from 'uuid/v4';
 
 import commentIcon from 'assets/images/comments.svg';
 import warning from 'assets/images/warning.svg';
@@ -52,7 +53,7 @@ const IssuePreview = (props: Props) => {
         </CommentContainer>
         <LabelsContainer>
           {props.openIssue.labels.map(label => (
-            <Label key={label.color} labelColor={label.color}>
+            <Label key={uuid()} labelColor={label.color}>
               {label.name}
             </Label>
           ))}

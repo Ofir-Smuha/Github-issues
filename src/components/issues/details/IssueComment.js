@@ -15,6 +15,7 @@ const IssueComment = (props: Props) => {
   const { created_at: createdAt } = props.context;
 
   const image = props => {
+    console.log('ppp', props);
     return <img {...props} style={{ maxWidth: '100%' }} />;
   };
 
