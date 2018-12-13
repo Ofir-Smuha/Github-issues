@@ -1,44 +1,128 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-import { get, size, map } from 'lodash/fp';
+import {
+  get,
+  size,
+  map,
+  hasIn,
+  isEmpty,
+  compact,
+  map as _map
+} from 'lodash/fp';
 
 import ListSelect from 'components/common/ListSelect';
-import Assignee from '../details/Assignee';
-import Label from '../../common/Label';
+import Assignee from 'components/common/Assignee';
+import Label from 'components/common/Label';
 import labelsOptions from 'constants/labels.constans';
 
+import { fetchCollaborators } from 'actions/issues.actions';
+
 import gear from 'assets/images/gear.svg';
-import type { OptionLabel } from '../issues.types';
 
 type Props = {};
 
 type State = {
   isLabelsOpen: boolean,
-  labels: {}[]
+  isAssigneesOpen: boolean,
+  labels: {}[],
+  storedLabels: Object,
+  storedAssignees: {}
 };
 
 class SideBar extends Component<Props, State> {
   state = {
     isLabelsOpen: false,
+    isAssigneesOpen: false,
     labels: [],
-    storedLabels: {}
+    collaborators: [],
+    storedLabels: {},
+    storedAssignees: {}
   };
 
   componentDidMount() {
-    this.setState({
-      labels: labelsOptions
-    });
+    const { name, repo } = this.props.match.params;
+    this.props.fetchCollaborators(name, repo);
+    this.setState({ labels: labelsOptions });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.collaborators !== this.props.collaborators) {
+      this.setState({ collaborators: this.props.collaborators });
+    }
   }
 
   toggleState = property => {
+    this.setState({ [property]: !this.state[property] });
+  };
+
+  handleAssigneeSelect = assignee => {
+    let collaborators = [...this.state.collaborators];
+    const storedAssignees = { ...this.state.storedAssignees };
+    const collaboratorIndex = collaborators.findIndex(
+      collaborator => assignee.login === collaborator.login
+    );
+
+    if (get('isAssignee', assignee)) {
+      delete collaborators[collaboratorIndex].isAssignee;
+      delete storedAssignees[assignee.login];
+    } else {
+      collaborators = collaborators.map((c, i) => {
+        if (i === collaboratorIndex) {
+          return {
+            ...c,
+            isAssignee: true
+          };
+        }
+
+        return c;
+      });
+
+      storedAssignees[assignee.login] = assignee;
+    }
+    console.log('CCC', collaborators);
     this.setState({
-      [property]: !this.state[property]
+      collaborators: collaborators,
+      storedAssignees: storedAssignees
     });
   };
 
-  // renderAssignees = () => {};
+  renderAssignees = () => {
+    if (!isEmpty(this.state.storedAssignees)) {
+      return _map(
+        assignee => (
+          <AssigneeContainer key={assignee.id}>
+            <AssigneeAvatar avatar={assignee.avatar_url} />
+            <AssigneeName>{assignee.login}</AssigneeName>
+          </AssigneeContainer>
+        ),
+        this.state.storedAssignees
+      );
+    }
+    return <Info>No one assigned</Info>;
+  };
+
+  handleLabelChange = (params, label) => {
+    const labels = [...this.state.labels];
+    const storedLabels = { ...this.state.storedLabels };
+    const labelIndex = labels.findIndex(
+      stateLabel => label.name === stateLabel.name
+    );
+    if (get('default', label)) {
+      delete labels[labelIndex].default;
+      delete storedLabels[label.name];
+    } else {
+      labels[labelIndex].default = true;
+      storedLabels[label.name] = label;
+    }
+
+    this.setState({
+      labels: labels,
+      storedLabels: storedLabels
+    });
+  };
 
   renderLabels = () => {
     if (size(this.state.storedLabels)) {
@@ -54,43 +138,27 @@ class SideBar extends Component<Props, State> {
     return <Info>None yet</Info>;
   };
 
-  handleLabelChange = (params, label) => {
-    const labels = [...this.state.labels];
-    const storedLabels = { ...this.state.storedLabels };
-    const labelIndex = this.state.labels.findIndex(
-      stateLabel => label.name === stateLabel.name
-    );
-    if (get('default', label)) {
-      delete labels[labelIndex].default;
-      delete storedLabels[label.name];
-      this.setState({
-        labels: labels,
-        storedLabels: storedLabels
-      });
-    } else {
-      labels[labelIndex].default = true;
-      storedLabels[label.name] = label;
-      this.setState({
-        labels: labels,
-        storedLabels: storedLabels
-      });
-    }
-
-    this.setState({
-      labels: labels
-    });
-  };
-
   render() {
     return (
       <Wrapper>
         <ItemsContainer>
           <TitleIconContainer>
             <Title>Assignees</Title>
-            <Icon />
-            {/*<ListSelect />*/}
+            <Icon onClick={() => this.toggleState('isAssigneesOpen')} />
+            <ListSelect
+              top="23px"
+              right="-2px"
+              isOpen={this.state.isAssigneesOpen}
+              items={this.state.collaborators}
+              render={collaborator => (
+                <Assignee
+                  handleAssigneeSelect={this.handleAssigneeSelect}
+                  assignee={collaborator}
+                />
+              )}
+            />
           </TitleIconContainer>
-          {/*{this.renderAssignees}*/}
+          {this.renderAssignees()}
         </ItemsContainer>
         <ItemsContainer>
           <TitleIconContainer>
@@ -176,6 +244,29 @@ const Info = styled.h3`
   font-size: 12px;
 `;
 
-const mapStateToProps = state => ({});
+const AssigneeContainer = styled.div`
+  width: 100%;
+  display: flex;
+  margin-bottom: 5px;
+`;
 
-export default connect(null)(SideBar);
+const AssigneeAvatar = styled.div`
+  background: url(${({ avatar }) => avatar}) no-repeat center;
+  background-size: contain;
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+`;
+
+const AssigneeName = styled.h3`
+  color: #586069;
+  font-size: 14px;
+`;
+
+const mapStateToProps = state => ({
+  collaborators: state.issues.collaborators
+});
+
+export default withRouter(
+  connect(mapStateToProps, { fetchCollaborators })(SideBar)
+);

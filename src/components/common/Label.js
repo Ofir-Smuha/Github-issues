@@ -8,7 +8,7 @@ import exit from 'assets/images/exit.svg';
 
 type Props = {
   match: Object,
-  handleActionCall: () => void
+  handleLabelClick: () => void
 };
 
 class Label extends Component<Props> {

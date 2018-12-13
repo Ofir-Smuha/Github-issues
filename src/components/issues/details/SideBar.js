@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { get, size, isEmpty, hasIn, compact } from 'lodash/fp';
 import uuid from 'uuid/v4';
 
 import ListSelect from 'components/common/ListSelect';
 import Label from 'components/common/Label';
-import Assignee from 'components/issues/details/Assignee';
+import Assignee from 'components/common/Assignee';
 import labelsSelector from 'selectors/labels.selector';
 import { assigneesSelector } from 'selectors/assignees.selector';
-import { addLabel, deleteLabel } from 'actions/issues.actions';
+import {
+  addLabel,
+  deleteLabel,
+  addAssignee,
+  deleteAssignee
+} from 'actions/issues.actions';
 
 import gear from 'assets/images/gear.svg';
 
@@ -55,6 +61,24 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
       return <Info>No one assigned</Info>;
     }
     return assignees;
+  };
+
+  handleAssigneeSelect = assignee => {
+    const { repo, name, number } = this.props.match.params;
+    const query = {
+      repo,
+      name,
+      number,
+      assignees: {
+        assignees: [assignee.login]
+      }
+    };
+
+    if (hasIn('isAssignee', assignee)) {
+      this.props.deleteAssignee(query);
+    } else {
+      this.props.addAssignee(query);
+    }
   };
 
   renderLabels = () => {
@@ -117,7 +141,13 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               right={'-2px'}
               isOpen={this.state.isAssigneesOpen}
               items={this.props.assignees}
-              render={e => <Assignee key={uuid()} assignee={e} />}>
+              render={e => (
+                <Assignee
+                  handleAssigneeSelect={this.handleAssigneeSelect}
+                  key={uuid()}
+                  assignee={e}
+                />
+              )}>
               Assign up to 10 people to this issue
             </ListSelect>
           </TitleActionsContainer>
@@ -277,7 +307,11 @@ const mapStateToProps = state => ({
   issueLabels: state.issues.issueLabels
 });
 
-export default connect(mapStateToProps, {
-  addLabel,
-  deleteLabel
-})(SideBar);
+export default withRouter(
+  connect(mapStateToProps, {
+    addLabel,
+    deleteLabel,
+    addAssignee,
+    deleteAssignee
+  })(SideBar)
+);

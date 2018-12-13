@@ -11,7 +11,11 @@ import SortIssues from 'components/issues/SortIssues';
 import Paginate from 'components/issues/Paginate';
 import Loader from 'components/common/Loader';
 
-import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
+import {
+  fetchIssues,
+  fetchCollaborators,
+  ISSUES_LABEL
+} from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
 import type { State } from 'types/redux.types';
@@ -95,5 +99,5 @@ const mapStateToProps = (state: State) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchIssues })(IssuesPage)
+  connect(mapStateToProps, { fetchIssues, fetchCollaborators })(IssuesPage)
 );
