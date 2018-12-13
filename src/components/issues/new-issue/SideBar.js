@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-import { get, keyBy } from 'lodash/fp';
+import { get, size, map } from 'lodash/fp';
 
 import ListSelect from 'components/common/ListSelect';
 import Assignee from '../details/Assignee';
@@ -32,42 +32,26 @@ class SideBar extends Component<Props, State> {
     });
   }
 
-  // renderAssignees = () => {};
-
   toggleState = property => {
     this.setState({
       [property]: !this.state[property]
     });
   };
 
-  // handleActiveLabel = (params, label) => {
-  //   const labelIndex = this.state.labels.findIndex(
-  //     labelItem => label.name === labelItem.name
-  //   );
-  //
-  //   const labels = [...this.state.labels];
-  //   labels[labelIndex] = { ...labels[labelIndex], default: true };
-  //   console.log(labels);
-  //   this.setState({
-  //     labels: labels
-  //   });
-  // };
+  // renderAssignees = () => {};
 
-  handleDeActiveLabel = (params, { name }) => {
-    const labels = keyBy('name', this.state.labels);
-    console.log('LA', labels);
-    // const labelIndex = this.state.labels.findIndex(
-    //   label => name === label.name
-    // );
-    //
-    // const labels = [...this.state.labels];
-    //
-    // delete labels[labelIndex].default;
-    //
-    // console.log(labels);
-    // this.setState({
-    //   labels: labels
-    // });
+  renderLabels = () => {
+    if (size(this.state.storedLabels)) {
+      return map(
+        label => (
+          <LabelBar color={label.color} key={label.id}>
+            <LabelText>{label.name}</LabelText>
+          </LabelBar>
+        ),
+        this.state.storedLabels
+      );
+    }
+    return <Info>None yet</Info>;
   };
 
   handleLabelChange = (params, label) => {
@@ -106,7 +90,7 @@ class SideBar extends Component<Props, State> {
             <Icon />
             {/*<ListSelect />*/}
           </TitleIconContainer>
-          {this.renderAssignees}
+          {/*{this.renderAssignees}*/}
         </ItemsContainer>
         <ItemsContainer>
           <TitleIconContainer>
@@ -127,6 +111,7 @@ class SideBar extends Component<Props, State> {
               Apply labels to this issue
             </ListSelect>
           </TitleIconContainer>
+          {this.renderLabels()}
         </ItemsContainer>
       </Wrapper>
     );
@@ -139,6 +124,9 @@ const Wrapper = styled.div`
 
 const ItemsContainer = styled.div`
   position: relative;
+  border-bottom: 1px solid #e6ebf1;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 `;
 
 const TitleIconContainer = styled.div`
@@ -163,6 +151,29 @@ const Icon = styled.div`
   width: 20px;
   height: 20px;
   cursor: pointer;
+`;
+
+const LabelBar = styled.div`
+  width: 100%;
+  background-color: #${({ color }) => color};
+  height: 20px;
+  display: flex;
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+`;
+
+const LabelText = styled.h3`
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 5px;
+`;
+
+const Info = styled.h3`
+  color: #586069;
+  font-size: 12px;
 `;
 
 const mapStateToProps = state => ({});
