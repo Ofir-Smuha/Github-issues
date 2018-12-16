@@ -39,7 +39,6 @@ class NewIssue extends Component<OwnProps, ConnectedProps, State> {
       assignees: this.state.assignees,
       labels: this.state.labels
     };
-    console.log('BODY', body);
     this.props.addNewIssue(query, body);
   };
 

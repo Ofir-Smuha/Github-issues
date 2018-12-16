@@ -25,10 +25,6 @@ class AddComment extends Component<ConnectedProps, State> {
     typeError: false
   };
 
-  componentDidUpdate() {
-    console.log('updated');
-  }
-
   renderEditMode = () => {
     this.setState({
       editMode: true

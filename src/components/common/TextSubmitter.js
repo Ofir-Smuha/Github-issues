@@ -51,7 +51,6 @@ class TextSubmitter extends Component<Props, State> {
     });
   };
 
-  // TODO support generic action handling
   handleSubmitText = () => {
     if (this.props.includeTitle) {
       if (isEmpty(this.state.title) || isEmpty(this.state.comment)) {

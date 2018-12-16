@@ -14,7 +14,6 @@ type Props = {
 };
 
 const Assignee = (props: Props) => {
-  console.log('Collabs: ', props);
   const handleAssigneeSelect = () => {
     props.handleAssigneeSelect(props.assignee);
   };
