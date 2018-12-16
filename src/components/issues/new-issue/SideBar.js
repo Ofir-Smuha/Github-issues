@@ -3,16 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-import {
-  get,
-  size,
-  map,
-  hasIn,
-  isEmpty,
-  compact,
-  map as _map,
-  values
-} from 'lodash/fp';
+import { get, size, isEmpty, map as _map, values } from 'lodash/fp';
 
 import ListSelect from 'components/common/ListSelect';
 import Assignee from 'components/common/Assignee';
@@ -132,7 +123,7 @@ class SideBar extends Component<Props, State> {
 
   renderLabels = () => {
     if (size(this.state.storedLabels)) {
-      return map(
+      return _map(
         label => (
           <LabelBar color={label.color} key={label.id}>
             <LabelText>{label.name}</LabelText>
