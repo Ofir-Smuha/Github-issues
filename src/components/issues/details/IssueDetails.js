@@ -62,7 +62,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
   }
 
   handleCommentSubmit = content => {
-    console.log('content:', content);
     const { name, repo, number } = this.props.match.params;
     this.props.handlePostComment(name, repo, number, {
       body: content.comment
