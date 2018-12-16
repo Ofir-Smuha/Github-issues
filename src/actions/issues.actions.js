@@ -272,6 +272,5 @@ export const addNewIssue = (
       method: 'POST',
       path: `https://api.github.com/repos/${name}/${repo}/issues?access_token=${token}`,
       data: body
-      // onSuccess: setNewIssue
     }
   });

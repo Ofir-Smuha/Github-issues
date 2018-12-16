@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -7,34 +7,32 @@ import check from 'assets/images/check.svg';
 import exit from 'assets/images/exit.svg';
 
 type Props = {
+  label: Object,
   match: Object,
   handleLabelClick: () => void
 };
 
-class Label extends Component<Props> {
-  handleLabelClick = label => {
-    this.props.handleLabelClick(this.props.match.params, label);
+const Label = (props: Props) => {
+  if (!props.label) {
+    return null;
+  }
+
+  const handleLabelClick = label => {
+    props.handleLabelClick(props.match.params, label);
   };
 
-  render() {
-    if (!this.props.label) {
-      return null;
-    }
-
-    const { label } = this.props;
-
-    return (
-      <LabelContainer onClick={() => this.handleLabelClick(label)}>
-        <Active active={'default' in label} />
-        <ColorTitleContainer>
-          <LabelColor color={label.color} />
-          <LabelTitle>{label.name}</LabelTitle>
-        </ColorTitleContainer>
-        <DeActivate active={'default' in label} />
-      </LabelContainer>
-    );
-  }
-}
+  const { label } = props;
+  return (
+    <LabelContainer onClick={() => handleLabelClick(label)}>
+      <Active active={'default' in label} />
+      <ColorTitleContainer>
+        <LabelColor color={label.color} />
+        <LabelTitle>{label.name}</LabelTitle>
+      </ColorTitleContainer>
+      <DeActivate active={'default' in label} />
+    </LabelContainer>
+  );
+};
 
 Label.propTypes = {
   handleLabelClick: PropTypes.func

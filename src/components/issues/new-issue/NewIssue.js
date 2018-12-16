@@ -15,8 +15,8 @@ type ConnectedProps = {
 };
 
 type State = {
-  assignees: [],
-  labels: []
+  assignees: string[],
+  labels: string[]
 };
 
 class NewIssue extends Component<OwnProps, ConnectedProps, State> {
