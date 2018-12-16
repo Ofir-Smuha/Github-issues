@@ -13,6 +13,7 @@ import {
   removeCurrentIssue,
   fetchComments,
   removeComments,
+  handlePostComment,
   ISSUE_LABEL
 } from 'actions/issues.actions';
 
@@ -26,6 +27,7 @@ type ConnectedProps = {
   removeCurrentIssue: () => void,
   fetchComments: () => void,
   removeComments: () => void,
+  handlePostComment: () => void,
   currentIssue?: Issue,
   issueComments: Comments,
   match: Object,
@@ -59,6 +61,14 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
     }
   }
 
+  handleCommentSubmit = content => {
+    console.log('content:', content);
+    const { name, repo, number } = this.props.match.params;
+    this.props.handlePostComment(name, repo, number, {
+      body: content.comment
+    });
+  };
+
   render() {
     if (!this.props.currentIssue) {
       return <Loader isLoading={this.props.isLoading} />;
@@ -70,6 +80,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
           <IssueContent
             currentIssue={this.props.currentIssue}
             issueComments={this.props.issueComments}
+            handleCommentSubmit={this.handleCommentSubmit}
           />
           <SideBar currentIssue={this.props.currentIssue} />
         </ContentContainer>
@@ -101,5 +112,6 @@ export default connect(mapStateToProps, {
   fetchIssue,
   removeCurrentIssue,
   fetchComments,
-  removeComments
+  removeComments,
+  handlePostComment
 })(IssueDetails);

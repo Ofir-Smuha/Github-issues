@@ -160,17 +160,11 @@ export const ResetIssuesSort = () => ({
   type: RESET_SORTING
 });
 
-export const handlePostComment = (
-  query: Object,
-  comment: Object,
-  token: string
-) =>
+export const handlePostComment = (name, repo, number, comment: Object) =>
   apiAction({
     type: POST_COMMENT,
     payload: {
-      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
-        query.number
-      }/comments?access_token=${token}`,
+      path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/comments?access_token=${token}`,
       method: 'POST',
       data: comment,
       onSuccess: fetchIssueAfterComment

@@ -70,6 +70,7 @@ class TextSubmitter extends Component<Props, State> {
     if (!isEmpty(this.state.comment)) {
       const content = { comment: this.state.comment };
       this.props.handleSubmit(content);
+      this.setState({ title: '', comment: '' });
       if (this.props.redirect) {
         this.props.history.push(this.props.redirect);
       }
