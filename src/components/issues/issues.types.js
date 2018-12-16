@@ -52,3 +52,10 @@ export type AssigneeType = {
   login: string,
   permissions: Object
 };
+
+export type NewIssue = {
+  title: string,
+  body: string,
+  assignees: string[],
+  labels: string[]
+};

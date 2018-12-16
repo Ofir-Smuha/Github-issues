@@ -1,15 +1,13 @@
 // @flow
 import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
+import { get } from 'lodash/fp';
 
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
-import { get } from 'lodash/fp';
+import type { NewIssue } from 'components/issues/issues.types';
 
 const user = JSON.parse(localStorage.getItem('auth'));
 const token = get('user.token', user);
-
-export type Header = {};
-export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
 export const SET_ISSUES = 'SET_ISSUES';
@@ -38,6 +36,9 @@ export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
+
+export type Header = {};
+export type id = number;
 
 export const fetchIssues = (
   page = 1,
@@ -263,14 +264,14 @@ export const deleteAssignee = ({ repo, name, number, assignees }) =>
 
 export const addNewIssue = (
   { name, repo }: { name: string, repo: string },
-  content: Object
+  body: NewIssue
 ) =>
   apiAction({
     type: ADD_NEW_ISSUE,
     payload: {
       method: 'POST',
       path: `https://api.github.com/repos/${name}/${repo}/issues?access_token=${token}`,
-      data: content
+      data: body
       // onSuccess: setNewIssue
     }
   });

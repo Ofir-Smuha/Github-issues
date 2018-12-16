@@ -10,7 +10,8 @@ import {
   hasIn,
   isEmpty,
   compact,
-  map as _map
+  map as _map,
+  values
 } from 'lodash/fp';
 
 import ListSelect from 'components/common/ListSelect';
@@ -22,7 +23,9 @@ import { fetchCollaborators } from 'actions/issues.actions';
 
 import gear from 'assets/images/gear.svg';
 
-type Props = {};
+type Props = {
+  handleSetValues: () => Object
+};
 
 type State = {
   isLabelsOpen: boolean,
@@ -80,13 +83,14 @@ class SideBar extends Component<Props, State> {
         return c;
       });
 
-      storedAssignees[assignee.login] = assignee;
+      storedAssignees[assignee.login] = assignee.login;
     }
-    console.log('CCC', collaborators);
     this.setState({
       collaborators: collaborators,
       storedAssignees: storedAssignees
     });
+    const items = values(storedAssignees);
+    this.props.handleSetValues('assignees', items);
   };
 
   renderAssignees = () => {
@@ -115,13 +119,15 @@ class SideBar extends Component<Props, State> {
       delete storedLabels[label.name];
     } else {
       labels[labelIndex].default = true;
-      storedLabels[label.name] = label;
+      storedLabels[label.name] = label.name;
     }
 
     this.setState({
       labels: labels,
       storedLabels: storedLabels
     });
+    const items = values(storedLabels);
+    this.props.handleSetValues('labels', items);
   };
 
   renderLabels = () => {

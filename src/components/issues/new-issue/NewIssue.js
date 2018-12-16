@@ -8,10 +8,39 @@ import SideBar from 'components/issues/new-issue/SideBar';
 
 import { addNewIssue } from 'actions/issues.actions';
 
-class NewIssue extends Component {
-  handleAction = content => {
+type OwnProps = {};
+
+type ConnectedProps = {
+  addNewIssue: () => void
+};
+
+type State = {
+  assignees: [],
+  labels: []
+};
+
+class NewIssue extends Component<OwnProps, ConnectedProps, State> {
+  state = {
+    assignees: [],
+    labels: []
+  };
+
+  setValues = (key, items) => {
+    this.setState({
+      [key]: items
+    });
+  };
+
+  handleSubmit = content => {
     const query = this.props.match.params;
-    this.props.addNewIssue(query, content);
+    const body = {
+      title: content.title,
+      body: content.comment,
+      assignees: this.state.assignees,
+      labels: this.state.labels
+    };
+    console.log('BODY', body);
+    this.props.addNewIssue(query, body);
   };
 
   render() {
@@ -22,10 +51,10 @@ class NewIssue extends Component {
           includeTitle="true"
           height="200px"
           submitText="Submit new issue"
-          handleSubmit={this.handleAction}
+          handleSubmit={this.handleSubmit}
           redirect={`/${name}/${repo}/issues`}
         />
-        <SideBar />
+        <SideBar handleSetValues={this.setValues} />
       </Wrapper>
     );
   }
