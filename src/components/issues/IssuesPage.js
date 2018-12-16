@@ -37,10 +37,12 @@ type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
+    const { name, repo } = this.props.match.params;
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     }
     this.handleFetchIssues();
+    this.props.fetchCollaborators(name, repo);
   }
 
   componentDidUpdate(prevProps) {

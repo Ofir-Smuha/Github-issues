@@ -128,6 +128,30 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     });
   };
 
+  renderParticipants = () => {
+    if (!size(this.props.collaborators)) {
+      return (
+        <ParticipantsContainer>
+          <Title>participants</Title>
+          <Info>No participants</Info>
+        </ParticipantsContainer>
+      );
+    }
+
+    return (
+      <ParticipantsContainer>
+        <Title>{size(this.props.collaborators)} participants</Title>
+        <AvatarsContainer>
+          {this.props.collaborators.map(c => (
+            <a href={c.html_url} target="_blank">
+              <Participant avatar={c.avatar_url} />
+            </a>
+          ))}
+        </AvatarsContainer>
+      </ParticipantsContainer>
+    );
+  };
+
   render() {
     const { projects } = this.props.currentIssue;
     return (
@@ -182,6 +206,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
           <Title>Milestone</Title>
           {this.renderProgress()}
         </MilestoneContainer>
+        {this.renderParticipants()}
       </Wrapper>
     );
   }
@@ -298,13 +323,33 @@ const ProjectsContainer = styled.div`
 `;
 
 const MilestoneContainer = styled.div`
+  border-bottom: 1px solid #e6ebf1;
   padding: 10px 0;
+`;
+
+const ParticipantsContainer = styled.div`
+  dispaly: flex;
+  padding: 10px 0;
+`;
+
+const AvatarsContainer = styled.div`
+  display: flex;
+`;
+
+const Participant = styled.div`
+  background: url(${({ avatar }) => avatar}) no-repeat center;
+  background-size: contain;
+  width: 26px;
+  height: 26px;
+  margin-right: 5px;
+  cursor: pointer;
 `;
 
 const mapStateToProps = state => ({
   assignees: assigneesSelector(state),
   labels: labelsSelector(state),
-  issueLabels: state.issues.issueLabels
+  issueLabels: state.issues.issueLabels,
+  collaborators: state.issues.collaborators
 });
 
 export default withRouter(
