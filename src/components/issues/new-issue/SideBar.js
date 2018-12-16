@@ -56,7 +56,7 @@ class SideBar extends Component<Props, State> {
     let collaborators = [...this.state.collaborators];
     const storedAssignees = { ...this.state.storedAssignees };
     const collaboratorIndex = collaborators.findIndex(
-      collaborator => assignee.login === collaborator.login
+      c => assignee.login === c.login
     );
 
     if (get('isAssignee', assignee)) {
@@ -102,9 +102,8 @@ class SideBar extends Component<Props, State> {
   handleLabelChange = (params, label) => {
     const labels = [...this.state.labels];
     const storedLabels = { ...this.state.storedLabels };
-    const labelIndex = labels.findIndex(
-      stateLabel => label.name === stateLabel.name
-    );
+    const labelIndex = labels.findIndex(l => label.name === l.name);
+
     if (get('default', label)) {
       delete labels[labelIndex].default;
       delete storedLabels[label.name];
