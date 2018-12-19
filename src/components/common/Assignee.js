@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { hasIn } from 'lodash/fp';
+import { get, hasIn } from 'lodash/fp';
 
 import check from 'assets/images/check.svg';
 
@@ -9,7 +9,6 @@ import type { AssigneeType } from 'components/issues/issues.types';
 
 type Props = {
   assignee: AssigneeType,
-  match: Object,
   handleAssigneeSelect: () => void
 };
 
@@ -18,7 +17,7 @@ const Assignee = (props: Props) => {
     props.handleAssigneeSelect(props.assignee);
   };
   const { login } = props.assignee;
-  const isAssignee = hasIn('isAssignee', props.assignee);
+  const isAssignee = get('isAssignee', props.assignee);
 
   return (
     <AssigneeContainer onClick={handleAssigneeSelect}>
@@ -77,8 +76,11 @@ const NameAvatarContainer = styled.div`
 `;
 
 const Avatar = styled.div`
-  background: url(${({ avatar }) => avatar}) no-repeat center;
-  width: 15px;
+  ${({ avatar }) =>
+    avatar &&
+    `
+  background: url(${avatar}) no-repeat center;
+  `} width: 15px;
   height: 15px;
   background-size: contain;
   margin-right: 10px;
