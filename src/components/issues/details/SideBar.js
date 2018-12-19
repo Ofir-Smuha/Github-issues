@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import { get, size, isEmpty, hasIn, compact } from 'lodash/fp';
+import { get, size, isEmpty, compact } from 'lodash/fp';
 import uuid from 'uuid/v4';
 
 import ListSelect from 'components/common/ListSelect';
-import Label from 'components/issues/details/Label';
-import Assignee from 'components/issues/details/Assignee';
+import Label from 'components/common/Label';
+import Assignee from 'components/common/Assignee';
 import labelsSelector from 'selectors/labels.selector';
 import { assigneesSelector } from 'selectors/assignees.selector';
+import {
+  addLabel,
+  deleteLabel,
+  addAssignee,
+  deleteAssignee
+} from 'actions/issues.actions';
 
 import gear from 'assets/images/gear.svg';
 
@@ -40,7 +47,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
 
   renderAssignees = () => {
     const assignees = this.props.assignees.map(assignee => {
-      if (hasIn('isAssignee', assignee)) {
+      if (get('isAssignee', assignee)) {
         return (
           <AssigneeContainer key={assignee.id}>
             <AssigneeAvatar avatar={assignee.avatar_url} />
@@ -56,6 +63,24 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     return assignees;
   };
 
+  handleAssigneeSelect = assignee => {
+    const { repo, name, number } = this.props.match.params;
+    const query = {
+      repo,
+      name,
+      number,
+      assignees: {
+        assignees: [assignee.login]
+      }
+    };
+
+    if (get('isAssignee', assignee)) {
+      this.props.deleteAssignee(query);
+    } else {
+      this.props.addAssignee(query);
+    }
+  };
+
   renderLabels = () => {
     if (size(this.props.issueLabels)) {
       return this.props.issueLabels.map(label => (
@@ -65,6 +90,14 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
       ));
     }
     return <Info>None yet</Info>;
+  };
+
+  handleLabelActionsCall = (params, label) => {
+    if (get('default', label)) {
+      this.props.deleteLabel(params, label.name);
+    } else {
+      this.props.addLabel(params, label.name);
+    }
   };
 
   renderProgress = () => {
@@ -95,6 +128,30 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
     });
   };
 
+  renderParticipants = () => {
+    if (!size(this.props.collaborators)) {
+      return (
+        <ParticipantsContainer>
+          <Title>participants</Title>
+          <Info>No participants</Info>
+        </ParticipantsContainer>
+      );
+    }
+
+    return (
+      <ParticipantsContainer>
+        <Title>{size(this.props.collaborators)} participants</Title>
+        <AvatarsContainer>
+          {this.props.collaborators.map(c => (
+            <a href={c.html_url} target="_blank">
+              <Participant avatar={c.avatar_url} />
+            </a>
+          ))}
+        </AvatarsContainer>
+      </ParticipantsContainer>
+    );
+  };
+
   render() {
     const { projects } = this.props.currentIssue;
     return (
@@ -108,7 +165,13 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               right={'-2px'}
               isOpen={this.state.isAssigneesOpen}
               items={this.props.assignees}
-              render={e => <Assignee key={uuid()} assignee={e} />}>
+              render={singleAssignee => (
+                <Assignee
+                  handleAssigneeSelect={this.handleAssigneeSelect}
+                  key={uuid()}
+                  assignee={singleAssignee}
+                />
+              )}>
               Assign up to 10 people to this issue
             </ListSelect>
           </TitleActionsContainer>
@@ -123,7 +186,13 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               right="-2px"
               isOpen={this.state.isLabelsOpen}
               items={this.props.labels}
-              render={label => <Label key={uuid()} label={label} />}>
+              render={label => (
+                <Label
+                  handleLabelClick={this.handleLabelActionsCall}
+                  key={uuid()}
+                  label={label}
+                />
+              )}>
               Apply labels to this issue
             </ListSelect>
           </TitleActionsContainer>
@@ -137,6 +206,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
           <Title>Milestone</Title>
           {this.renderProgress()}
         </MilestoneContainer>
+        {this.renderParticipants()}
       </Wrapper>
     );
   }
@@ -253,13 +323,40 @@ const ProjectsContainer = styled.div`
 `;
 
 const MilestoneContainer = styled.div`
+  border-bottom: 1px solid #e6ebf1;
   padding: 10px 0;
+`;
+
+const ParticipantsContainer = styled.div`
+  dispaly: flex;
+  padding: 10px 0;
+`;
+
+const AvatarsContainer = styled.div`
+  display: flex;
+`;
+
+const Participant = styled.div`
+  background: url(${({ avatar }) => avatar}) no-repeat center;
+  background-size: contain;
+  width: 26px;
+  height: 26px;
+  margin-right: 5px;
+  cursor: pointer;
 `;
 
 const mapStateToProps = state => ({
   assignees: assigneesSelector(state),
   labels: labelsSelector(state),
-  issueLabels: state.issues.issueLabels
+  issueLabels: state.issues.issueLabels,
+  collaborators: state.issues.collaborators
 });
 
-export default connect(mapStateToProps)(SideBar);
+export default withRouter(
+  connect(mapStateToProps, {
+    addLabel,
+    deleteLabel,
+    addAssignee,
+    deleteAssignee
+  })(SideBar)
+);

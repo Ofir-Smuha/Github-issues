@@ -7,14 +7,16 @@ import { get } from 'lodash/fp';
 
 import history from 'utils/history.utils';
 import { loadFromStorage } from 'utils/local-storage.utils';
-
 import theme from 'constants/themes.constants';
+
 import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
 import ErrorPage from 'components/error/ErrorPage';
+import NewIssue from 'components/issues/new-issue/NewIssue';
+
 import {
   getUserInfoWithToken,
   saveTokenToLocalStorage
@@ -45,6 +47,10 @@ class App extends React.Component<ConnectedProps & OwnProps> {
               <Route exact path="/" component={HomePage} />
               <Route path="/login" component={Login} />
               <Route exact path="/:name/:repo/issues" component={IssuesPage} />
+              <Route
+                path="/:name/:repo/issues/new-issue"
+                component={NewIssue}
+              />
               <Route
                 path="/:name/:repo/issues/:number"
                 component={IssueDetails}

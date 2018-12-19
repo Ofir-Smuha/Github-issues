@@ -4,13 +4,18 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
+import FillterAddBar from 'components/issues/FilterAddBar';
 import IssuesReset from 'components/issues/IssuesReset';
 import IssuesList from 'components/issues/IssuesList';
 import SortIssues from 'components/issues/SortIssues';
 import Paginate from 'components/issues/Paginate';
 import Loader from 'components/common/Loader';
 
-import { fetchIssues, ISSUES_LABEL } from 'actions/issues.actions';
+import {
+  fetchIssues,
+  fetchCollaborators,
+  ISSUES_LABEL
+} from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
 
 import type { State } from 'types/redux.types';
@@ -32,10 +37,12 @@ type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
+    const { name, repo } = this.props.match.params;
     if (!this.props.isAuthenticated) {
       this.props.history.push('/login');
     }
     this.handleFetchIssues();
+    this.props.fetchCollaborators(name, repo);
   }
 
   componentDidUpdate(prevProps) {
@@ -65,6 +72,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     return (
       <Wrapper>
         <Loader isLoading={this.props.isLoading} />
+        <FillterAddBar />
         <IssuesReset
           sorting={this.props.sorting}
           issuesState={this.props.issuesState}
@@ -93,5 +101,5 @@ const mapStateToProps = (state: State) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchIssues })(IssuesPage)
+  connect(mapStateToProps, { fetchIssues, fetchCollaborators })(IssuesPage)
 );

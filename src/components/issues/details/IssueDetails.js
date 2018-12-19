@@ -13,7 +13,7 @@ import {
   removeCurrentIssue,
   fetchComments,
   removeComments,
-  fetchCollaborators,
+  handlePostComment,
   ISSUE_LABEL
 } from 'actions/issues.actions';
 
@@ -27,6 +27,7 @@ type ConnectedProps = {
   removeCurrentIssue: () => void,
   fetchComments: () => void,
   removeComments: () => void,
+  handlePostComment: () => void,
   currentIssue?: Issue,
   issueComments: Comments,
   match: Object,
@@ -41,7 +42,6 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
     }
     const { name, repo, number } = this.props.match.params;
     this.props.fetchIssue({ name, repo, number });
-    this.props.fetchCollaborators(name, repo);
   }
 
   componentDidUpdate(prevProps) {
@@ -61,6 +61,13 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
     }
   }
 
+  handleCommentSubmit = content => {
+    const { name, repo, number } = this.props.match.params;
+    this.props.handlePostComment(name, repo, number, {
+      body: content.comment
+    });
+  };
+
   render() {
     if (!this.props.currentIssue) {
       return <Loader isLoading={this.props.isLoading} />;
@@ -72,6 +79,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
           <IssueContent
             currentIssue={this.props.currentIssue}
             issueComments={this.props.issueComments}
+            handleCommentSubmit={this.handleCommentSubmit}
           />
           <SideBar currentIssue={this.props.currentIssue} />
         </ContentContainer>
@@ -104,5 +112,5 @@ export default connect(mapStateToProps, {
   removeCurrentIssue,
   fetchComments,
   removeComments,
-  fetchCollaborators
+  handlePostComment
 })(IssueDetails);

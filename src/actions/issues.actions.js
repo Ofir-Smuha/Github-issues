@@ -1,15 +1,13 @@
 // @flow
 import { apiAction } from 'actions/api.actions';
 import { extractLinkFromHeaders } from 'utils/github.utils';
+import { get } from 'lodash/fp';
 
 import type { Issues, Issue, Comments } from 'components/issues/issues.actions';
-import { get } from 'lodash/fp';
+import type { NewIssue } from 'components/issues/issues.types';
 
 const user = JSON.parse(localStorage.getItem('auth'));
 const token = get('user.token', user);
-
-export type Header = {};
-export type id = number;
 
 export const FETCH_ISSUES = 'FETCH_ISSUES';
 export const SET_ISSUES = 'SET_ISSUES';
@@ -34,10 +32,13 @@ export const SET_COLLABORATORS = 'SET_COLLABORATORS';
 export const SET_ASSIGNEES = 'SET_ASSIGNEES';
 export const ADD_ASSIGNEE = 'ADD_ASSIGNEE';
 export const DELETE_ASSIGNEE = 'DELETE_ASSIGNEE';
+export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
-export const COMMENT_LABEL = 'COMMENT_LABEL';
+
+export type Header = {};
+export type id = number;
 
 export const fetchIssues = (
   page = 1,
@@ -159,17 +160,11 @@ export const ResetIssuesSort = () => ({
   type: RESET_SORTING
 });
 
-export const handlePostComment = (
-  query: Object,
-  comment: Object,
-  token: string
-) =>
+export const handlePostComment = (name, repo, number, comment: Object) =>
   apiAction({
     type: POST_COMMENT,
     payload: {
-      path: `https://api.github.com/repos/${query.name}/${query.repo}/issues/${
-        query.number
-      }/comments?access_token=${token}`,
+      path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/comments?access_token=${token}`,
       method: 'POST',
       data: comment,
       onSuccess: fetchIssueAfterComment
@@ -258,5 +253,18 @@ export const deleteAssignee = ({ repo, name, number, assignees }) =>
       path: `https://api.github.com/repos/${name}/${repo}/issues/${number}/assignees?access_token=${token}`,
       data: assignees,
       onSuccess: setAssignees
+    }
+  });
+
+export const addNewIssue = (
+  { name, repo }: { name: string, repo: string },
+  body: NewIssue
+) =>
+  apiAction({
+    type: ADD_NEW_ISSUE,
+    payload: {
+      method: 'POST',
+      path: `https://api.github.com/repos/${name}/${repo}/issues?access_token=${token}`,
+      data: body
     }
   });

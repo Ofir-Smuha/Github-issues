@@ -1,43 +1,35 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import MarkDown from 'react-markdown/with-html';
+import styled from 'styled-components';
 import { isEmpty } from 'lodash/fp';
-import { get } from 'lodash/fp';
 
-import { handlePostComment } from 'actions/issues.actions';
-
-type ConnectedProps = {
-  handlePostComment: () => void
+type Props = {
+  includeTitle: boolean,
+  height: string,
+  Submit: string,
+  handleSubmit: () => void
 };
 
 type State = {
+  title: string,
   comment: string,
   editMode: boolean,
   typeError: boolean
 };
 
-class AddComment extends Component<ConnectedProps, State> {
+class TextSubmitter extends Component<Props, State> {
   state = {
+    title: '',
     comment: '',
     editMode: true,
     typeError: false
   };
 
-  componentDidUpdate() {
-    console.log('updated');
-  }
-
-  renderEditMode = () => {
+  handleTitleChange = e => {
     this.setState({
-      editMode: true
-    });
-  };
-
-  renderDisplayMode = () => {
-    this.setState({
-      editMode: false
+      title: e.target.value
     });
   };
 
@@ -47,70 +39,107 @@ class AddComment extends Component<ConnectedProps, State> {
     });
   };
 
-  handleCommentSubmit = () => {
-    if (isEmpty(this.state.comment)) {
-      this.setState({
-        typeError: true
-      });
+  renderDisplayMode = () => {
+    this.setState({
+      editMode: false
+    });
+  };
+
+  renderEditMode = () => {
+    this.setState({
+      editMode: true
+    });
+  };
+
+  handleSubmitText = () => {
+    if (this.props.includeTitle) {
+      if (isEmpty(this.state.title) || isEmpty(this.state.comment)) {
+        this.setState({
+          typeError: true
+        });
+        return;
+      }
+      const content = { title: this.state.title, comment: this.state.comment };
+      this.props.handleSubmit(content);
+      if (this.props.redirect) {
+        this.props.history.push(this.props.redirect);
+      }
       return;
     }
-    const user = JSON.parse(localStorage.getItem('auth'));
-    const token = get('user.token', user);
-    this.props.handlePostComment(
-      this.props.match.params,
-      {
-        body: this.state.comment
-      },
-      token
-    );
+
+    if (!isEmpty(this.state.comment)) {
+      const content = { comment: this.state.comment };
+      this.props.handleSubmit(content);
+      this.setState({ title: '', comment: '' });
+      if (this.props.redirect) {
+        this.props.history.push(this.props.redirect);
+      }
+      return;
+    }
     this.setState({
-      comment: '',
-      editMode: true,
-      typeError: false
+      typeError: true
     });
   };
 
   render() {
     return (
       <Wrapper>
-        <AddCommentContainer>
+        <AddIssueContainer>
+          <TitleContainer
+            onChange={this.handleTitleChange}
+            active={this.props.includeTitle}>
+            <TitleInput placeholder="Title.." />
+          </TitleContainer>
           <DashBoard>
             <WriteMode
-              active={this.state.editMode}
-              onClick={this.renderEditMode}>
+              onClick={this.renderEditMode}
+              active={this.state.editMode}>
               Write
             </WriteMode>
             <PreviewMode
-              active={this.state.editMode}
-              onClick={this.renderDisplayMode}>
+              onClick={this.renderDisplayMode}
+              active={this.state.editMode}>
               Preview
             </PreviewMode>
           </DashBoard>
           <DisplayContainer>
             <ErrorDisplay active={this.state.typeError}>
-              You can't comment at this time — your comment cannot be blank.
+              You can't comment at this time — your text cannot be blank.
             </ErrorDisplay>
             <TextArea
+              height={this.props.height}
               value={this.state.comment}
               onChange={this.handleCommentChange}
               active={this.state.editMode}
               placeholder="Leave a comment"
             />
-            <MarkDownPreview active={this.state.editMode}>
+            <MarkDownPreview
+              active={this.state.editMode}
+              height={this.props.height}>
               <MarkDown source={this.state.comment} escapeHtml={false} />
             </MarkDownPreview>
           </DisplayContainer>
           <FormAction>
             <InfoText>Styling with Markdown is supported</InfoText>
-            <SubmitButton onClick={this.handleCommentSubmit}>
-              Comment
+            <SubmitButton onClick={this.handleSubmitText}>
+              {this.props.submitText}
             </SubmitButton>
           </FormAction>
-        </AddCommentContainer>
+        </AddIssueContainer>
       </Wrapper>
     );
   }
 }
+
+TextSubmitter.defaultProps = {
+  includeTitle: false,
+  height: '100px',
+  submitText: 'Submit'
+};
+
+TextSubmitter.propTypes = {
+  handleSubmit: PropTypes.func.isRequired
+};
 
 const Wrapper = styled.div`
   width: 700px;
@@ -118,16 +147,34 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const AddCommentContainer = styled.div`
+const AddIssueContainer = styled.div`
   border: 1px solid #d1d5da;
+`;
+
+const TitleContainer = styled.div`
+  padding: 5px;
+  display: none;
+  ${({ active }) =>
+    active &&
+    `
+    display: block;
+  `};
+`;
+
+const TitleInput = styled.input`
+  width: 100%;
+  font-size: 16px;
+  padding: 4px 10px;
+  background-color: #f6f8fa;
+  border: 1px solid #d1d5da;
+  border-radius: 3px;
 `;
 
 const DashBoard = styled.div`
   display: flex;
   align-items: center;
   padding: 6px 10px;
-  margin-bottom: 10px;
-  background-color: #f6f8fa;
+  // margin-bottom: 10px;
   border-bottom: 1px solid #d1d5da;
 `;
 
@@ -168,31 +215,37 @@ const TextArea = styled.textarea`
   font-size: 16px;
   color: #24292e;
   padding: 10px;
+  background-color: #f6f8fa;
   border: 1px solid #d1d5da;
   border-radius: 3px;
   box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075);
   margin: 0 auto;
   max-width: 100%;
   min-width: 100%;
-  min-height: 100px;
   vertical-align: middle;
   display: none;
-
-  ${({ active }) =>
-    active &&
+  ${({ height }) =>
+    height &&
     `
+    min-height: ${height};
+`} ${({ active }) =>
+      active &&
+      `
     display: block;
   `};
 `;
 
 const MarkDownPreview = styled.div`
-  min-height: 100px;
+  min-height: 200px;
   padding: 10px;
   display: none;
-
-  ${({ active }) =>
-    !active &&
+  ${({ height }) =>
+    height &&
     `
+    min-height: ${height};
+  `} ${({ active }) =>
+      !active &&
+      `
     display: block;
   `};
 `;
@@ -237,4 +290,4 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-export default withRouter(connect(null, { handlePostComment })(AddComment));
+export default withRouter(TextSubmitter);

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import IssueComment from 'components/issues/details/IssueComment';
+import TextSubmitter from 'components/common/TextSubmitter';
 
 import type { Issue, Comments } from 'components/issues/issues.types';
 
@@ -26,6 +27,7 @@ const IssueContent = (props: Props) => {
     <div>
       <IssueComment context={props.currentIssue} />
       {renderComments()}
+      <TextSubmitter handleSubmit={props.handleCommentSubmit} />
     </div>
   );
 };

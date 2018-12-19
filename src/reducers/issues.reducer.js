@@ -13,7 +13,8 @@ import {
   RESET_SORTING,
   SET_LABELS,
   SET_COLLABORATORS,
-  SET_ASSIGNEES
+  SET_ASSIGNEES,
+  SET_NEW_ISSUE
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
