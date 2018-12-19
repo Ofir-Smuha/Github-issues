@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 
+import SortDropDown from 'components/issues/SortDropDown';
+
 import { setSortStateInState, setSortingInState } from 'actions/issues.actions';
 
 import warning from 'assets/images/warning-black.svg';
@@ -63,31 +65,38 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
           </Closed>
         </OpenClosedContainer>
         <OutsideClickHandler onOutsideClick={this.handleClickOutSide}>
-          <SortSelect onClick={this.toggleSort}>
-            <BarText>Sort</BarText>
-            <SortIcon />
-          </SortSelect>
-          <DropDownContainer isOpen={this.state.isOpen}>
-            <TitleContainer>
-              <Title>Sort by</Title>
-            </TitleContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('created')}>
-              <OptionTitle>Newest</OptionTitle>
-            </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('created-asc')}>
-              <OptionTitle>Oldest</OptionTitle>
-            </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('comments')}>
-              <OptionTitle>Most commented</OptionTitle>
-            </OptionContainer>
-            <OptionContainer
-              onClick={() => this.setFetchBySort('comments-asc')}>
-              <OptionTitle>Least comments</OptionTitle>
-            </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('updated')}>
-              <OptionTitle>Recently updated</OptionTitle>
-            </OptionContainer>
-          </DropDownContainer>
+          <SortSelectContainer>
+            <SortSelect>
+              <BarText>Assignee</BarText>
+              <SortIcon />
+            </SortSelect>
+            <SortSelect onClick={this.toggleSort}>
+              <BarText>Sort</BarText>
+              <SortIcon />
+            </SortSelect>
+          </SortSelectContainer>
+          {this.state.isOpen && <SortDropDown />}
+          {/*<DropDownContainer isOpen={this.state.isOpen}>*/}
+          {/*<TitleContainer>*/}
+          {/*<Title>Sort by</Title>*/}
+          {/*</TitleContainer>*/}
+          {/*<OptionContainer onClick={() => this.setFetchBySort('created')}>*/}
+          {/*<OptionTitle>Newest</OptionTitle>*/}
+          {/*</OptionContainer>*/}
+          {/*<OptionContainer onClick={() => this.setFetchBySort('created-asc')}>*/}
+          {/*<OptionTitle>Oldest</OptionTitle>*/}
+          {/*</OptionContainer>*/}
+          {/*<OptionContainer onClick={() => this.setFetchBySort('comments')}>*/}
+          {/*<OptionTitle>Most commented</OptionTitle>*/}
+          {/*</OptionContainer>*/}
+          {/*<OptionContainer*/}
+          {/*onClick={() => this.setFetchBySort('comments-asc')}>*/}
+          {/*<OptionTitle>Least comments</OptionTitle>*/}
+          {/*</OptionContainer>*/}
+          {/*<OptionContainer onClick={() => this.setFetchBySort('updated')}>*/}
+          {/*<OptionTitle>Recently updated</OptionTitle>*/}
+          {/*</OptionContainer>*/}
+          {/*</DropDownContainer>*/}
         </OutsideClickHandler>
       </SortContainer>
     );
@@ -141,10 +150,20 @@ const ClosedIcon = styled(OpenIcon)`
   height: 20px;
 `;
 
+const SortSelectContainer = styled.div`
+  display: flex;
+`;
+
 const SortSelect = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+  &:last-child {
+    margin-right: 5px;
+  }
 `;
 
 const SortIcon = styled(OpenIcon)`
