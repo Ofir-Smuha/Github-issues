@@ -8,7 +8,6 @@ type Props = {
   placeholder?: string,
   items: [],
   handleInputChange?: string => void,
-  position: Object,
   top: string,
   right: string,
   bottom: string,
@@ -67,10 +66,18 @@ const Wrapper = styled.div`
     `
     top: ${top};
   `} ${({ right }) =>
-      right &&
-      `
+  right &&
+  `
     right: ${right};
-  `} width: 300px;
+  `} 
+  ${({ bottom }) => bottom`
+    bottom: ${bottom}
+  `}  
+  ${({ left }) => left`
+    left: ${left}
+  `}
+  
+  width: 300px;
   border: 1px solid #e1e4e8;
   border-radius: 3px;
 `;
