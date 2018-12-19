@@ -38,7 +38,9 @@ class SideBar extends Component<Props, State> {
 
   componentDidMount() {
     const { name, repo } = this.props.match.params;
-    this.props.fetchCollaborators(name, repo);
+    if (!this.props.collaborators) {
+      this.props.fetchCollaborators(name, repo);
+    }
     this.setState({ labels: labelsOptions });
   }
 
