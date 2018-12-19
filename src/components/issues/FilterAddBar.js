@@ -5,7 +5,7 @@ import { get } from 'lodash/fp';
 
 class FilterAddBar extends Component {
   handleRedirect = () => {
-    const path = get('pathname', this.props.location) + '/new-issue';
+    const path = `${get('pathname', this.props.location)}/new-issue`;
     this.props.history.push(path);
   };
 

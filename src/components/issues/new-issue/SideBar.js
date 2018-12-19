@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-import { get, size, isEmpty, map as _map, values } from 'lodash/fp';
+import { get, size, isEmpty, map, values } from 'lodash/fp';
 
 import ListSelect from 'components/common/ListSelect';
 import Assignee from 'components/common/Assignee';
@@ -23,7 +23,7 @@ type State = {
   isAssigneesOpen: boolean,
   labels: {}[],
   storedLabels: Object,
-  storedAssignees: {}
+  storedAssignees: Object
 };
 
 class SideBar extends Component<Props, State> {
@@ -63,15 +63,15 @@ class SideBar extends Component<Props, State> {
       delete collaborators[collaboratorIndex].isAssignee;
       delete storedAssignees[assignee.login];
     } else {
-      collaborators = collaborators.map((c, i) => {
-        if (i === collaboratorIndex) {
+      collaborators = collaborators.map((collaborator, index) => {
+        if (index === collaboratorIndex) {
           return {
-            ...c,
+            ...collaborator,
             isAssignee: true
           };
         }
 
-        return c;
+        return collaborator;
       });
 
       storedAssignees[assignee.login] = assignee.login;
@@ -86,7 +86,7 @@ class SideBar extends Component<Props, State> {
 
   renderAssignees = () => {
     if (!isEmpty(this.state.storedAssignees)) {
-      return _map(
+      return map(
         assignee => (
           <AssigneeContainer key={assignee.id}>
             <AssigneeAvatar avatar={assignee.avatar_url} />
@@ -122,7 +122,7 @@ class SideBar extends Component<Props, State> {
 
   renderLabels = () => {
     if (size(this.state.storedLabels)) {
-      return _map(
+      return map(
         label => (
           <LabelBar color={label.color} key={label.id}>
             <LabelText>{label.name}</LabelText>

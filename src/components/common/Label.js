@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { get } from 'lodash/fp';
 
 import check from 'assets/images/check.svg';
 import exit from 'assets/images/exit.svg';
@@ -13,29 +13,23 @@ type Props = {
 };
 
 const Label = (props: Props) => {
+  console.log('LABEL', props.label);
   if (!props.label) {
     return null;
   }
 
-  const handleLabelClick = label => {
-    props.handleLabelClick(props.match.params, label);
-  };
-
   const { label } = props;
   return (
-    <LabelContainer onClick={() => handleLabelClick(label)}>
+    <LabelContainer
+      onClick={() => props.handleLabelClick(props.match.params, label)}>
       <Active active={'default' in label} />
       <ColorTitleContainer>
         <LabelColor color={label.color} />
         <LabelTitle>{label.name}</LabelTitle>
       </ColorTitleContainer>
-      <DeActivate active={'default' in label} />
+      <DeActivate active={get('default', label)} />
     </LabelContainer>
   );
-};
-
-Label.propTypes = {
-  handleLabelClick: PropTypes.func
 };
 
 const LabelContainer = styled.div`
@@ -91,8 +85,9 @@ const LabelColor = styled.div`
   width: 14px;
   height: 14px;
   border-radius: 3px;
-  background-color: #${({ color }) => color};
-  margin-right: 5px;
+  ${({ color }) => color`
+    background-color: #${color};
+  `} margin-right: 5px;
 `;
 
 export default withRouter(Label);
