@@ -85,7 +85,9 @@ const LabelColor = styled.div`
   width: 14px;
   height: 14px;
   border-radius: 3px;
-  ${({ color }) => color`
+  ${({ color }) =>
+    color &&
+    `
     background-color: #${color};
   `} margin-right: 5px;
 `;

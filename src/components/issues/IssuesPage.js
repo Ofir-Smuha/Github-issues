@@ -14,6 +14,7 @@ import Loader from 'components/common/Loader';
 import {
   fetchIssues,
   fetchCollaborators,
+  fetchRepoAssignees,
   ISSUES_LABEL
 } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
@@ -42,12 +43,17 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
       this.props.history.push('/login');
     }
     this.handleFetchIssues();
+    // Fetch repo info:
     this.props.fetchCollaborators(name, repo);
+    this.props.fetchRepoAssignees(name, repo);
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.parameters !== this.props.parameters) {
+      console.log('this.props.parameters', this.props.parameters);
+    }
     if (
-      prevProps.sorting !== this.props.sorting ||
+      prevProps.parameters !== this.props.parameters ||
       prevProps.issuesState !== this.props.issuesState ||
       prevProps.currentPage !== this.props.currentPage
     ) {
@@ -57,15 +63,11 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
   handleFetchIssues = () => {
     const { name, repo } = this.props.match.params;
-
-    this.props.fetchIssues(
-      this.props.currentPage,
-      {
-        state: this.props.issuesState,
-        sort: this.props.sorting
-      },
-      { name, repo }
-    );
+    // TODO: add issuesParameters (the object by params to fetch by) to fetchIssues
+    this.props.fetchIssues(this.props.currentPage, this.props.parameters, {
+      name,
+      repo
+    });
   };
 
   render() {
@@ -97,9 +99,14 @@ const mapStateToProps = (state: State) => ({
   issuesState: state.issues.issuesState,
   sorting: state.issues.sorting,
   isLoading: isLoadingSelector(state, ISSUES_LABEL),
-  isAuthenticated: state.user.token
+  isAuthenticated: state.user.token,
+  parameters: state.issues.issuesParameters
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchIssues, fetchCollaborators })(IssuesPage)
+  connect(mapStateToProps, {
+    fetchIssues,
+    fetchCollaborators,
+    fetchRepoAssignees
+  })(IssuesPage)
 );

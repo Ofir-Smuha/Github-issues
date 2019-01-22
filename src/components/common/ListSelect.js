@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 type Props = {
@@ -46,17 +45,6 @@ ListSelect.defaultProps = {
   left: ''
 };
 
-ListSelect.propTypes = {
-  items: PropTypes.array.isRequired,
-  isOpen: PropTypes.boolean,
-  searchable: PropTypes.boolean,
-  handleInputChange: PropTypes.func,
-  top: PropTypes.string,
-  right: PropTypes.string,
-  bottom: PropTypes.string,
-  left: PropTypes.string
-};
-
 const Wrapper = styled.div`
   z-index: 1;
   position: absolute;
@@ -70,10 +58,14 @@ const Wrapper = styled.div`
   `
     right: ${right};
   `} 
-  ${({ bottom }) => bottom`
+  ${({ bottom }) =>
+    bottom &&
+    `
     bottom: ${bottom}
-  `}  
-  ${({ left }) => left`
+  `}
+  ${({ left }) =>
+    left &&
+    `
     left: ${left}
   `}
   
