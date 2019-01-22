@@ -7,13 +7,15 @@ type Props = {
   height: string,
   title: string,
   subject: string,
-  handleSelect: (string, string) => void
+  closeModalKey: string,
+  handleSelect: (string, string, string) => void
 };
 
 const ListItem = (props: Props) => {
-  const { subject, title, image, width, height } = props;
+  const { subject, title, image, width, height, closeModalKey } = props;
   return (
-    <ItemContainer onClick={() => props.handleSelect(subject, title)}>
+    <ItemContainer
+      onClick={() => props.handleSelect(subject, title, closeModalKey)}>
       <Image image={image} width={width} height={height} />
       <Title image={image}>{title}</Title>
     </ItemContainer>

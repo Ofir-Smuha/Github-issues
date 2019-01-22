@@ -148,7 +148,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     return Array.isArray(item);
   };
 
-  handleUrlChange = (parameter, value) => {
+  handleUrlChange = (parameter, value, closeModalKey) => {
     const pathName = this.props.location.pathname;
     const searchParams = this.extractSearchParams();
 
@@ -195,8 +195,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
     this.props.history.push(`${pathName}?${newUrlParams}`);
     this.props.setIssuesParameters(queryParams);
+    this.setState({ [closeModalKey]: false });
     // Close on click
-    this.setState({ isAssigneeOpen: false });
   };
 
   render() {
@@ -224,7 +224,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
                   title={assignee.login}
                   width="20px"
                   height="20px"
-                  subject={'assignee'}
+                  subject="assignee"
+                  closeModalKey="isAssigneeOpen"
                   handleSelect={this.handleUrlChange}
                 />
               )}>
