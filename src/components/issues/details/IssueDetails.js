@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import Header from 'components/issues/details/Header';
+import GlobalLayout from 'components/common/GlobalLayout';
 import IssueContent from 'components/issues/details/IssueContent';
 import SideBar from 'components/issues/details/SideBar';
 import Loader from 'components/common/Loader';
@@ -73,17 +73,18 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
       return <Loader isLoading={this.props.isLoading} />;
     }
     return (
-      <Wrapper>
-        <Header currentIssue={this.props.currentIssue} />
-        <ContentContainer>
-          <IssueContent
-            currentIssue={this.props.currentIssue}
-            issueComments={this.props.issueComments}
-            handleCommentSubmit={this.handleCommentSubmit}
-          />
-          <SideBar currentIssue={this.props.currentIssue} />
-        </ContentContainer>
-      </Wrapper>
+      <GlobalLayout userInfo={this.props.userInfo}>
+        <Wrapper>
+          <ContentContainer>
+            <IssueContent
+              currentIssue={this.props.currentIssue}
+              issueComments={this.props.issueComments}
+              handleCommentSubmit={this.handleCommentSubmit}
+            />
+            <SideBar currentIssue={this.props.currentIssue} />
+          </ContentContainer>
+        </Wrapper>
+      </GlobalLayout>
     );
   }
 }
@@ -104,7 +105,8 @@ const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
   issueComments: state.issues.issueComments,
   isAuthenticated: state.user.token,
-  isLoading: isLoadingSelector(state, ISSUE_LABEL)
+  isLoading: isLoadingSelector(state, ISSUE_LABEL),
+  userInfo: state.user.userInfo
 });
 
 export default connect(mapStateToProps, {

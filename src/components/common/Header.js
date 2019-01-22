@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -34,6 +34,7 @@ const Wrapper = styled.div`
   padding: 12px 0;
   background-color: #24292e;
   color: hsla(0, 0%, 100%, 0.75);
+  margin-bottom: 40px;
 `;
 
 const ContentContainer = styled.div`

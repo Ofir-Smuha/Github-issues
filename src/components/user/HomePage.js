@@ -7,10 +7,9 @@ import qs from 'qs';
 
 import type { State } from 'types/redux.types';
 
-import Header from 'components/common/Header';
 import Sidebar from 'components/user/sidebar/Sidebar';
-import Footer from 'components/common/Footer';
 import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
+import GlobalLayout from '../common/GlobalLayout';
 
 type ConnectedProps = {
   userInfo: Object,
@@ -45,13 +44,11 @@ class HomePage extends Component<ConnectedProps & OwnProps> {
 
   render() {
     return (
-      <div>
-        <Header userInfo={this.props.userInfo} />
+      <GlobalLayout userInfo={this.props.userInfo}>
         <Content>
           <Sidebar />
         </Content>
-        <Footer />
-      </div>
+      </GlobalLayout>
     );
   }
 }

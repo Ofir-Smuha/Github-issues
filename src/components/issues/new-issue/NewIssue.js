@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { compose } from 'redux';
 import styled from 'styled-components';
 
+import GlobalLayout from 'components/common/GlobalLayout';
 import TextSubmitter from 'components/common/TextSubmitter';
 import SideBar from 'components/issues/new-issue/SideBar';
-
 import { addNewIssue } from 'actions/issues.actions';
+
+import type { State } from 'types/redux.types';
 
 type OwnProps = {};
 
@@ -15,12 +16,12 @@ type ConnectedProps = {
   addNewIssue: () => void
 };
 
-type State = {
+type OwnState = {
   assignees: string[],
   labels: string[]
 };
 
-class NewIssue extends Component<OwnProps, ConnectedProps, State> {
+class NewIssue extends Component<OwnProps, ConnectedProps, OwnState> {
   state = {
     assignees: [],
     labels: []
@@ -46,16 +47,18 @@ class NewIssue extends Component<OwnProps, ConnectedProps, State> {
   render() {
     const { name, repo } = this.props.match.params;
     return (
-      <Wrapper>
-        <TextSubmitter
-          includeTitle="true"
-          height="200px"
-          submitText="Submit new issue"
-          handleSubmit={this.handleSubmit}
-          redirect={`/${name}/${repo}/issues`}
-        />
-        <SideBar handleSetValues={this.setValues} />
-      </Wrapper>
+      <GlobalLayout userInfo={this.props.userInfo}>
+        <Wrapper>
+          <TextSubmitter
+            includeTitle="true"
+            height="200px"
+            submitText="Submit new issue"
+            handleSubmit={this.handleSubmit}
+            redirect={`/${name}/${repo}/issues`}
+          />
+          <SideBar handleSetValues={this.setValues} />
+        </Wrapper>
+      </GlobalLayout>
     );
   }
 }
@@ -63,8 +66,12 @@ class NewIssue extends Component<OwnProps, ConnectedProps, State> {
 const Wrapper = styled.div`
   display: flex;
   width: 1000px;
-  margin: 30px auto;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
 `;
-export default withRouter(connect(null, { addNewIssue })(NewIssue));
+
+const mapStateToProps = (state: State) => ({
+  userInfo: state.user.userInfo
+});
+export default withRouter(connect(mapStateToProps, { addNewIssue })(NewIssue));
