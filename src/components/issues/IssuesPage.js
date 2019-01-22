@@ -43,15 +43,11 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
       this.props.history.push('/login');
     }
     this.handleFetchIssues();
-    // Fetch repo info:
     this.props.fetchCollaborators(name, repo);
     this.props.fetchRepoAssignees(name, repo);
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.parameters !== this.props.parameters) {
-      console.log('this.props.parameters', this.props.parameters);
-    }
     if (
       prevProps.parameters !== this.props.parameters ||
       prevProps.issuesState !== this.props.issuesState ||
@@ -63,7 +59,6 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
   handleFetchIssues = () => {
     const { name, repo } = this.props.match.params;
-    // TODO: add issuesParameters (the object by params to fetch by) to fetchIssues
     this.props.fetchIssues(this.props.currentPage, this.props.parameters, {
       name,
       repo

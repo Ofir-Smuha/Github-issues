@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type Props = {
   isOpen: boolean,
@@ -19,19 +20,21 @@ const ListSelect = (props: Props) => {
     return null;
   }
   return (
-    <Wrapper top={top} right={right} left={left} bottom={bottom}>
-      <Title>{props.children}</Title>
-      {props.searchable && (
-        <FilterContainer>
-          <Filter
-            type="text"
-            placeholder={props.placeholder}
-            onChange={e => props.handleInputChange(e)}
-          />
-        </FilterContainer>
-      )}
-      {props.items.map(item => props.render(item))}
-    </Wrapper>
+    <OutsideClickHandler onOutsideClick={props.handleClickOutSide}>
+      <Wrapper top={top} right={right} left={left} bottom={bottom}>
+        <Title>{props.children}</Title>
+        {props.searchable && (
+          <FilterContainer>
+            <Filter
+              type="text"
+              placeholder={props.placeholder}
+              onChange={e => props.handleInputChange(e)}
+            />
+          </FilterContainer>
+        )}
+        {props.items.map(item => props.render(item))}
+      </Wrapper>
+    </OutsideClickHandler>
   );
 };
 

@@ -13,7 +13,6 @@ type Props = {
 };
 
 const Label = (props: Props) => {
-  console.log('LABEL', props.label);
   if (!props.label) {
     return null;
   }

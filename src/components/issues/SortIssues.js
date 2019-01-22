@@ -29,10 +29,6 @@ type OwnProps = {};
 
 type State = {
   isOpen: boolean,
-  author: [],
-  labels: [],
-  milestone: [],
-  assignee: [],
   isOpen: boolean,
   isSortOpen: boolean,
   isAssigneeOpen: boolean
@@ -40,17 +36,12 @@ type State = {
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
-    author: [],
-    labels: [],
-    milestone: [],
-    assignee: [],
     isOpen: false,
     isSortOpen: false,
-    isAssigneeOpen: true
+    isAssigneeOpen: false
   };
 
   componentDidMount() {
-    console.log(this.props);
     this.handleSetIssuesParametersFromParams();
   }
 
@@ -143,13 +134,13 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
   toggleSort = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isSortOpen: !this.state.isOpen
     });
   };
 
   handleClickOutSide = () => {
     this.setState({
-      isOpen: false
+      isSortOpen: false
     });
   };
 
@@ -204,6 +195,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
     this.props.history.push(`${pathName}?${newUrlParams}`);
     this.props.setIssuesParameters(queryParams);
+    // Close on click
+    this.setState({ isAssigneeOpen: false });
   };
 
   render() {
@@ -213,7 +206,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         <ItemSelectContainer>
           <ItemSelect>
             <BarText>Assignee</BarText>
-            <SortIcon />
+            <SortIcon onClick={() => this.setState({ isAssigneeOpen: true })} />
             <ListSelect
               searchable={true}
               right="0px"
@@ -221,6 +214,9 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
               isOpen={this.state.isAssigneeOpen}
               items={this.props.repoAssignees}
               handleInputChange={this.handleAssigneesFilter}
+              handleClickOutSide={() =>
+                this.setState({ isAssigneeOpen: false })
+              }
               render={assignee => (
                 <ListItem
                   key={assignee.id}
@@ -231,15 +227,16 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
                   subject={'assignee'}
                   handleSelect={this.handleUrlChange}
                 />
-              )}
-            />
+              )}>
+              Filter by who’s assigned
+            </ListSelect>
           </ItemSelect>
           <ItemSelect>
             <BarText>Sort</BarText>
             <SortIcon onClick={this.toggleSort} />
-            {this.state.isOpen && (
+            {this.state.isSortOpen && (
               <SortDropDown
-                handleClickOutSide={this.handleClickOutSide}
+                handleClickOutSide={() => this.setState({ isSortOpen: false })}
                 setFetchBySort={this.setFetchBySort}
               />
             )}
