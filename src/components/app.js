@@ -1,14 +1,15 @@
 // @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { get } from 'lodash/fp';
+import { get, isNull } from 'lodash/fp';
+import qs from 'qs';
 
-import history from 'utils/history.utils';
 import { loadFromStorage } from 'utils/local-storage.utils';
 import theme from 'constants/themes.constants';
 
+import PrivateRoute from 'components/common/PrivateRoute';
 import Login from 'components/login/Login';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
@@ -19,12 +20,14 @@ import NewIssue from 'components/issues/new-issue/NewIssue';
 
 import {
   getUserInfoWithToken,
-  saveTokenToLocalStorage
+  saveTokenToLocalStorage,
+  getUserTokenWithCode
 } from 'actions/user.actions';
 
 type ConnectedProps = {
   getUserInfoWithToken: () => void,
-  saveTokenToLocalStorage: () => void
+  saveTokenToLocalStorage: () => void,
+  isAuthenticated: string | null
 };
 
 type OwnProps = {};
@@ -32,38 +35,73 @@ type OwnProps = {};
 class App extends React.Component<ConnectedProps & OwnProps> {
   componentWillMount() {
     const user = get('user', loadFromStorage('auth'));
-    if (user) {
+
+    if (user && user.token !== null) {
       this.props.saveTokenToLocalStorage(user);
       this.props.getUserInfoWithToken(user);
+    } else {
+      const searchParams = get('search', this.props.location);
+
+      if (searchParams) {
+        const codeParams = qs.parse(searchParams);
+        const userCode = codeParams['?code'];
+        this.props.getUserTokenWithCode(userCode);
+      } else {
+        this.props.saveTokenToLocalStorage({ token: null });
+      }
     }
   }
 
   render() {
+    const { isAuthenticated } = this.props;
+
+    if (!isNull(isAuthenticated) && !isAuthenticated) {
+      return null;
+    }
+
     return (
       <ThemeProvider theme={theme}>
         <ErrorBoundary>
-          <Router history={history}>
-            <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route path="/login" component={Login} />
-              <Route exact path="/:name/:repo/issues" component={IssuesPage} />
-              <Route
-                path="/:name/:repo/issues/new-issue"
-                component={NewIssue}
-              />
-              <Route
-                path="/:name/:repo/issues/:number"
-                component={IssueDetails}
-              />
-              <Route exact path="/error" component={ErrorPage} />
-            </Switch>
-          </Router>
+          <Switch>
+            <PrivateRoute
+              exact
+              path="/"
+              isAuthenticated={this.props.isAuthenticated}
+              component={HomePage}
+            />
+            <PrivateRoute
+              exact
+              path="/:name/:repo/issues"
+              isAuthenticated={this.props.isAuthenticated}
+              component={IssuesPage}
+            />
+            <PrivateRoute
+              path="/:name/:repo/issues/new-issue"
+              isAuthenticated={this.props.isAuthenticated}
+              component={NewIssue}
+            />
+            <PrivateRoute
+              path="/:name/:repo/issues/:number"
+              isAuthenticated={this.props.isAuthenticated}
+              component={IssueDetails}
+            />
+            <Route path="/login" component={Login} />
+            <Route exact path="/error" component={ErrorPage} />
+          </Switch>
         </ErrorBoundary>
       </ThemeProvider>
     );
   }
 }
 
-export default connect(null, { getUserInfoWithToken, saveTokenToLocalStorage })(
-  App
+const mapStateToProps = state => ({
+  isAuthenticated: state.user.token
+});
+
+export default withRouter(
+  connect(mapStateToProps, {
+    getUserInfoWithToken,
+    saveTokenToLocalStorage,
+    getUserTokenWithCode
+  })(App)
 );

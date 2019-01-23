@@ -2,6 +2,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+
+import history from 'utils/history.utils';
 
 import Mimic from 'mimic';
 
@@ -20,7 +23,9 @@ if (process.env.NODE_ENV === 'development') {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <Router history={history}>
+      <App />
+    </Router>
   </Provider>,
   document.getElementById('root')
 );

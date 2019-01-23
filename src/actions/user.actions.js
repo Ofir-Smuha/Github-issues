@@ -11,6 +11,7 @@ export const SET_USER_REPOSITORIES = 'SET_USER_REPOSITORIES';
 
 const LOGIN_LABEL = 'login';
 const REPOSITORIES_LABEL = 'fetch-repositories';
+const AUTH_LABEL = 'auth';
 
 export const getUserTokenWithCode = (userCode: string) =>
   apiAction({
@@ -38,7 +39,12 @@ export const getUserInfoWithToken = ({ token }: { token: string }) =>
     }
   });
 
-export const saveTokenToLocalStorage = ({ token }: { token: string }) => ({
+// TODO:Change to setTokenToLocalStorage => ensure that the persist to local storage is sync with it.
+export const saveTokenToLocalStorage = ({
+  token
+}: {
+  token: string | null
+}) => ({
   type: SAVE_TOKEN_TO_LOCAL_STORAGE,
   payload: {
     token

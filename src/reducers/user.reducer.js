@@ -11,7 +11,7 @@ import {
 } from 'actions/user.actions';
 
 const initialState = {
-  token: null,
+  token: false,
   userInfo: null,
   userRepositories: null,
   badCode: false
@@ -29,7 +29,10 @@ export default handleActions(
     [SAVE_TOKEN_TO_LOCAL_STORAGE]: (
       state: UserState,
       { payload }: { payload: Object }
-    ) => set('token', payload.token, state),
+    ) => {
+      console.log('payload', payload);
+      return set('token', !payload.token ? null : payload.token, state);
+    },
     [SET_AUTH_ERROR]: (state: UserState) => set('badCode', true, state),
     [RESET_AUTH_ERROR]: (state: UserState) => set('badCode', false, state),
     [SET_USER_IN_STATE]: (state: UserState, { payload: { user } }) =>

@@ -25,15 +25,15 @@ type OwnProps = {};
 
 class HomePage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    if (!this.props.isAuthenticated) {
-      if (get('location.search', window)) {
-        const codeParams = qs.parse(window.location.search);
-        const userCode = codeParams['?code'];
-        this.props.getUserTokenWithCode(userCode);
-      } else {
-        this.props.history.push('/login');
-      }
-    }
+    // if (!this.props.isAuthenticated) {
+    //   if (get('location.search', window)) {
+    //     const codeParams = qs.parse(window.location.search);
+    //     const userCode = codeParams['?code'];
+    //     this.props.getUserTokenWithCode(userCode);
+    //   } else {
+    //     this.props.history.push('/login');
+    //   }
+    // }
   }
 
   componentDidUpdate() {
