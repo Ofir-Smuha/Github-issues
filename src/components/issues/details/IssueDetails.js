@@ -32,7 +32,8 @@ type ConnectedProps = {
   issueComments: Comments,
   match: Object,
   params: Object,
-  isAuthenticated: any
+  isAuthenticated: any,
+  userInfo: Object | null
 };
 
 class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {

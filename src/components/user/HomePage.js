@@ -12,7 +12,7 @@ import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
 import GlobalLayout from '../common/GlobalLayout';
 
 type ConnectedProps = {
-  userInfo: Object,
+  userInfo: Object | null,
   isAuthenticated: boolean | null,
   getUserTokenWithCode: () => void,
   resetAuthError: () => void,

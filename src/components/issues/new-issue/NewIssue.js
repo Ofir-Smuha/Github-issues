@@ -13,7 +13,8 @@ import type { State } from 'types/redux.types';
 type OwnProps = {};
 
 type ConnectedProps = {
-  addNewIssue: () => void
+  addNewIssue: () => void,
+  userInfo: Object | null
 };
 
 type OwnState = {
