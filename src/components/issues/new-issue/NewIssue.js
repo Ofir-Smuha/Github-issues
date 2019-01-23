@@ -8,7 +8,7 @@ import TextSubmitter from 'components/common/TextSubmitter';
 import SideBar from 'components/issues/new-issue/SideBar';
 import { addNewIssue } from 'actions/issues.actions';
 
-import type { State } from 'types/redux.types';
+import type { State as StateType } from 'types/redux.types';
 
 type OwnProps = {};
 
@@ -17,12 +17,12 @@ type ConnectedProps = {
   userInfo: Object | null
 };
 
-type OwnState = {
+type State = {
   assignees: string[],
   labels: string[]
 };
 
-class NewIssue extends Component<OwnProps, ConnectedProps, OwnState> {
+class NewIssue extends Component<OwnProps, ConnectedProps, State> {
   state = {
     assignees: [],
     labels: []
@@ -72,7 +72,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-const mapStateToProps = (state: State) => ({
+const mapStateToProps = (state: StateType) => ({
   userInfo: state.user.userInfo
 });
 export default withRouter(connect(mapStateToProps, { addNewIssue })(NewIssue));
