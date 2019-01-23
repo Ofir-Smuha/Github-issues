@@ -8,17 +8,17 @@ class GlobalLayout extends Component {
   render() {
     return (
       <Fragment>
-        <HeaderAndContent>
+        <HeaderAndContentContainer>
           <Header userInfo={this.props.userInfo} />
           {this.props.children}
-        </HeaderAndContent>
+        </HeaderAndContentContainer>
         <Footer />
       </Fragment>
     );
   }
 }
 
-const HeaderAndContent = styled.div`
+const HeaderAndContentContainer = styled.div`
   min-height: calc(100vh - 104px);
 `;
 
