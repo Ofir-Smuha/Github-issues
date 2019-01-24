@@ -20,14 +20,17 @@ class IssuesReset extends Component<connectedProps & OwnProps> {
     }
 
     return (
-      <Reset onClick={this.props.ResetIssuesSort}>
-        Clear current search query and sorts
-      </Reset>
+      <div>
+        <Reset onClick={this.props.ResetIssuesSort}>
+          Clear current search query and sorts
+        </Reset>
+      </div>
     );
   }
 }
 
 const Reset = styled.h1`
+  display: inline-block;
   font-weight: 600;
   font-size: 14px;
   line-height: 1.5;
