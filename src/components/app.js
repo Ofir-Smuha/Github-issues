@@ -36,7 +36,7 @@ class App extends React.Component<ConnectedProps & OwnProps> {
   componentWillMount() {
     const user = get('user', loadFromStorage('auth'));
 
-    if (user && user.token !== null) {
+    if (user && !isNull(user.token)) {
       this.props.saveTokenToLocalStorage(user);
       this.props.getUserInfoWithToken(user);
     } else {
