@@ -3,19 +3,17 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { get } from 'lodash/fp';
-import qs from 'qs';
 
 import type { State } from 'types/redux.types';
 
 import Header from 'components/common/Header';
 import Sidebar from 'components/user/sidebar/Sidebar';
 import Footer from 'components/common/Footer';
-import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
+import { resetAuthError } from 'actions/user.actions';
 
 type ConnectedProps = {
   userInfo: Object,
   isAuthenticated: boolean | null,
-  getUserTokenWithCode: () => void,
   resetAuthError: () => void,
   badCode: boolean,
   history: Object
@@ -49,5 +47,5 @@ const mapStateToProps = (state: State) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
+  connect(mapStateToProps, { resetAuthError })(HomePage)
 );
