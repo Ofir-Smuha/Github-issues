@@ -59,7 +59,7 @@ export default handleActions(
       set('issueComments', initialState.issueComments, state),
     [SET_ISSUES_PAGING]: (state, { payload }) => {
       const pageCount = get('header.last.page', payload);
-      return set('pageCount', !pageCount ? null : +pageCount, state);
+      return set('pageCount', !pageCount ? null : parseInt(pageCount), state);
     },
     [SET_CURRENT_PAGE]: (state, { payload }) =>
       set('currentPage', payload.currentPage, state),
