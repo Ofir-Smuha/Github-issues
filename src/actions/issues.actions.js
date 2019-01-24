@@ -33,6 +33,9 @@ export const SET_ASSIGNEES = 'SET_ASSIGNEES';
 export const ADD_ASSIGNEE = 'ADD_ASSIGNEE';
 export const DELETE_ASSIGNEE = 'DELETE_ASSIGNEE';
 export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
+export const FETCH_REPO_ASSIGNEES = 'FETCH_REPO_ASSIGNEES';
+export const SET_REPO_ASSIGNEES = 'SET_REPO_ASSIGNEES';
+export const SET_ISSUES_PARAMETERS = 'SET_ISSUES_FILTER';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -42,8 +45,8 @@ export type id = number;
 
 export const fetchIssues = (
   page = 1,
-  data = { state: null, sort: null },
-  query = { name: 'facebook', repo: 'create-react-app' }
+  parameters = '',
+  query = { name: '', repo: '' }
 ) =>
   apiAction({
     type: FETCH_ISSUES,
@@ -51,11 +54,10 @@ export const fetchIssues = (
       method: 'GET',
       path: `https://api.github.com/repos/${query.name}/${
         query.repo
-      }/issues?page=${page}`,
+      }/issues?page=${page}${parameters}`,
       networkLabel: ISSUES_LABEL,
       onSuccess: setIssues,
-      handleHeaders: setPaging,
-      data
+      handleHeaders: setPaging
     }
   });
 
@@ -268,3 +270,27 @@ export const addNewIssue = (
       data: body
     }
   });
+
+export const fetchRepoAssignees = (name, repo) =>
+  apiAction({
+    type: FETCH_REPO_ASSIGNEES,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/repos/${name}/${repo}/assignees?access_token=${token}`,
+      onSuccess: setRepoAssignees
+    }
+  });
+
+export const setRepoAssignees = assignees => ({
+  type: SET_REPO_ASSIGNEES,
+  payload: {
+    assignees
+  }
+});
+
+export const setIssuesParameters = parameters => ({
+  type: SET_ISSUES_PARAMETERS,
+  payload: {
+    parameters
+  }
+});

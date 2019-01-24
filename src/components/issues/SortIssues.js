@@ -1,31 +1,126 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import OutsideClickHandler from 'react-outside-click-handler';
+import { isEmpty, mapKeys, map, get, includes } from 'lodash/fp';
+import qs from 'qs';
 
-import { setSortStateInState, setSortingInState } from 'actions/issues.actions';
+import SortDropDown from 'components/issues/filter-sort-panel/SortDropDown';
+import IssuesState from 'components/issues/filter-sort-panel/IssuesState';
+import ListSelect from 'components/common/ListSelect';
+import ListItem from 'components/common/ListItem';
 
-import warning from 'assets/images/warning-black.svg';
-import check from 'assets/images/check.svg';
+import {
+  setSortStateInState,
+  setSortingInState,
+  setIssuesParameters
+} from 'actions/issues.actions';
+
 import downArrow from 'assets/images/drop-down.svg';
 
 type ConnectedProps = {
   setSortStateInState: () => void,
-  setSortingInState: () => void
+  setSortingInState: () => void,
+  setIssuesFilter: () => void
 };
 
 type OwnProps = {};
 
 type State = {
-  isOpen: boolean
+  isOpen: boolean,
+  isOpen: boolean,
+  isSortOpen: boolean,
+  isAssigneeOpen: boolean
 };
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
-    isOpen: false
+    isOpen: false,
+    isSortOpen: false,
+    isAssigneeOpen: false
   };
 
+  componentDidMount() {
+    this.handleSetIssuesParametersFromParams();
+  }
+
+  handleSetIssuesParametersFromParams = () => {
+    const searchParams = this.extractSearchParams();
+    if (!isEmpty(searchParams)) {
+      const parametersObject = this.createParametersObject(searchParams);
+      const parameters = this.createQueryUrl(parametersObject);
+      this.props.setIssuesParameters(parameters);
+    }
+  };
+
+  extractSearchParams = () => {
+    const searchUrl = this.props.location.search.split('?');
+    return qs.parse(searchUrl[1]);
+  };
+
+  createQueryUrl = parameters => {
+    let queryUrl = ``;
+
+    mapKeys(key => {
+      if (Array.isArray(parameters[key])) {
+        queryUrl += `&${key}=${parameters[key].map(param => param).join(',')}`;
+      } else {
+        queryUrl += `&${key}=${parameters[key]}`;
+      }
+    }, parameters);
+
+    return queryUrl;
+  };
+
+  createParametersObject = searchParams => {
+    const parameters = {};
+
+    mapKeys(key => {
+      switch (key) {
+        case 'milestone':
+          if (this.isItemArray(searchParams[key])) {
+            break;
+          }
+          parameters[key] = searchParams[key];
+          break;
+        case 'state':
+          if (this.isItemArray(searchParams[key])) {
+            break;
+          }
+          parameters[key] = searchParams[key];
+          break;
+        case 'assignee':
+          if (this.isItemArray(searchParams[key])) {
+            break;
+          }
+          parameters[key] = searchParams[key];
+          break;
+        case 'label':
+          parameters['labels'] = searchParams[key];
+          break;
+        case 'sort':
+          // TODO: add sort functionality to common cmp
+          if (this.isItemArray(searchParams[key])) {
+            break;
+          }
+          parameters[key] = searchParams[key];
+          break;
+        case 'direction':
+          if (this.isItemArray(searchParams[key])) {
+            break;
+          }
+          parameters[key] = searchParams[key];
+          break;
+        default:
+          break;
+      }
+    }, searchParams);
+
+    return parameters;
+  };
+
+  // TODO: All should be replace by Query string
   setFetchByState = issuesState => {
     this.props.setSortStateInState(issuesState);
   };
@@ -39,56 +134,115 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
   toggleSort = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isSortOpen: !this.state.isOpen
     });
   };
 
   handleClickOutSide = () => {
     this.setState({
-      isOpen: false
+      isSortOpen: false
     });
+  };
+
+  isItemArray = item => {
+    return Array.isArray(item);
+  };
+
+  handleUrlChange = (parameter, value, closeModalKey) => {
+    const pathName = this.props.location.pathname;
+    const searchParams = this.extractSearchParams();
+
+    if (get(parameter, searchParams)) {
+      if (parameter === 'label') {
+        // If label is Array
+        if (Array.isArray(searchParams[parameter])) {
+          if (includes(value, searchParams[parameter])) {
+            searchParams[parameter] = searchParams[parameter].filter(
+              parameterValue => parameterValue !== value
+            );
+          } else {
+            searchParams[parameter].push(value);
+          }
+        }
+
+        // If label isn't an Array
+        if (!Array.isArray(searchParams[parameter])) {
+          if (value === searchParams[parameter]) {
+            delete searchParams[parameter];
+          } else {
+            searchParams[parameter] = [searchParams[parameter], value];
+          }
+        }
+      }
+
+      // If parameter is not a "label"
+      if (parameter !== 'label') {
+        if (value === searchParams[parameter]) {
+          delete searchParams[parameter];
+        } else {
+          searchParams[parameter] = value;
+        }
+      }
+
+      // If no parameter
+    } else {
+      searchParams[parameter] = value;
+    }
+
+    const newUrlParams = qs.stringify(searchParams, { arrayFormat: 'repeat' });
+    const paramsObject = this.createParametersObject(searchParams);
+    const queryParams = this.createQueryUrl(paramsObject);
+
+    this.props.history.push(`${pathName}?${newUrlParams}`);
+    this.props.setIssuesParameters(queryParams);
+    this.setState({ [closeModalKey]: false });
+    // Close on click
   };
 
   render() {
     return (
       <SortContainer>
-        <OpenClosedContainer>
-          <Open onClick={() => this.setFetchByState('open')}>
-            <OpenIcon />
-            <BarText>Open</BarText>
-          </Open>
-          <Closed onClick={() => this.setFetchByState('closed')}>
-            <ClosedIcon />
-            <BarText>Closed</BarText>
-          </Closed>
-        </OpenClosedContainer>
-        <OutsideClickHandler onOutsideClick={this.handleClickOutSide}>
-          <SortSelect onClick={this.toggleSort}>
+        <IssuesState handleSetFetchByState={this.setFetchByState} />
+        <ItemSelectContainer>
+          <ItemSelect>
+            <BarText>Assignee</BarText>
+            <SortIcon onClick={() => this.setState({ isAssigneeOpen: true })} />
+            <ListSelect
+              searchable={true}
+              right="0px"
+              top="20px"
+              isOpen={this.state.isAssigneeOpen}
+              items={this.props.repoAssignees}
+              handleInputChange={this.handleAssigneesFilter}
+              handleClickOutSide={() =>
+                this.setState({ isAssigneeOpen: false })
+              }
+              render={assignee => (
+                <ListItem
+                  key={assignee.id}
+                  image={assignee.avatar_url}
+                  title={assignee.login}
+                  width="20px"
+                  height="20px"
+                  subject="assignee"
+                  closeModalKey="isAssigneeOpen"
+                  handleSelect={this.handleUrlChange}
+                />
+              )}>
+              Filter by who’s assigned
+            </ListSelect>
+          </ItemSelect>
+          <ItemSelect>
             <BarText>Sort</BarText>
-            <SortIcon />
-          </SortSelect>
-          <DropDownContainer isOpen={this.state.isOpen}>
-            <TitleContainer>
-              <Title>Sort by</Title>
-            </TitleContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('created')}>
-              <OptionTitle>Newest</OptionTitle>
-            </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('created-asc')}>
-              <OptionTitle>Oldest</OptionTitle>
-            </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('comments')}>
-              <OptionTitle>Most commented</OptionTitle>
-            </OptionContainer>
-            <OptionContainer
-              onClick={() => this.setFetchBySort('comments-asc')}>
-              <OptionTitle>Least comments</OptionTitle>
-            </OptionContainer>
-            <OptionContainer onClick={() => this.setFetchBySort('updated')}>
-              <OptionTitle>Recently updated</OptionTitle>
-            </OptionContainer>
-          </DropDownContainer>
-        </OutsideClickHandler>
+            <SortIcon onClick={this.toggleSort} />
+            {this.state.isSortOpen && (
+              <SortDropDown
+                handleClickOutSide={() => this.setState({ isSortOpen: false })}
+                setFetchBySort={this.setFetchBySort}
+              />
+            )}
+          </ItemSelect>
+        </ItemSelectContainer>
       </SortContainer>
     );
   }
@@ -103,18 +257,6 @@ const SortContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
-`;
-
-const OpenClosedContainer = styled.div`
-  display: flex;
-`;
-
-const Open = styled.div`
-  display: flex;
-  align-items: center;
-  margin-left: 5px;
-  cursor: pointer;
 `;
 
 const BarText = styled.h3`
@@ -123,82 +265,38 @@ const BarText = styled.h3`
   font-weight: 400;
 `;
 
-const OpenIcon = styled.div`
-  background: url(${warning}) no-repeat center;
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
-  margin-right: 5px;
+const ItemSelectContainer = styled.div`
+  display: flex;
 `;
 
-const Closed = styled(Open)`
-  margin-left: 10px;
-`;
-
-const ClosedIcon = styled(OpenIcon)`
-  background: url(${check}) no-repeat center;
-  width: 18px;
-  height: 20px;
-`;
-
-const SortSelect = styled.div`
+const ItemSelect = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
+  &:not(:last-child) {
+    margin-right: 10px;
+  }
+  &:last-child {
+    margin-right: 5px;
+  }
 `;
 
-const SortIcon = styled(OpenIcon)`
+const SortIcon = styled.div`
   background: url(${downArrow}) no-repeat center;
   width: 13px;
   height: 13px;
   margin: 5px 5px 0 3px;
 `;
 
-const DropDownContainer = styled.div`
-  display: none;
-  position: absolute;
-  bottom: -202px;
-  right: 0;
-  width: 300px;
-  border: 1px solid rgba(27, 31, 35, 0.15);
-  border-radius: 3px;
-  box-shadow: 0 3px 12px rgba(27, 31, 35, 0.15);
+const mapStateToProps = state => ({
+  repoAssignees: state.issues.repoAssignees
+});
 
-  ${({ isOpen }) =>
-    isOpen &&
-    `
-    display: block;
-  `};
-`;
-
-const TitleContainer = styled.div`
-  background: #f6f8fa;
-  border-bottom: 1px solid #e1e4e8;
-  line-height: 16px;
-  padding: 8px 10px;
-`;
-
-const Title = styled.h1`
-  color: #24292e;
-  font-weight: 600;
-  font-size: 12px;
-`;
-
-const OptionContainer = styled.div`
-  background: #fff;
-  border-bottom: 1px solid #e1e4e8;
-  line-height: 16px;
-  padding: 8px 10px;
-`;
-
-const OptionTitle = styled(Title)`
-  cursor: pointer;
-
-  &:hover {
-    color: #0366d6;
-  }
-`;
-
-export default connect(null, { setSortStateInState, setSortingInState })(
-  SortIssues
+export default withRouter(
+  connect(mapStateToProps, {
+    setSortStateInState,
+    setSortingInState,
+    setIssuesParameters
+  })(SortIssues)
 );
