@@ -24,13 +24,6 @@ type ConnectedProps = {
 type OwnProps = {};
 
 class HomePage extends Component<ConnectedProps & OwnProps> {
-  // componentDidUpdate() {
-  // if (this.props.badCode === true) {
-  //   this.props.history.push('/login');
-  //   this.props.resetAuthError();
-  // }
-  // }
-
   render() {
     return (
       <div>
