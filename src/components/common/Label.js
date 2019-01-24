@@ -13,7 +13,6 @@ type Props = {
 };
 
 const Label = (props: Props) => {
-  console.log('LABEL', props.label);
   if (!props.label) {
     return null;
   }
@@ -85,7 +84,9 @@ const LabelColor = styled.div`
   width: 14px;
   height: 14px;
   border-radius: 3px;
-  ${({ color }) => color`
+  ${({ color }) =>
+    color &&
+    `
     background-color: #${color};
   `} margin-right: 5px;
 `;

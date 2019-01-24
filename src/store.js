@@ -26,7 +26,7 @@ const localStorageMiddleWare = createMiddleware(
 const middlewares = [apiMiddleware, localStorageMiddleWare];
 
 if (isDev) {
-  middlewares.push(require('redux-freeze'));
+  middlewares.unshift(require('redux-freeze'));
 }
 
 const savedState = localStorage.getItem(RESTORE_LOCAL_STORAGE_KEY);

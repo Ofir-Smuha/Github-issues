@@ -14,7 +14,9 @@ import {
   SET_LABELS,
   SET_COLLABORATORS,
   SET_ASSIGNEES,
-  SET_NEW_ISSUE
+  SET_NEW_ISSUE,
+  SET_REPO_ASSIGNEES,
+  SET_ISSUES_PARAMETERS
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -22,6 +24,7 @@ import { REMOVE_CURRENT_ISSUE } from '../actions/issues.actions';
 
 const initialState = {
   openIssues: [],
+  issuesParameters: '',
   currentIssue: null,
   issueLabels: null,
   issueComments: [],
@@ -30,11 +33,13 @@ const initialState = {
   issuesState: null,
   sorting: null,
   collaborators: [],
-  assignees: []
+  assignees: [],
+  repoAssignees: []
 };
 
 export type IssuesState = {|
   +openIssues: Issues,
+  +issuesParameters: string,
   +currentIssue: Issue,
   +issueComments: [],
   +pageCount: number,
@@ -43,20 +48,26 @@ export type IssuesState = {|
   +sorting: any,
   +issueLabels: null | [],
   +collaborators: [],
-  +assignees: []
+  +assignees: [],
+  +repoAssignees: []
 |};
 
 export default handleActions(
   {
     [SET_ISSUES]: (state: IssuesState, { payload }): IssuesState =>
       set('openIssues', payload.openIssues, state),
+
     [SET_CURRENT_ISSUE]: (state: IssuesState, { payload: { issue } }) =>
       set('currentIssue', issue, state),
+
     [REMOVE_CURRENT_ISSUE]: state => set('currentIssue', null, state),
+
     [SET_COMMENTS]: (state: IssuesState, { payload }) =>
       set('issueComments', payload.comments, state),
+
     [REMOVE_COMMENTS]: state =>
       set('issueComments', initialState.issueComments, state),
+
     [SET_ISSUES_PAGING]: (state, { payload }) => {
       const pageCount = get('header.last.page', payload);
       return set('pageCount', +pageCount, state);
@@ -79,7 +90,11 @@ export default handleActions(
     [SET_COLLABORATORS]: (state, { payload: { collaborators } }) =>
       set('collaborators', collaborators, state),
     [SET_ASSIGNEES]: (state, { payload: { assignees } }) =>
-      set('assignees', assignees, state)
+      set('assignees', assignees, state),
+    [SET_REPO_ASSIGNEES]: (state, { payload: { assignees } }) =>
+      set('repoAssignees', assignees, state),
+    [SET_ISSUES_PARAMETERS]: (state, { payload: { parameters } }) =>
+      set('issuesParameters', parameters, state)
   },
   initialState
 );
