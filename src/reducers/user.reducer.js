@@ -6,7 +6,6 @@ import {
   SET_AUTH_ERROR,
   RESET_AUTH_ERROR,
   SET_USER_IN_STATE,
-  FETCH_USER_REPOSITORIES,
   SET_USER_REPOSITORIES
 } from 'actions/user.actions';
 
@@ -29,14 +28,15 @@ export default handleActions(
     [SAVE_TOKEN_TO_LOCAL_STORAGE]: (
       state: UserState,
       { payload }: { payload: Object }
-    ) => {
-      console.log('payload', payload);
-      return set('token', !payload.token ? null : payload.token, state);
-    },
+    ) => set('token', !payload.token ? null : payload.token, state),
+
     [SET_AUTH_ERROR]: (state: UserState) => set('badCode', true, state),
+
     [RESET_AUTH_ERROR]: (state: UserState) => set('badCode', false, state),
+
     [SET_USER_IN_STATE]: (state: UserState, { payload: { user } }) =>
       set('userInfo', user, state),
+
     [SET_USER_REPOSITORIES]: (state, { payload: { repositories } }) =>
       set('userRepositories', repositories, state)
   },
