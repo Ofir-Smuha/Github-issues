@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import OutsideClickHandler from 'react-outside-click-handler';
 
 type Props = {
   isOpen: boolean,
@@ -8,7 +8,6 @@ type Props = {
   placeholder?: string,
   items: [],
   handleInputChange?: string => void,
-  position: Object,
   top: string,
   right: string,
   bottom: string,
@@ -21,19 +20,21 @@ const ListSelect = (props: Props) => {
     return null;
   }
   return (
-    <Wrapper top={top} right={right} left={left} bottom={bottom}>
-      <Title>{props.children}</Title>
-      {props.searchable && (
-        <FilterContainer>
-          <Filter
-            type="text"
-            placeholder={props.placeholder}
-            onChange={e => props.handleInputChange(e)}
-          />
-        </FilterContainer>
-      )}
-      {props.items.map(item => props.render(item))}
-    </Wrapper>
+    <OutsideClickHandler onOutsideClick={props.handleClickOutSide}>
+      <Wrapper top={top} right={right} left={left} bottom={bottom}>
+        <Title>{props.children}</Title>
+        {props.searchable && (
+          <FilterContainer>
+            <Filter
+              type="text"
+              placeholder={props.placeholder}
+              onChange={e => props.handleInputChange(e)}
+            />
+          </FilterContainer>
+        )}
+        {props.items.map(item => props.render(item))}
+      </Wrapper>
+    </OutsideClickHandler>
   );
 };
 
@@ -47,17 +48,6 @@ ListSelect.defaultProps = {
   left: ''
 };
 
-ListSelect.propTypes = {
-  items: PropTypes.array.isRequired,
-  isOpen: PropTypes.boolean,
-  searchable: PropTypes.boolean,
-  handleInputChange: PropTypes.func,
-  top: PropTypes.string,
-  right: PropTypes.string,
-  bottom: PropTypes.string,
-  left: PropTypes.string
-};
-
 const Wrapper = styled.div`
   z-index: 1;
   position: absolute;
@@ -67,10 +57,22 @@ const Wrapper = styled.div`
     `
     top: ${top};
   `} ${({ right }) =>
-      right &&
-      `
+  right &&
+  `
     right: ${right};
-  `} width: 300px;
+  `} 
+  ${({ bottom }) =>
+    bottom &&
+    `
+    bottom: ${bottom}
+  `}
+  ${({ left }) =>
+    left &&
+    `
+    left: ${left}
+  `}
+  
+  width: 300px;
   border: 1px solid #e1e4e8;
   border-radius: 3px;
 `;
