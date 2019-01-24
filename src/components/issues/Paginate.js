@@ -7,7 +7,7 @@ import ReactPaginate from 'react-paginate';
 import { setCurrentPage } from 'actions/issues.actions';
 
 type ConnectedProps = {
-  pageCount: number,
+  pageCount: number | null,
   setCurrentPage: () => void
 };
 
@@ -20,7 +20,7 @@ class Paginate extends Component<ConnectedProps & OwnProps> {
   };
 
   render() {
-    if (this.props.pageCount === 0) {
+    if (!this.props.pageCount) {
       return null;
     }
 
