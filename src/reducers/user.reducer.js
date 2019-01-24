@@ -25,11 +25,8 @@ export type UserState = {|
 
 export default handleActions(
   {
-    [SAVE_TOKEN_TO_LOCAL_STORAGE]: (state: UserState, { payload }) => {
-      console.log(payload);
-      // TODO: Set action SAVE_TOKEN_TO_LOCAL_STORAGE defualt value to null, then check if it override undefined
-      return set('token', payload.user.token, state);
-    },
+    [SAVE_TOKEN_TO_LOCAL_STORAGE]: (state: UserState, { payload }) =>
+      set('token', payload.user.token, state),
 
     [SET_AUTH_ERROR]: (state: UserState) => set('badCode', true, state),
 
