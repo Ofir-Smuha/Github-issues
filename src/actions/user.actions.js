@@ -38,7 +38,7 @@ export const getUserInfoWithToken = ({ token }: { token: string }) =>
     }
   });
 
-export const saveTokenToLocalStorage = (user: Object) => ({
+export const saveTokenToLocalStorage = (user = { token: null }) => ({
   type: SAVE_TOKEN_TO_LOCAL_STORAGE,
   payload: {
     user
