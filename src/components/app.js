@@ -22,7 +22,9 @@ import {
 const HomePage = React.lazy(() => import('components/user/HomePage'));
 const Login = React.lazy(() => import('components/login/Login'));
 const IssuesPage = React.lazy(() => import('components/issues/IssuesPage'));
-const IssueDetails = React.lazy(() => 'components/issues/details/IssueDetails');
+const IssueDetails = React.lazy(() =>
+  import('components/issues/details/IssueDetails')
+);
 const NewIssue = React.lazy(() =>
   import('components/issues/new-issue/NewIssue')
 );
