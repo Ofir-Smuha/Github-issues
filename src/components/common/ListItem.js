@@ -12,7 +12,8 @@ type Props = {
   subject: string,
   closeModalKey: string,
   handleSelect: (string, string, string) => void,
-  id: number
+  id: number,
+  isMultiSelect: boolean
 };
 
 const ListItem = (props: Props) => {
@@ -26,7 +27,7 @@ const ListItem = (props: Props) => {
     closeModalKey,
     itemId,
     itemsKey,
-    isMultiSelect = false
+    isMultiSelect
   } = props;
 
   return (
@@ -50,7 +51,8 @@ const ListItem = (props: Props) => {
 
 ListItem.defaultProps = {
   width: '15px',
-  height: '15px'
+  height: '15px',
+  isMultiSelect: false
 };
 
 const ItemContainer = styled.div`

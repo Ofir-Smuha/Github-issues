@@ -48,7 +48,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
   componentDidUpdate(prevProps) {
     if (prevProps.repoAssignees !== this.props.repoAssignees) {
-      console.log('here 1');
       this.setState({ repoAssignees: this.props.repoAssignees });
     }
   }
@@ -216,7 +215,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     isMultiSelect
   ) => {
     this.handleUrlChange(parameter, value, closeModalKey);
-    console.log('here 2');
 
     if (isMultiSelect) {
       this.setState({
@@ -224,7 +222,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
           const newItem = { ...item };
 
           if (newItem.id === itemId) {
-            includes('isSelected', newItem)
+            get('isSelected', newItem)
               ? (newItem.isSelected = !newItem.isSelected)
               : (newItem.isSelected = true);
           }
@@ -240,7 +238,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         const newItem = { ...item };
 
         if (newItem.id === itemId) {
-          includes('isSelected', newItem)
+          get('isSelected', newItem)
             ? (newItem.isSelected = !newItem.isSelected)
             : (newItem.isSelected = true);
         }
