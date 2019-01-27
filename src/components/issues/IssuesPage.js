@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
+import GlobalLayout from 'components/common/GlobalLayout';
 import FillterAddBar from 'components/issues/FilterAddBar';
 import IssuesReset from 'components/issues/IssuesReset';
 import IssuesList from 'components/issues/IssuesList';
@@ -64,25 +65,26 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
   render() {
     return (
-      <Wrapper>
-        <Loader isLoading={this.props.isLoading} />
-        <FillterAddBar />
-        <IssuesReset
-          sorting={this.props.sorting}
-          issuesState={this.props.issuesState}
-        />
-        <SortIssues />
-        <IssuesList openIssues={this.props.openIssues} />
-        <Paginate />
-      </Wrapper>
+      <GlobalLayout>
+        <Wrapper>
+          <Loader isLoading={this.props.isLoading} />
+          <FillterAddBar />
+          <IssuesReset
+            sorting={this.props.sorting}
+            issuesState={this.props.issuesState}
+          />
+          <SortIssues />
+          <IssuesList openIssues={this.props.openIssues} />
+          <Paginate />
+        </Wrapper>
+      </GlobalLayout>
     );
   }
 }
 
 const Wrapper = styled.div`
-  margin-top: 70px;
   max-width: 1012px;
-  margin: 70px auto 0;
+  margin: 0 auto;
 `;
 
 const mapStateToProps = (state: State) => ({
