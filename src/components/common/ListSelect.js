@@ -16,9 +16,11 @@ type Props = {
 
 const ListSelect = (props: Props) => {
   const { top, right, left, bottom } = props;
+
   if (!props.isOpen || !props.items) {
     return null;
   }
+
   return (
     <OutsideClickHandler onOutsideClick={props.handleClickOutSide}>
       <Wrapper top={top} right={right} left={left} bottom={bottom}>

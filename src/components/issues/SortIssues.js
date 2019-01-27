@@ -36,6 +36,7 @@ type State = {
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
+    repoAssignees: this.props.repoAssignees,
     isOpen: false,
     isSortOpen: false,
     isAssigneeOpen: false
@@ -43,6 +44,13 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
   componentDidMount() {
     this.handleSetIssuesParametersFromParams();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.repoAssignees !== this.props.repoAssignees) {
+      console.log('here 1');
+      this.setState({ repoAssignees: this.props.repoAssignees });
+    }
   }
 
   handleSetIssuesParametersFromParams = () => {
@@ -199,6 +207,53 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     // Close on click
   };
 
+  handleItemSelect = (
+    parameter,
+    value,
+    closeModalKey,
+    itemId,
+    itemsKey,
+    isMultiSelect
+  ) => {
+    this.handleUrlChange(parameter, value, closeModalKey);
+    console.log('here 2');
+
+    if (isMultiSelect) {
+      this.setState({
+        [itemsKey]: this.state[itemsKey].map(item => {
+          const newItem = { ...item };
+
+          if (newItem.id === itemId) {
+            includes('isSelected', newItem)
+              ? (newItem.isSelected = !newItem.isSelected)
+              : (newItem.isSelected = true);
+          }
+          return newItem;
+        })
+      });
+
+      return;
+    }
+
+    this.setState({
+      [itemsKey]: this.state[itemsKey].map(item => {
+        const newItem = { ...item };
+
+        if (newItem.id === itemId) {
+          includes('isSelected', newItem)
+            ? (newItem.isSelected = !newItem.isSelected)
+            : (newItem.isSelected = true);
+        }
+
+        if (newItem.id !== itemId) {
+          newItem.isSelected = false;
+        }
+
+        return newItem;
+      })
+    });
+  };
+
   render() {
     return (
       <SortContainer>
@@ -212,7 +267,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
               right="0px"
               top="20px"
               isOpen={this.state.isAssigneeOpen}
-              items={this.props.repoAssignees}
+              items={this.state.repoAssignees}
               handleInputChange={this.handleAssigneesFilter}
               handleClickOutSide={() =>
                 this.setState({ isAssigneeOpen: false })
@@ -220,13 +275,16 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
               render={assignee => (
                 <ListItem
                   key={assignee.id}
+                  isSelected={assignee.isSelected}
                   image={assignee.avatar_url}
                   title={assignee.login}
+                  itemId={assignee.id}
+                  itemsKey="repoAssignees"
                   width="20px"
                   height="20px"
                   subject="assignee"
                   closeModalKey="isAssigneeOpen"
-                  handleSelect={this.handleUrlChange}
+                  handleSelect={this.handleItemSelect}
                 />
               )}>
               Filter by who’s assigned
