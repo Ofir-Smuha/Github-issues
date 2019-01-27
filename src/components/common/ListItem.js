@@ -12,8 +12,9 @@ type Props = {
   subject: string,
   closeModalKey: string,
   handleSelect: (string, string, string) => void,
-  id: number,
-  isMultiSelect: boolean
+  isMultiSelect: boolean,
+  itemId: number,
+  itemsKey: string
 };
 
 const ListItem = (props: Props) => {
@@ -42,7 +43,7 @@ const ListItem = (props: Props) => {
           isMultiSelect
         )
       }>
-      <CheckIcon isSelected={isSelected} width={width} height={height} />
+      <SelectedIcon isSelected={isSelected} width={width} height={height} />
       <Image image={image} width={width} height={height} />
       <Title image={image}>{title}</Title>
     </ItemContainer>
@@ -90,14 +91,13 @@ const Title = styled.h3`
   `};
 `;
 
-const CheckIcon = styled.div`
+const SelectedIcon = styled.div`
   display: none;
   position: absolute;
   left: 5px;
   background: url(${checkIcon}) no-repeat center;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
-  background-size: contain;
   ${({ isSelected }) =>
     isSelected &&
     `
