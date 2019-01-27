@@ -17,7 +17,7 @@ const initialState = {
 };
 
 export type UserState = {|
-  +token: boolean | null | undefined,
+  +token: boolean | null,
   +badCode: boolean,
   +userInfo: Object | null,
   +userRepositories: Object[] | null
