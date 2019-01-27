@@ -32,8 +32,7 @@ type ConnectedProps = {
   issueComments: Comments,
   match: Object,
   params: Object,
-  isAuthenticated: any,
-  userInfo: Object | null
+  isAuthenticated: any
 };
 
 class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
@@ -74,7 +73,7 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
       return <Loader isLoading={this.props.isLoading} />;
     }
     return (
-      <GlobalLayout userInfo={this.props.userInfo}>
+      <GlobalLayout>
         <Wrapper>
           <ContentContainer>
             <IssueContent
@@ -106,8 +105,7 @@ const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
   issueComments: state.issues.issueComments,
   isAuthenticated: state.user.token,
-  isLoading: isLoadingSelector(state, ISSUE_LABEL),
-  userInfo: state.user.userInfo
+  isLoading: isLoadingSelector(state, ISSUE_LABEL)
 });
 
 export default connect(mapStateToProps, {

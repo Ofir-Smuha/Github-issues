@@ -32,8 +32,7 @@ type ConnectedProps = {
   isLoading: boolean,
   isAuthenticated: string,
   history: Object,
-  error: boolean,
-  userInfo: Object | null
+  error: boolean
 };
 
 type OwnProps = {};
@@ -69,7 +68,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
 
   render() {
     return (
-      <GlobalLayout userInfo={this.props.userInfo}>
+      <GlobalLayout>
         <Wrapper>
           <Loader isLoading={this.props.isLoading} />
           <FillterAddBar />
@@ -98,8 +97,7 @@ const mapStateToProps = (state: State) => ({
   sorting: state.issues.sorting,
   isLoading: isLoadingSelector(state, ISSUES_LABEL),
   isAuthenticated: state.user.token,
-  parameters: state.issues.issuesParameters,
-  userInfo: state.user.userInfo
+  parameters: state.issues.issuesParameters
 });
 
 export default withRouter(

@@ -1,34 +1,35 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
+import { get } from 'lodash/fp';
 
 import GithubIcon from 'assets/images/github-mark.png';
 
-type Props = {
-  userInfo: Object,
+type ConnectedProps = {
+  serInfo: Object
+};
+type OwnProps = {
   history: Object
 };
 
-const Header = (props: Props) => {
-  if (!props.userInfo) {
-    return null;
+class Header extends Component<OwnProps, ConnectedProps> {
+  render() {
+    const user = get('user', this.props);
+    return (
+      <Wrapper>
+        <ContentContainer>
+          <ActionsContainer>
+            {user && <Icon onClick={() => this.props.history.push('/')} />}
+          </ActionsContainer>
+          <UserInfoContainer>
+            {user && <Avatar avatar={user.avatar_url} />}
+          </UserInfoContainer>
+        </ContentContainer>
+      </Wrapper>
+    );
   }
-
-  const avatarUrl = props.userInfo.avatar_url;
-
-  return (
-    <Wrapper>
-      <ContentContainer>
-        <ActionsContainer>
-          <Icon onClick={() => props.history.push('/')} />
-        </ActionsContainer>
-        <UserInfoContainer>
-          <Avatar avatar={avatarUrl} />
-        </UserInfoContainer>
-      </ContentContainer>
-    </Wrapper>
-  );
-};
+}
 
 const Wrapper = styled.div`
   padding: 12px 0;
@@ -67,4 +68,8 @@ const Avatar = styled.div`
   height: 20px;
 `;
 
-export default withRouter(Header);
+const mapStateToProps = state => ({
+  user: state.user.userInfo
+});
+
+export default withRouter(connect(mapStateToProps)(Header));

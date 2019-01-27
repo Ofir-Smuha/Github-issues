@@ -12,7 +12,6 @@ import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
 import GlobalLayout from '../common/GlobalLayout';
 
 type ConnectedProps = {
-  userInfo: Object | null,
   isAuthenticated: boolean | null,
   getUserTokenWithCode: () => void,
   resetAuthError: () => void,
@@ -44,7 +43,7 @@ class HomePage extends Component<ConnectedProps & OwnProps> {
 
   render() {
     return (
-      <GlobalLayout userInfo={this.props.userInfo}>
+      <GlobalLayout>
         <Content>
           <Sidebar />
         </Content>
@@ -60,7 +59,6 @@ const Content = styled.div`
 
 const mapStateToProps = (state: State) => ({
   isAuthenticated: state.user.token,
-  userInfo: state.user.userInfo,
   badCode: state.user.badCode
 });
 

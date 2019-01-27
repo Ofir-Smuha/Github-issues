@@ -9,7 +9,7 @@ class GlobalLayout extends Component {
     return (
       <Fragment>
         <HeaderAndContentContainer>
-          <Header userInfo={this.props.userInfo} />
+          <Header />
           {this.props.children}
         </HeaderAndContentContainer>
         <Footer />

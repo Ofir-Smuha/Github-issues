@@ -13,8 +13,7 @@ import type { State as StateType } from 'types/redux.types';
 type OwnProps = {};
 
 type ConnectedProps = {
-  addNewIssue: () => void,
-  userInfo: Object | null
+  addNewIssue: () => void
 };
 
 type State = {
@@ -48,7 +47,7 @@ class NewIssue extends Component<OwnProps, ConnectedProps, State> {
   render() {
     const { name, repo } = this.props.match.params;
     return (
-      <GlobalLayout userInfo={this.props.userInfo}>
+      <GlobalLayout>
         <Wrapper>
           <TextSubmitter
             includeTitle="true"
@@ -72,7 +71,4 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-const mapStateToProps = (state: StateType) => ({
-  userInfo: state.user.userInfo
-});
-export default withRouter(connect(mapStateToProps, { addNewIssue })(NewIssue));
+export default withRouter(connect(null, { addNewIssue })(NewIssue));
