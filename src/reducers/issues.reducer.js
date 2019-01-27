@@ -42,7 +42,7 @@ export type IssuesState = {|
   +issuesParameters: string,
   +currentIssue: Issue,
   +issueComments: [],
-  +pageCount: number,
+  +pageCount: number | null,
   +currentPage: number,
   +issuesState: any,
   +sorting: any,
@@ -70,7 +70,7 @@ export default handleActions(
 
     [SET_ISSUES_PAGING]: (state, { payload }) => {
       const pageCount = get('header.last.page', payload);
-      return set('pageCount', +pageCount, state);
+      return set('pageCount', !pageCount ? null : parseInt(pageCount), state);
     },
     [SET_CURRENT_PAGE]: (state, { payload }) =>
       set('currentPage', payload.currentPage, state),
