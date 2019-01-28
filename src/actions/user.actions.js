@@ -19,7 +19,10 @@ export const getUserTokenWithCode = (userCode: string) =>
       method: 'GET',
       path: `https://get-token-github.herokuapp.com/authenticate/${userCode}`,
       networkLabel: LOGIN_LABEL,
-      onSuccess: [getUserInfoWithToken, saveTokenToLocalStorage],
+      onSuccess: [
+        user => getUserInfoWithToken(user.token),
+        user => saveTokenToLocalStorage(user.token)
+      ],
       onError: setAuthError
     },
     meta: {
@@ -27,7 +30,7 @@ export const getUserTokenWithCode = (userCode: string) =>
     }
   });
 
-export const getUserInfoWithToken = ({ token }: { token: string }) =>
+export const getUserInfoWithToken = (token: string) =>
   apiAction({
     type: GET_USER_DATA_FROM_TOKEN,
     payload: {
@@ -38,11 +41,7 @@ export const getUserInfoWithToken = ({ token }: { token: string }) =>
     }
   });
 
-export const saveTokenToLocalStorage = ({
-  token
-}: {
-  token: string | null
-}) => ({
+export const saveTokenToLocalStorage = (token = null) => ({
   type: SAVE_TOKEN_TO_LOCAL_STORAGE,
   payload: {
     token

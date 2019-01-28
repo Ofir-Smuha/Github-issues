@@ -10,27 +10,25 @@ type Props = {
 
 const Footer = (props: Props) => {
   return (
-    <div>
-      <Container>
-        <LinksContainer>
-          <CopyRights>2018 github, Inc.</CopyRights>
-          <Link>Terms</Link>
-          <Link>Privacy</Link>
-          <Link>Security</Link>
-          <Link>Status</Link>
-          <Link>Help</Link>
-        </LinksContainer>
-        <Icon onClick={() => props.history.push('/')} />
-        <LinksContainer>
-          <Link>Concatct GitHub</Link>
-          <Link>Pricing</Link>
-          <Link>API</Link>
-          <Link>Traning</Link>
-          <Link>Blog</Link>
-          <Link>About</Link>
-        </LinksContainer>
-      </Container>
-    </div>
+    <Container>
+      <LinksContainer>
+        <CopyRights>2018 github, Inc.</CopyRights>
+        <Link>Terms</Link>
+        <Link>Privacy</Link>
+        <Link>Security</Link>
+        <Link>Status</Link>
+        <Link>Help</Link>
+      </LinksContainer>
+      <Icon onClick={() => props.history.push('/')} />
+      <LinksContainer>
+        <Link>Concatct GitHub</Link>
+        <Link>Pricing</Link>
+        <Link>API</Link>
+        <Link>Traning</Link>
+        <Link>Blog</Link>
+        <Link>About</Link>
+      </LinksContainer>
+    </Container>
   );
 };
 
@@ -39,13 +37,14 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   max-width: 1012px;
-  margin: 40px auto 0;
+  margin: 0 auto;
   padding: 40px 0;
   font-size: 12px;
 `;
 
 const LinksContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const Link = styled.a`
@@ -58,7 +57,8 @@ const Link = styled.a`
 `;
 
 const CopyRights = styled.h3`
-  margin-right: 16px;
+  margin-right: 15px;
+  font-weight: 500;
 `;
 
 const Icon = styled.div`

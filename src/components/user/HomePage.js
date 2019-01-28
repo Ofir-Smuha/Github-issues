@@ -7,15 +7,12 @@ import qs from 'qs';
 
 import type { State } from 'types/redux.types';
 
-import Header from 'components/common/Header';
 import Sidebar from 'components/user/sidebar/Sidebar';
-import Footer from 'components/common/Footer';
 import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
+import GlobalLayout from '../common/GlobalLayout';
 
 type ConnectedProps = {
-  userInfo: Object,
   isAuthenticated: boolean | null,
-  getUserTokenWithCode: () => void,
   resetAuthError: () => void,
   badCode: boolean,
   history: Object
@@ -26,13 +23,11 @@ type OwnProps = {};
 class HomePage extends Component<ConnectedProps & OwnProps> {
   render() {
     return (
-      <div>
-        <Header userInfo={this.props.userInfo} />
+      <GlobalLayout>
         <Content>
           <Sidebar />
         </Content>
-        <Footer />
-      </div>
+      </GlobalLayout>
     );
   }
 }
@@ -44,10 +39,9 @@ const Content = styled.div`
 
 const mapStateToProps = (state: State) => ({
   isAuthenticated: state.user.token,
-  userInfo: state.user.userInfo,
   badCode: state.user.badCode
 });
 
 export default withRouter(
-  connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
+  connect(mapStateToProps, { resetAuthError })(HomePage)
 );

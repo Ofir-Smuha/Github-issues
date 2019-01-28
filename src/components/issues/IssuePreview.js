@@ -113,6 +113,7 @@ const IssueTitle = styled.h3`
 const OpendAt = styled.h1`
   font-size: 12px;
   color: #444;
+  font-weight: 500;
 `;
 
 const CommentsLabelsContainer = styled.div`
@@ -136,7 +137,8 @@ const CommentIcon = styled.div`
 `;
 
 const Comments = styled.div`
-  font-size: 0.9rem;
+  font-size: 12px;
+  font-weight: 600;
 `;
 
 const LabelsContainer = styled.div`
