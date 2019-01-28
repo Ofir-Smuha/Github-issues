@@ -30,7 +30,7 @@ export const getUserTokenWithCode = (userCode: string) =>
     }
   });
 
-export const getUserInfoWithToken = (token: string | null) =>
+export const getUserInfoWithToken = (token: string) =>
   apiAction({
     type: GET_USER_DATA_FROM_TOKEN,
     payload: {
