@@ -34,7 +34,7 @@ type OwnProps = {};
 
 class App extends React.Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    const token = get('token', loadFromStorage('auth'));
+    const token = get('user.token', loadFromStorage('auth'));
 
     if (token) {
       this.props.saveTokenToLocalStorage(token);
