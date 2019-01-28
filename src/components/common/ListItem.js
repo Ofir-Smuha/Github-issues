@@ -71,16 +71,11 @@ const ItemContainer = styled.div`
 `;
 
 const Image = styled.div`
-  display: none;
+  display: ${props => (props.image ? 'block' : 'none')};
   background: url(${({ image }) => image}) no-repeat center;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   background-size: contain;
-  ${({ image }) =>
-    image &&
-    `
-    display: block;
-  `};
 `;
 
 const Title = styled.h3`
@@ -92,17 +87,12 @@ const Title = styled.h3`
 `;
 
 const SelectedIcon = styled.div`
-  display: none;
+  display: ${props => (props.isSelected ? 'block' : 'none')};
   position: absolute;
   left: 5px;
   background: url(${checkIcon}) no-repeat center;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
-  ${({ isSelected }) =>
-    isSelected &&
-    `
-       display: block;
-    `};
 `;
 
 export default ListItem;
