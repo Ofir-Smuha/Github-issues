@@ -34,11 +34,11 @@ type OwnProps = {};
 
 class App extends React.Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    const token = get('user.token', loadFromStorage('auth'));
+    const token = get('token', loadFromStorage('auth'));
 
     if (token) {
-      this.props.saveTokenToLocalStorage({ token });
-      this.props.getUserInfoWithToken({ token });
+      this.props.saveTokenToLocalStorage(token);
+      this.props.getUserInfoWithToken(token);
     } else {
       const searchParams = get('search', this.props.location);
 
@@ -47,7 +47,7 @@ class App extends React.Component<ConnectedProps & OwnProps> {
         const userCode = codeParams['?code'];
         this.props.getUserTokenWithCode(userCode);
       } else {
-        this.props.saveTokenToLocalStorage({ token: null });
+        this.props.saveTokenToLocalStorage(null);
       }
     }
   }
