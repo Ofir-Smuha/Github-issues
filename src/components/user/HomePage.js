@@ -13,7 +13,6 @@ import GlobalLayout from '../common/GlobalLayout';
 
 type ConnectedProps = {
   isAuthenticated: boolean | null,
-  getUserTokenWithCode: () => void,
   resetAuthError: () => void,
   badCode: boolean,
   history: Object
@@ -22,25 +21,6 @@ type ConnectedProps = {
 type OwnProps = {};
 
 class HomePage extends Component<ConnectedProps & OwnProps> {
-  componentDidMount() {
-    if (!this.props.isAuthenticated) {
-      if (get('location.search', window)) {
-        const codeParams = qs.parse(window.location.search);
-        const userCode = codeParams['?code'];
-        this.props.getUserTokenWithCode(userCode);
-      } else {
-        this.props.history.push('/login');
-      }
-    }
-  }
-
-  componentDidUpdate() {
-    if (this.props.badCode === true) {
-      this.props.history.push('/login');
-      this.props.resetAuthError();
-    }
-  }
-
   render() {
     return (
       <GlobalLayout>
@@ -63,5 +43,5 @@ const mapStateToProps = (state: State) => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { getUserTokenWithCode, resetAuthError })(HomePage)
+  connect(mapStateToProps, { resetAuthError })(HomePage)
 );

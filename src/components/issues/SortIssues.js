@@ -100,7 +100,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
           parameters['labels'] = searchParams[key];
           break;
         case 'sort':
-          // TODO: add sort functionality to common cmp
           if (this.isItemArray(searchParams[key])) {
             break;
           }
@@ -120,7 +119,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     return parameters;
   };
 
-  // TODO: All should be replace by Query string
   setFetchByState = issuesState => {
     this.props.setSortStateInState(issuesState);
   };

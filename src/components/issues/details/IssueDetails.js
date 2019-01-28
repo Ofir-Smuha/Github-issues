@@ -37,9 +37,6 @@ type ConnectedProps = {
 
 class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
   componentDidMount() {
-    if (!this.props.isAuthenticated) {
-      this.props.history.push('/login');
-    }
     const { name, repo, number } = this.props.match.params;
     this.props.fetchIssue({ name, repo, number });
   }
