@@ -240,6 +240,7 @@ const LabelText = styled.h3`
 const Info = styled.h3`
   color: #586069;
   font-size: 12px;
+  font-weight: 500;
 `;
 
 const AssigneeContainer = styled.div`

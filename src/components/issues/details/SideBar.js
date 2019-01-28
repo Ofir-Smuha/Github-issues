@@ -242,6 +242,7 @@ const Title = styled.h1`
 const Info = styled.h3`
   color: #586069;
   font-size: 12px;
+  font-weight: 500;
 `;
 
 const AssigneeContainer = styled.div`

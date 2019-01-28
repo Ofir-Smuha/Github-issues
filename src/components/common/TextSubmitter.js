@@ -276,7 +276,7 @@ const FormAction = styled.div`
 
 const InfoText = styled.h3`
   color: #586069;
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 const SubmitButton = styled.button`
