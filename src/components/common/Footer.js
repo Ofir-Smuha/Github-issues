@@ -44,6 +44,7 @@ const Container = styled.div`
 
 const LinksContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 const Link = styled.a`
@@ -56,7 +57,8 @@ const Link = styled.a`
 `;
 
 const CopyRights = styled.h3`
-  margin-right: 16px;
+  margin-right: 15px;
+  font-weight: 500;
 `;
 
 const Icon = styled.div`
