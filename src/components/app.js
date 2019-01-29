@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { get, isNull } from 'lodash/fp';
-import qs from 'qs';
 
 import { loadFromStorage } from 'utils/local-storage.utils';
 import theme from 'constants/themes.constants';
