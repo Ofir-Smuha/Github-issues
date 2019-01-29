@@ -40,19 +40,10 @@ class App extends React.Component<ConnectedProps & OwnProps> {
     if (token) {
       this.props.saveTokenToLocalStorage(token);
       this.props.getUserInfoWithToken(token);
-    } else {
-      // TODO: Move the section below to Authenticate page
-      // TODO: Be sure "bad code" validates before in enters any page & redirect to Login component (maybe it should be added to PrivateRoute component)
-      // TODO: Set the above to null if no (!Token)
-      // const searchParams = get('search', this.props.location);
+    }
 
-      // if (searchParams) {
-      //   const codeParams = qs.parse(searchParams);
-      //   const userCode = codeParams['?code'];
-      //   this.props.getUserTokenWithCode(userCode);
-      // } else {
+    if (!token) {
       this.props.saveTokenToLocalStorage(null);
-      // }
     }
   }
 
