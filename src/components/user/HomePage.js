@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { get } from 'lodash/fp';
-import qs from 'qs';
 
 import type { State } from 'types/redux.types';
 
 import Sidebar from 'components/user/sidebar/Sidebar';
-import { getUserTokenWithCode, resetAuthError } from 'actions/user.actions';
+import { resetAuthError } from 'actions/user.actions';
 import GlobalLayout from '../common/GlobalLayout';
 
 type ConnectedProps = {
