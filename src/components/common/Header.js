@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { get } from 'lodash/fp';
 
+import AutoSearch from 'components/common/AutoSearch';
+
 import GithubIcon from 'assets/images/github-mark.png';
 
 type ConnectedProps = {
@@ -19,9 +21,10 @@ class Header extends Component<OwnProps, ConnectedProps> {
     return (
       <Wrapper>
         <ContentContainer>
-          <ActionsContainer>
-            {user && <Icon onClick={() => this.props.history.push('/')} />}
-          </ActionsContainer>
+          <LogoAndSearch>
+            {user && <Logo onClick={() => this.props.history.push('/')} />}
+            <AutoSearch />
+          </LogoAndSearch>
           <UserInfoContainer>
             {user && <Avatar avatar={user.avatar_url} />}
           </UserInfoContainer>
@@ -42,22 +45,26 @@ const ContentContainer = styled.div`
   display: flex;
   justify-content: space-between;
   height: 36px;
-  max-width: 1012px;
   margin: 0 auto;
 `;
 
 const UserInfoContainer = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 30px;
 `;
 
-const ActionsContainer = styled.div`
+const LogoAndSearch = styled.div`
   display: flex;
+  align-items: center;
+  margin-left: 30px;
 `;
 
-const Icon = styled.div`
+const Logo = styled.div`
   background: url(${GithubIcon}) no-repeat center;
   width: 34px;
+  min-height: 34px;
+  margin-right: 20px;
   cursor: pointer;
 `;
 

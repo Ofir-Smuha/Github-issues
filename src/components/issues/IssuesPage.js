@@ -39,13 +39,13 @@ type OwnProps = {};
 
 class IssuesPage extends Component<ConnectedProps & OwnProps> {
   componentDidMount() {
-    const { name, repo } = this.props.match.params;
-    this.handleFetchIssues();
-    this.props.fetchCollaborators(name, repo);
-    this.props.fetchRepoAssignees(name, repo);
+    this.handleRequestByParams();
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      this.handleRequestByParams();
+    }
     if (
       prevProps.parameters !== this.props.parameters ||
       prevProps.issuesState !== this.props.issuesState ||
@@ -53,6 +53,14 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     ) {
       this.handleFetchIssues();
     }
+  }
+
+  handleRequestByParams() {
+    const { name, repo } = this.props.match.params;
+
+    this.handleFetchIssues();
+    this.props.fetchCollaborators(name, repo);
+    this.props.fetchRepoAssignees(name, repo);
   }
 
   handleFetchIssues = () => {

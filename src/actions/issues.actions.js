@@ -36,6 +36,8 @@ export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
 export const FETCH_REPO_ASSIGNEES = 'FETCH_REPO_ASSIGNEES';
 export const SET_REPO_ASSIGNEES = 'SET_REPO_ASSIGNEES';
 export const SET_ISSUES_PARAMETERS = 'SET_ISSUES_FILTER';
+export const FETCH_REPOS_SEARCH = 'FETCH_REPOS_SEARCH';
+export const SET_SEARCHED_REPOS = 'SET_SEARCHED_REPOS';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -292,5 +294,22 @@ export const setIssuesParameters = parameters => ({
   type: SET_ISSUES_PARAMETERS,
   payload: {
     parameters
+  }
+});
+
+export const fetchReposSearch = searchValue =>
+  apiAction({
+    type: FETCH_REPOS_SEARCH,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/search/repositories?q=${searchValue}`,
+      onSuccess: setSearchedRepos
+    }
+  });
+
+export const setSearchedRepos = repos => ({
+  type: SET_SEARCHED_REPOS,
+  payload: {
+    repos
   }
 });
