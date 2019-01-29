@@ -11,6 +11,7 @@ import theme from 'constants/themes.constants';
 
 import PrivateRoute from 'components/common/PrivateRoute';
 import Login from 'components/login/Login';
+import AuthenticatePage from 'components/login/AuthenticatePage';
 import IssuesPage from 'components/issues/IssuesPage';
 import IssueDetails from 'components/issues/details/IssueDetails';
 import HomePage from 'components/user/HomePage';
@@ -40,15 +41,18 @@ class App extends React.Component<ConnectedProps & OwnProps> {
       this.props.saveTokenToLocalStorage(token);
       this.props.getUserInfoWithToken(token);
     } else {
-      const searchParams = get('search', this.props.location);
+      // TODO: Move the section below to Authenticate page
+      // TODO: Be sure "bad code" validates before in enters any page & redirect to Login component (maybe it should be added to PrivateRoute component)
+      // TODO: Set the above to null if no (!Token)
+      // const searchParams = get('search', this.props.location);
 
-      if (searchParams) {
-        const codeParams = qs.parse(searchParams);
-        const userCode = codeParams['?code'];
-        this.props.getUserTokenWithCode(userCode);
-      } else {
-        this.props.saveTokenToLocalStorage(null);
-      }
+      // if (searchParams) {
+      //   const codeParams = qs.parse(searchParams);
+      //   const userCode = codeParams['?code'];
+      //   this.props.getUserTokenWithCode(userCode);
+      // } else {
+      this.props.saveTokenToLocalStorage(null);
+      // }
     }
   }
 
@@ -85,7 +89,8 @@ class App extends React.Component<ConnectedProps & OwnProps> {
               isAuthenticated={this.props.isAuthenticated}
               component={IssueDetails}
             />
-            <Route path="/login" component={Login} />
+            <Route exact path="/login" component={Login} />
+            <Route path="/login/authenticate" component={AuthenticatePage} />
             <Route exact path="/error" component={ErrorPage} />
           </Switch>
         </ErrorBoundary>
