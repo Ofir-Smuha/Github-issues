@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
 
-import { fetchReposSearch } from 'actions/issues.actions';
+import { fetchSearchedRepos } from 'actions/issues.actions';
 
 import bookIcon from 'assets/images/book.svg';
 
@@ -17,7 +17,7 @@ class AutoSearch extends Component {
   handleSearch = e => {
     const value = e.target.value;
     this.setState({ searchValue: value });
-    this.props.fetchReposSearch(value);
+    this.props.fetchSearchedRepos(value);
   };
 
   handleSelect = path => {
@@ -132,5 +132,5 @@ const mapStateToProps = state => ({
 });
 
 export default withRouter(
-  connect(mapStateToProps, { fetchReposSearch })(AutoSearch)
+  connect(mapStateToProps, { fetchSearchedRepos })(AutoSearch)
 );
