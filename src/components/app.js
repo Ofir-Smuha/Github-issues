@@ -10,19 +10,25 @@ import { loadFromStorage } from 'utils/local-storage.utils';
 import theme from 'constants/themes.constants';
 
 import PrivateRoute from 'components/common/PrivateRoute';
-import Login from 'components/login/Login';
-import IssuesPage from 'components/issues/IssuesPage';
-import IssueDetails from 'components/issues/details/IssueDetails';
-import HomePage from 'components/user/HomePage';
 import ErrorBoundary from './ErrorBoundary';
-import ErrorPage from 'components/error/ErrorPage';
-import NewIssue from 'components/issues/new-issue/NewIssue';
+import Loader from 'components/common/Loader';
 
 import {
   getUserInfoWithToken,
   saveTokenToLocalStorage,
   getUserTokenWithCode
 } from 'actions/user.actions';
+
+const HomePage = React.lazy(() => import('components/user/HomePage'));
+const Login = React.lazy(() => import('components/login/Login'));
+const IssuesPage = React.lazy(() => import('components/issues/IssuesPage'));
+const IssueDetails = React.lazy(() =>
+  import('components/issues/details/IssueDetails')
+);
+const NewIssue = React.lazy(() =>
+  import('components/issues/new-issue/NewIssue')
+);
+const ErrorPage = React.lazy(() => import('components/error/ErrorPage'));
 
 type ConnectedProps = {
   getUserInfoWithToken: () => void,
@@ -62,32 +68,34 @@ class App extends React.Component<ConnectedProps & OwnProps> {
     return (
       <ThemeProvider theme={theme}>
         <ErrorBoundary>
-          <Switch>
-            <PrivateRoute
-              exact
-              path="/"
-              isAuthenticated={this.props.isAuthenticated}
-              component={HomePage}
-            />
-            <PrivateRoute
-              exact
-              path="/:name/:repo/issues"
-              isAuthenticated={this.props.isAuthenticated}
-              component={IssuesPage}
-            />
-            <PrivateRoute
-              path="/:name/:repo/issues/new-issue"
-              isAuthenticated={this.props.isAuthenticated}
-              component={NewIssue}
-            />
-            <PrivateRoute
-              path="/:name/:repo/issues/:number"
-              isAuthenticated={this.props.isAuthenticated}
-              component={IssueDetails}
-            />
-            <Route path="/login" component={Login} />
-            <Route exact path="/error" component={ErrorPage} />
-          </Switch>
+          <React.Suspense fallback={<Loader />}>
+            <Switch>
+              <PrivateRoute
+                exact
+                path="/"
+                isAuthenticated={this.props.isAuthenticated}
+                component={HomePage}
+              />
+              <PrivateRoute
+                exact
+                path="/:name/:repo/issues"
+                isAuthenticated={this.props.isAuthenticated}
+                component={IssuesPage}
+              />
+              <PrivateRoute
+                path="/:name/:repo/issues/new-issue"
+                isAuthenticated={this.props.isAuthenticated}
+                component={NewIssue}
+              />
+              <PrivateRoute
+                path="/:name/:repo/issues/:number"
+                isAuthenticated={this.props.isAuthenticated}
+                component={IssueDetails}
+              />
+              <Route path="/login" component={Login} />
+              <Route exact path="/error" component={ErrorPage} />
+            </Switch>
+          </React.Suspense>
         </ErrorBoundary>
       </ThemeProvider>
     );
