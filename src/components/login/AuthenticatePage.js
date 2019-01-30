@@ -29,10 +29,6 @@ class AuthenticatePage extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.badCodeRequest) {
-      this.props.history.push('/login');
-    }
-
     if (this.props.token) {
       this.props.history.push('/');
     }

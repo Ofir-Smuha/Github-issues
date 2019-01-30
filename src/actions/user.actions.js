@@ -57,7 +57,10 @@ export const setUserInState = (user: Object) => ({
 
 export const setAuthError = () => ({
   type: SET_AUTH_ERROR,
-  payload: {}
+  payload: {},
+  meta: {
+    navigate: true
+  }
 });
 
 export const resetAuthError = () => ({
