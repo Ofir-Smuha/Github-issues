@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { isEmpty } from 'lodash/fp';
 
 import { fetchSearchedRepos } from 'actions/issues.actions';
 
@@ -30,6 +31,7 @@ class AutoSearch extends Component {
 
   renderSearchedRepos = () => {
     const repositories = this.props.repositories.slice(0, 7);
+
     return repositories.map(repo => (
       <ListItem onClick={() => this.handleSelect(repo.full_name)}>
         <ItemIcon />
@@ -52,11 +54,12 @@ class AutoSearch extends Component {
             placeholder="Search or jump to..."
           />
 
-          {this.props.repositories && (
-            <DropDown isOpen={this.state.isOpen}>
-              {this.renderSearchedRepos()}
-            </DropDown>
-          )}
+          {this.props.repositories &&
+            !isEmpty(this.state.searchValue) && (
+              <DropDown isOpen={this.state.isOpen}>
+                {this.renderSearchedRepos()}
+              </DropDown>
+            )}
         </OutsideClickHandler>
       </AutoSearchWrapper>
     );
