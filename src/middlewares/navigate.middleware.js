@@ -4,9 +4,9 @@ import history from 'utils/history.utils';
 
 import type { Middleware } from 'types/redux.types';
 
-const navigateMiddleware: Middleware = () => {
+const redirectMiddleware: Middleware = () => {
   return next => action => {
-    if (!get('meta.navigate', action)) {
+    if (!get('meta.redirect', action)) {
       return next(action);
     }
 
@@ -14,4 +14,4 @@ const navigateMiddleware: Middleware = () => {
   };
 };
 
-export default navigateMiddleware;
+export default redirectMiddleware;

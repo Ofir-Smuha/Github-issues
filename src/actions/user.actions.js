@@ -58,7 +58,7 @@ export const badCodeRedirect = () => ({
   type: BAD_CODE_REDIRECT,
   payload: {},
   meta: {
-    navigate: true
+    redirect: true
   }
 });
 

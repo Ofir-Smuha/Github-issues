@@ -6,7 +6,7 @@ import filter from 'redux-storage-decorator-filter';
 
 import rootReducer from 'reducers/root.reducer';
 import apiMiddleware from 'middlewares/api.middleware';
-import navigateMiddleware from 'middlewares/navigate.middleware';
+import redirectMiddleware from 'middlewares/navigate.middleware';
 
 import { SAVE_TOKEN_TO_LOCAL_STORAGE } from 'actions/user.actions';
 
@@ -25,7 +25,7 @@ const localStorageMiddleWare = createMiddleware(
   [SAVE_TOKEN_TO_LOCAL_STORAGE]
 );
 
-const middlewares = [apiMiddleware, navigateMiddleware, localStorageMiddleWare];
+const middlewares = [apiMiddleware, redirectMiddleware, localStorageMiddleWare];
 
 if (isDev) {
   middlewares.unshift(require('redux-freeze'));
