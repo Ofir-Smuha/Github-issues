@@ -3,8 +3,6 @@ import { handleActions } from 'redux-actions';
 
 import {
   SAVE_TOKEN_TO_LOCAL_STORAGE,
-  SET_AUTH_ERROR,
-  RESET_AUTH_ERROR,
   SET_USER_IN_STATE,
   SET_USER_REPOSITORIES
 } from 'actions/user.actions';
