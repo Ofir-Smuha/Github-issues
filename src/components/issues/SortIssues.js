@@ -36,7 +36,6 @@ type State = {
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
-    repoAssignees: this.props.repoAssignees,
     isOpen: false,
     isSortOpen: false,
     isAssigneeOpen: false,
@@ -45,12 +44,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
   componentDidMount() {
     this.handleSetIssuesParametersFromParams();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.repoAssignees !== this.props.repoAssignees) {
-      this.setState({ repoAssignees: this.props.repoAssignees });
-    }
   }
 
   handleSetIssuesParametersFromParams = () => {
@@ -245,7 +238,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
               right="0px"
               top="20px"
               isOpen={this.state.isAssigneeOpen}
-              items={this.state.repoAssignees}
+              items={this.props.repoAssignees}
               handleInputChange={this.handleAssigneesFilter}
               handleClickOutSide={() =>
                 this.setState({ isAssigneeOpen: false })
