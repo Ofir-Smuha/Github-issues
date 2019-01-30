@@ -39,7 +39,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     repoAssignees: this.props.repoAssignees,
     isOpen: false,
     isSortOpen: false,
-    isAssigneeOpen: false
+    isAssigneeOpen: false,
+    selectedAssignees: []
   };
 
   componentDidMount() {
@@ -216,40 +217,19 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   ) => {
     this.handleUrlChange(parameter, value, closeModalKey);
 
+    let selectedItems = [...this.state[itemsKey]];
+
     if (isMultiSelect) {
-      this.setState({
-        [itemsKey]: this.state[itemsKey].map(item => {
-          const newItem = { ...item };
-
-          if (newItem.id === itemId) {
-            get('isSelected', newItem)
-              ? (newItem.isSelected = !newItem.isSelected)
-              : (newItem.isSelected = true);
-          }
-          return newItem;
-        })
-      });
-
-      return;
+      selectedItems = selectedItems.includes(itemId)
+        ? selectedItems.filter(item => item !== itemId)
+        : [...selectedItems, itemId];
     }
 
-    this.setState({
-      [itemsKey]: this.state[itemsKey].map(item => {
-        const newItem = { ...item };
+    if (!isMultiSelect) {
+      selectedItems = selectedItems.includes(itemId) ? [] : [itemId];
+    }
 
-        if (newItem.id === itemId) {
-          get('isSelected', newItem)
-            ? (newItem.isSelected = !newItem.isSelected)
-            : (newItem.isSelected = true);
-        }
-
-        if (newItem.id !== itemId) {
-          newItem.isSelected = false;
-        }
-
-        return newItem;
-      })
-    });
+    this.setState({ [itemsKey]: selectedItems });
   };
 
   render() {
@@ -273,16 +253,18 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
               render={assignee => (
                 <ListItem
                   key={assignee.id}
-                  isSelected={assignee.isSelected}
+                  isSelected={this.state.selectedAssignees.includes(
+                    assignee.id
+                  )}
+                  handleSelect={this.handleItemSelect}
                   image={assignee.avatar_url}
                   title={assignee.login}
                   itemId={assignee.id}
-                  itemsKey="repoAssignees"
+                  closeModalKey="isAssigneeOpen"
+                  itemsKey="selectedAssignees"
                   width="20px"
                   height="20px"
                   subject="assignee"
-                  closeModalKey="isAssigneeOpen"
-                  handleSelect={this.handleItemSelect}
                 />
               )}>
               Filter by who’s assigned
