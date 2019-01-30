@@ -36,7 +36,7 @@ const initialState = {
   collaborators: [],
   assignees: [],
   repoAssignees: [],
-  reposSearch: []
+  searchedRepos: []
 };
 
 export type IssuesState = {|
