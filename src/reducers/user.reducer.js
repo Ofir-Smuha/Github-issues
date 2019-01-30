@@ -28,10 +28,6 @@ export default handleActions(
     [SAVE_TOKEN_TO_LOCAL_STORAGE]: (state: UserState, { payload }) =>
       set('token', payload.token, state),
 
-    [SET_AUTH_ERROR]: (state: UserState) => set('badCode', true, state),
-
-    [RESET_AUTH_ERROR]: (state: UserState) => set('badCode', false, state),
-
     [SET_USER_IN_STATE]: (state: UserState, { payload: { user } }) =>
       set('userInfo', user, state),
 
