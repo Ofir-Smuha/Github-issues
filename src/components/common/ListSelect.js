@@ -80,6 +80,8 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.div`
+  font-size: 12px;
+  font-weight: 600;
   background-color: #f6f8fa;
   border-bottom: 1px solid #e1e4e8;
   line-height: 16px;

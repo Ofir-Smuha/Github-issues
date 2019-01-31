@@ -17,6 +17,8 @@ import {
   setIssuesParameters
 } from 'actions/issues.actions';
 
+import { sortings } from 'constants/sort.constants';
+
 import downArrow from 'assets/images/drop-down.svg';
 
 type ConnectedProps = {
@@ -29,11 +31,14 @@ type OwnProps = {};
 
 type State = {
   isOpen: boolean,
-  isOpen: boolean,
   isSortOpen: boolean,
   isAssigneeOpen: boolean,
   isLabelsOpen: boolean,
-  isMileStonesOpen: boolean
+  isMileStonesOpen: boolean,
+  selectedAssignees: [],
+  selectedLabels: [],
+  selectedMilestones: [],
+  selectedSort: []
 };
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
@@ -45,7 +50,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     isMileStonesOpen: false,
     selectedAssignees: [],
     selectedLabels: [],
-    selectedMilestones: []
+    selectedMilestones: [],
+    selectedSort: []
   };
 
   componentDidMount() {
@@ -157,10 +163,34 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     return Array.isArray(item);
   };
 
-  handleUrlChange = (parameter, value, closeModalKey) => {
+  handleSortSelect = value => {
+    switch (value) {
+      case 'Newest':
+        return 'created';
+      case 'Oldest':
+        return 'created-asc';
+      case 'Most commented':
+        return 'comments';
+      case 'Least comments':
+        return 'comments-asc';
+      case 'Recently updated':
+        return 'updated';
+    }
+  };
+
+  handleUrlChange = (parameter, itemValue, closeModalKey) => {
+    console.log(
+      'parameter',
+      parameter,
+      'value',
+      value,
+      'closeModalKey',
+      closeModalKey
+    );
+    const value =
+      parameter === 'sort' ? this.handleSortSelect(itemValue) : itemValue;
     const pathName = this.props.location.pathname;
     const searchParams = this.extractSearchParams();
-
     if (get(parameter, searchParams)) {
       if (parameter === 'label') {
         // If label is Array
@@ -330,13 +360,28 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   renderSortDropDown = () => (
     <ItemSelect>
       <BarText>Sort</BarText>
-      <SortIcon onClick={this.toggleSort} />
-      {this.state.isSortOpen && (
-        <SortDropDown
-          handleClickOutSide={() => this.setState({ isSortOpen: false })}
-          setFetchBySort={this.setFetchBySort}
-        />
-      )}
+      <SortIcon onClick={() => this.setState({ isSortOpen: true })} />
+      <ListSelect
+        right="0px"
+        top="20px"
+        isOpen={this.state.isSortOpen}
+        items={sortings}
+        // handleInputChange={this.handleAssigneesFilter}
+        handleClickOutSide={() => this.setState({ isSortOpen: false })}
+        render={sort => (
+          <ListItem
+            key={sort.id}
+            isSelected={this.state.selectedSort.includes(sort.id)}
+            handleSelect={this.handleItemSelect}
+            title={sort.title}
+            itemId={sort.id}
+            closeModalKey="isSortOpen"
+            itemsKey="selectedSort"
+            subject="sort"
+          />
+        )}>
+        Sort by
+      </ListSelect>
     </ItemSelect>
   );
 

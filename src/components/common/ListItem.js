@@ -95,7 +95,7 @@ const Icon = styled.div`
 `;
 
 const Title = styled.h3`
-  font-size: 14px;
+  font-size: 12px;
   ${({ image, fill }) =>
     (image || fill) &&
     `
