@@ -42,7 +42,10 @@ class ListSelect extends Component {
 
           {this.props.items
             .filter(item =>
-              includes(this.state.inputValue, item[this.props.accessKey])
+              includes(
+                this.state.inputValue.toLowerCase(),
+                item[this.props.accessKey].toLowerCase()
+              )
             )
             .map(item => this.props.render(item))}
         </Wrapper>
