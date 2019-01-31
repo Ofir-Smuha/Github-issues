@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import OutsideClickHandler from 'react-outside-click-handler';
+import { includes } from 'lodash/fp';
 
 type Props = {
   isOpen: boolean,
@@ -14,31 +15,67 @@ type Props = {
   left: string
 };
 
-const ListSelect = (props: Props) => {
-  const { top, right, left, bottom } = props;
+class ListSelect extends Component {
+  state = {
+    inputValue: ''
+  };
 
-  if (!props.isOpen || !props.items) {
-    return null;
+  render() {
+    const { top, right, left, bottom } = this.props;
+    if (!this.props.isOpen || !this.props.items) {
+      return null;
+    }
+
+    return (
+      <OutsideClickHandler onOutsideClick={this.props.handleClickOutSide}>
+        <Wrapper top={top} right={right} left={left} bottom={bottom}>
+          <Title>{this.props.children}</Title>
+          {this.props.searchable && (
+            <FilterContainer>
+              <Filter
+                type="text"
+                placeholder={this.props.placeholder}
+                onChange={e => this.setState({ inputValue: e.target.value })}
+              />
+            </FilterContainer>
+          )}
+
+          {this.props.items
+            .filter(item =>
+              includes(this.state.inputValue, item[this.props.accessKey])
+            )
+            .map(item => this.props.render(item))}
+        </Wrapper>
+      </OutsideClickHandler>
+    );
   }
+}
 
-  return (
-    <OutsideClickHandler onOutsideClick={props.handleClickOutSide}>
-      <Wrapper top={top} right={right} left={left} bottom={bottom}>
-        <Title>{props.children}</Title>
-        {props.searchable && (
-          <FilterContainer>
-            <Filter
-              type="text"
-              placeholder={props.placeholder}
-              onChange={e => props.handleInputChange(e)}
-            />
-          </FilterContainer>
-        )}
-        {props.items.map(item => props.render(item))}
-      </Wrapper>
-    </OutsideClickHandler>
-  );
-};
+// const ListSelect = (props: Props) => {
+//   const { top, right, left, bottom } = props;
+//
+//   if (!props.isOpen || !props.items) {
+//     return null;
+//   }
+//
+//   return (
+//     <OutsideClickHandler onOutsideClick={props.handleClickOutSide}>
+//       <Wrapper top={top} right={right} left={left} bottom={bottom}>
+//         <Title>{props.children}</Title>
+//         {props.searchable && (
+//           <FilterContainer>
+//             <Filter
+//               type="text"
+//               placeholder={props.placeholder}
+//               onChange={e => props.handleInputChange(e)}
+//             />
+//           </FilterContainer>
+//         )}
+//         {props.items.map(item => props.render(item))}
+//       </Wrapper>
+//     </OutsideClickHandler>
+//   );
+// };
 
 ListSelect.defaultProps = {
   isOpen: false,

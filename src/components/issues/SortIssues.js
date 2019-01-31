@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { isEmpty, mapKeys, map, get, includes } from 'lodash/fp';
 import qs from 'qs';
 
-import SortDropDown from 'components/issues/filter-sort-panel/SortDropDown';
 import IssuesState from 'components/issues/filter-sort-panel/IssuesState';
 import ListSelect from 'components/common/ListSelect';
 import ListItem from 'components/common/ListItem';
@@ -135,30 +134,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     return parameters;
   };
 
-  // TODO: All should be replace by Query string
-  setFetchByState = issuesState => {
-    this.props.setSortStateInState(issuesState);
-  };
-
-  setFetchBySort = sorting => {
-    this.props.setSortingInState(sorting);
-    this.setState({
-      isOpen: false
-    });
-  };
-
-  toggleSort = () => {
-    this.setState({
-      isSortOpen: !this.state.isOpen
-    });
-  };
-
-  handleClickOutSide = () => {
-    this.setState({
-      isSortOpen: false
-    });
-  };
-
   isItemArray = item => {
     return Array.isArray(item);
   };
@@ -273,7 +248,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         right="0px"
         top="20px"
         isOpen={this.state.isMileStonesOpen}
-        // handleInputChange={this.handleLabelsFilter}
+        accessKey={'title'}
         items={this.props.repoMilestones}
         handleClickOutSide={() => this.setState({ isMileStonesOpen: false })}
         render={milestone => (
@@ -302,7 +277,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         right="0px"
         top="20px"
         isOpen={this.state.isLabelsOpen}
-        // handleInputChange={this.handleLabelsFilter}
+        accessKey={'name'}
         items={this.props.repoLabels}
         handleClickOutSide={() => this.setState({ isLabelsOpen: false })}
         render={label => (
@@ -336,7 +311,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         top="20px"
         isOpen={this.state.isAssigneeOpen}
         items={this.props.repoAssignees}
-        handleInputChange={this.handleAssigneesFilter}
+        accessKey={'login'}
         handleClickOutSide={() => this.setState({ isAssigneeOpen: false })}
         render={assignee => (
           <ListItem
@@ -367,7 +342,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
         top="20px"
         isOpen={this.state.isSortOpen}
         items={sortings}
-        // handleInputChange={this.handleAssigneesFilter}
+        accessKey={'title'}
         handleClickOutSide={() => this.setState({ isSortOpen: false })}
         render={sort => (
           <ListItem
