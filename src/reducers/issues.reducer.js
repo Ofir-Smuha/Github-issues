@@ -17,7 +17,8 @@ import {
   SET_NEW_ISSUE,
   SET_REPO_ASSIGNEES,
   SET_ISSUES_PARAMETERS,
-  SET_REPO_LABELS
+  SET_REPO_LABELS,
+  SET_REPO_MILESTONES
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -36,7 +37,8 @@ const initialState = {
   collaborators: [],
   assignees: [],
   repoAssignees: [],
-  repoLabels: []
+  repoLabels: [],
+  repoMilestones: []
 };
 
 export type IssuesState = {|
@@ -52,7 +54,8 @@ export type IssuesState = {|
   +collaborators: [],
   +assignees: [],
   +repoAssignees: [],
-  repoLabels: []
+  +repoLabels: [],
+  +repoMilestones: []
 |};
 
 export default handleActions(
@@ -107,6 +110,9 @@ export default handleActions(
 
     [SET_REPO_LABELS]: (state, { payload }) =>
       set('repoLabels', payload.labels, state),
+
+    [SET_REPO_MILESTONES]: (state, { payload }) =>
+      set('repoMilestones', payload.milestones, state),
 
     [SET_ISSUES_PARAMETERS]: (state, { payload: { parameters } }) =>
       set('issuesParameters', parameters, state)

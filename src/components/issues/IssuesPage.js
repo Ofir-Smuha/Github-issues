@@ -16,6 +16,7 @@ import {
   fetchCollaborators,
   fetchRepoAssignees,
   fetchRepoLabels,
+  fetchRepoMilestones,
   ISSUES_LABEL
 } from 'actions/issues.actions';
 import { isLoadingSelector } from 'selectors/network.selectors';
@@ -47,6 +48,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
     this.props.fetchCollaborators(name, repo);
     this.props.fetchRepoAssignees(name, repo);
     this.props.fetchRepoLabels(name, repo);
+    this.props.fetchRepoMilestones(name, repo);
   }
 
   componentDidUpdate(prevProps) {
@@ -105,6 +107,7 @@ export default withRouter(
     fetchIssues,
     fetchCollaborators,
     fetchRepoAssignees,
-    fetchRepoLabels
+    fetchRepoLabels,
+    fetchRepoMilestones
   })(IssuesPage)
 );

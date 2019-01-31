@@ -32,7 +32,8 @@ type State = {
   isOpen: boolean,
   isSortOpen: boolean,
   isAssigneeOpen: boolean,
-  isLabelsOpen: boolean
+  isLabelsOpen: boolean,
+  isMileStonesOpen: boolean
 };
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
@@ -41,17 +42,17 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     isSortOpen: false,
     isAssigneeOpen: false,
     isLabelsOpen: false,
+    isMileStonesOpen: false,
     selectedAssignees: [],
-    selectedLabels: []
+    selectedLabels: [],
+    selectedMilestones: []
   };
 
   componentDidMount() {
     this.handleSetIssuesParametersFromParams();
   }
 
-  componentDidUpdate() {
-    console.log('this.props.repoLabels', this.props.repoLabels);
-  }
+  componentDidUpdate() {}
 
   handleSetIssuesParametersFromParams = () => {
     const searchParams = this.extractSearchParams();
@@ -232,6 +233,35 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     this.setState({ [itemsKey]: selectedItems });
   };
 
+  renderMilestonesDropDown = () => (
+    <ItemSelect>
+      <BarText>Milestones</BarText>
+      <SortIcon onClick={() => this.setState({ isMileStonesOpen: true })} />
+      <ListSelect
+        searchable={true}
+        right="0px"
+        top="20px"
+        isOpen={this.state.isMileStonesOpen}
+        // handleInputChange={this.handleLabelsFilter}
+        items={this.props.repoMilestones}
+        handleClickOutSide={() => this.setState({ isMileStonesOpen: false })}
+        render={milestone => (
+          <ListItem
+            key={milestone.id}
+            isSelected={this.state.selectedMilestones.includes(milestone.id)}
+            handleSelect={this.handleItemSelect}
+            title={milestone.title}
+            itemId={milestone.id}
+            closeModalKey="isMileStonesOpen"
+            itemsKey="selectedMilestones"
+            subject="milestone"
+          />
+        )}>
+        Filter by milestone
+      </ListSelect>
+    </ItemSelect>
+  );
+
   renderLabelsDropDown = () => (
     <ItemSelect>
       <BarText>Labels</BarText>
@@ -259,8 +289,9 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
             height="15px"
             subject="label"
           />
-        )}
-      />
+        )}>
+        Filter by label
+      </ListSelect>
     </ItemSelect>
   );
 
@@ -314,6 +345,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
       <SortContainer>
         <IssuesState handleSetFetchByState={this.setFetchByState} />
         <ItemSelectContainer>
+          {this.renderMilestonesDropDown()}
           {this.renderLabelsDropDown()}
           {this.renderAssigneeDropDown()}
           {this.renderSortDropDown()}
@@ -366,7 +398,8 @@ const SortIcon = styled.div`
 
 const mapStateToProps = state => ({
   repoAssignees: state.issues.repoAssignees,
-  repoLabels: state.issues.repoLabels
+  repoLabels: state.issues.repoLabels,
+  repoMilestones: state.issues.repoMilestones
 });
 
 export default withRouter(
