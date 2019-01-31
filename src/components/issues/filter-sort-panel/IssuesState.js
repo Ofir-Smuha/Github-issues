@@ -4,17 +4,17 @@ import warning from '../../../assets/images/warning-black.svg';
 import check from '../../../assets/images/check.svg';
 
 type Props = {
-  handleSetFetchByState: () => void
+  handleStateSelect: () => string
 };
 
 const IssuesState = (props: Props) => {
   return (
     <OpenClosedContainer>
-      <Open onClick={() => props.handleSetFetchByState('open')}>
+      <Open onClick={() => props.handleStateSelect('state', 'open')}>
         <OpenIcon />
         <BarText>Open</BarText>
       </Open>
-      <Closed onClick={() => props.handleSetFetchByState('closed')}>
+      <Closed onClick={() => props.handleStateSelect('state', 'closed')}>
         <ClosedIcon />
         <BarText>Closed</BarText>
       </Closed>

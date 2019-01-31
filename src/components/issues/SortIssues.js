@@ -234,8 +234,9 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
 
     this.props.history.push(`${pathName}?${newUrlParams}`);
     this.props.setIssuesParameters(queryParams);
-    this.setState({ [closeModalKey]: false });
-    // Close on click
+    if (closeModalKey) {
+      this.setState({ [closeModalKey]: false });
+    }
   };
 
   handleItemSelect = (
@@ -388,7 +389,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   render() {
     return (
       <SortContainer>
-        <IssuesState handleSetFetchByState={this.setFetchByState} />
+        <IssuesState handleStateSelect={this.handleUrlChange} />
         <ItemSelectContainer>
           {this.renderMilestonesDropDown()}
           {this.renderLabelsDropDown()}
