@@ -14,7 +14,8 @@ type Props = {
   handleSelect: (string, string, string) => void,
   isMultiSelect: boolean,
   itemId: number,
-  itemsKey: string
+  itemsKey: string,
+  fill: string
 };
 
 const ListItem = (props: Props) => {
@@ -23,6 +24,7 @@ const ListItem = (props: Props) => {
     subject,
     title,
     image,
+    fill,
     width,
     height,
     closeModalKey,
@@ -44,8 +46,10 @@ const ListItem = (props: Props) => {
         )
       }>
       <SelectedIcon isSelected={isSelected} width={width} height={height} />
-      <Image image={image} width={width} height={height} />
-      <Title image={image}>{title}</Title>
+      <Icon image={image} fill={fill} width={width} height={height} />
+      <Title image={image} fill={fill}>
+        {title}
+      </Title>
     </ItemContainer>
   );
 };
@@ -70,17 +74,30 @@ const ItemContainer = styled.div`
   }
 `;
 
-const Image = styled.div`
-  display: ${props => (props.image ? 'block' : 'none')};
-  background: url(${({ image }) => image}) no-repeat center;
+const Icon = styled.div`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
-  background-size: contain;
+  border-radius: 3px;
+  ${({ image, fill }) => {
+    if (image) {
+      return `
+        background: url(${image}) no-repeat center;
+        background-size: contain;
+      `;
+    }
+
+    if (fill) {
+      return `background-color: #${fill}`;
+    }
+
+    return `display: none`;
+  }};
 `;
 
 const Title = styled.h3`
-  ${({ image }) =>
-    image &&
+  font-size: 14px;
+  ${({ image, fill }) =>
+    (image || fill) &&
     `
     margin-left: 10px;
   `};

@@ -36,6 +36,8 @@ export const ADD_NEW_ISSUE = 'ADD_NEW_ISSUE';
 export const FETCH_REPO_ASSIGNEES = 'FETCH_REPO_ASSIGNEES';
 export const SET_REPO_ASSIGNEES = 'SET_REPO_ASSIGNEES';
 export const SET_ISSUES_PARAMETERS = 'SET_ISSUES_FILTER';
+export const FETCH_REPO_LABELS = 'FETCH_REPO_LABELS';
+export const SET_REPO_LABELS = 'SET_REPO_LABELS';
 
 export const ISSUES_LABEL = 'issues';
 export const ISSUE_LABEL = 'issue';
@@ -285,6 +287,23 @@ export const setRepoAssignees = assignees => ({
   type: SET_REPO_ASSIGNEES,
   payload: {
     assignees
+  }
+});
+
+export const fetchRepoLabels = (name, repo) =>
+  apiAction({
+    type: FETCH_REPO_LABELS,
+    payload: {
+      method: 'GET',
+      path: `https://api.github.com/repos/${name}/${repo}/labels?access_token=${token}`,
+      onSuccess: setRepoLabels
+    }
+  });
+
+export const setRepoLabels = labels => ({
+  type: SET_REPO_LABELS,
+  payload: {
+    labels
   }
 });
 

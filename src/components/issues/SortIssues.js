@@ -31,7 +31,8 @@ type State = {
   isOpen: boolean,
   isOpen: boolean,
   isSortOpen: boolean,
-  isAssigneeOpen: boolean
+  isAssigneeOpen: boolean,
+  isLabelsOpen: boolean
 };
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
@@ -39,11 +40,17 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     isOpen: false,
     isSortOpen: false,
     isAssigneeOpen: false,
-    selectedAssignees: []
+    isLabelsOpen: false,
+    selectedAssignees: [],
+    selectedLabels: []
   };
 
   componentDidMount() {
     this.handleSetIssuesParametersFromParams();
+  }
+
+  componentDidUpdate() {
+    console.log('this.props.repoLabels', this.props.repoLabels);
   }
 
   handleSetIssuesParametersFromParams = () => {
@@ -225,6 +232,38 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     this.setState({ [itemsKey]: selectedItems });
   };
 
+  renderLabelsDropDown = () => (
+    <ItemSelect>
+      <BarText>Labels</BarText>
+      <SortIcon onClick={() => this.setState({ isLabelsOpen: true })} />
+      <ListSelect
+        searchable={true}
+        right="0px"
+        top="20px"
+        isOpen={this.state.isLabelsOpen}
+        // handleInputChange={this.handleLabelsFilter}
+        items={this.props.repoLabels}
+        handleClickOutSide={() => this.setState({ isLabelsOpen: false })}
+        render={label => (
+          <ListItem
+            key={label.id}
+            isSelected={this.state.selectedLabels.includes(label.id)}
+            handleSelect={this.handleItemSelect}
+            fill={label.color}
+            title={label.name}
+            itemId={label.id}
+            isMultiSelect={true}
+            closeModalKey="isLabelsOpen"
+            itemsKey="selectedLabels"
+            width="15px"
+            height="15px"
+            subject="label"
+          />
+        )}
+      />
+    </ItemSelect>
+  );
+
   renderAssigneeDropDown = () => (
     <ItemSelect>
       <BarText>Assignee</BarText>
@@ -275,6 +314,7 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
       <SortContainer>
         <IssuesState handleSetFetchByState={this.setFetchByState} />
         <ItemSelectContainer>
+          {this.renderLabelsDropDown()}
           {this.renderAssigneeDropDown()}
           {this.renderSortDropDown()}
         </ItemSelectContainer>
@@ -325,7 +365,8 @@ const SortIcon = styled.div`
 `;
 
 const mapStateToProps = state => ({
-  repoAssignees: state.issues.repoAssignees
+  repoAssignees: state.issues.repoAssignees,
+  repoLabels: state.issues.repoLabels
 });
 
 export default withRouter(
