@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ResetIssuesSort } from 'actions/issues.actions';
@@ -9,19 +10,25 @@ type connectedProps = {
 };
 
 type OwnProps = {
-  sorting: any,
-  issuesState: any
+  issuesParameters: string | null,
+  issuesState: string | null
 };
 
 class IssuesReset extends Component<connectedProps & OwnProps> {
+  handleResetIssuesSort = () => {
+    const pathname = this.props.location.pathname;
+    this.props.history.push(`${pathname}`);
+    this.props.ResetIssuesSort();
+  };
+
   render() {
-    if (!this.props.sorting && !this.props.issuesState) {
+    if (!this.props.issuesParameters && !this.props.issuesState) {
       return null;
     }
 
     return (
       <div>
-        <Reset onClick={this.props.ResetIssuesSort}>
+        <Reset onClick={this.handleResetIssuesSort}>
           Clear current search query and sorts
         </Reset>
       </div>
@@ -42,4 +49,4 @@ const Reset = styled.h1`
   }
 `;
 
-export default connect(null, { ResetIssuesSort })(IssuesReset);
+export default withRouter(connect(null, { ResetIssuesSort })(IssuesReset));

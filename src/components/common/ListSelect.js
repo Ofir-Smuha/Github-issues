@@ -20,6 +20,7 @@ class ListSelect extends Component {
     inputValue: ''
   };
 
+  // TODO : validate Search inside drop-down, Delete sortDropDown component, handle selected items from params into SelectedItems array.
   render() {
     const { top, right, left, bottom } = this.props;
     if (!this.props.isOpen || !this.props.items) {
@@ -53,32 +54,6 @@ class ListSelect extends Component {
     );
   }
 }
-
-// const ListSelect = (props: Props) => {
-//   const { top, right, left, bottom } = props;
-//
-//   if (!props.isOpen || !props.items) {
-//     return null;
-//   }
-//
-//   return (
-//     <OutsideClickHandler onOutsideClick={props.handleClickOutSide}>
-//       <Wrapper top={top} right={right} left={left} bottom={bottom}>
-//         <Title>{props.children}</Title>
-//         {props.searchable && (
-//           <FilterContainer>
-//             <Filter
-//               type="text"
-//               placeholder={props.placeholder}
-//               onChange={e => props.handleInputChange(e)}
-//             />
-//           </FilterContainer>
-//         )}
-//         {props.items.map(item => props.render(item))}
-//       </Wrapper>
-//     </OutsideClickHandler>
-//   );
-// };
 
 ListSelect.defaultProps = {
   isOpen: false,

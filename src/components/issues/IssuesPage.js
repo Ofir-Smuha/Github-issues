@@ -29,7 +29,6 @@ type ConnectedProps = {
   openIssues: Issues,
   currentPage: number,
   issuesState: any,
-  sorting: any,
   isLoading: boolean,
   isAuthenticated: string,
   history: Object,
@@ -75,7 +74,7 @@ class IssuesPage extends Component<ConnectedProps & OwnProps> {
         <Loader isLoading={this.props.isLoading} />
         <FillterAddBar />
         <IssuesReset
-          sorting={this.props.sorting}
+          issuesParameters={this.props.issuesParameters}
           issuesState={this.props.issuesState}
         />
         <SortIssues />
@@ -96,7 +95,7 @@ const mapStateToProps = (state: State) => ({
   openIssues: state.issues.openIssues,
   currentPage: state.issues.currentPage,
   issuesState: state.issues.issuesState,
-  sorting: state.issues.sorting,
+  issuesParameters: state.issues.issuesParameters,
   isLoading: isLoadingSelector(state, ISSUES_LABEL),
   isAuthenticated: state.user.token,
   parameters: state.issues.issuesParameters

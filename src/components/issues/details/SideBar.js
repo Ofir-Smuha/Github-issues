@@ -165,6 +165,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               right={'-2px'}
               isOpen={this.state.isAssigneesOpen}
               items={this.props.assignees}
+              accessKey={'login'}
               render={singleAssignee => (
                 <Assignee
                   handleAssigneeSelect={this.handleAssigneeSelect}
@@ -186,6 +187,7 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
               right="-2px"
               isOpen={this.state.isLabelsOpen}
               items={this.props.labels}
+              accessKey={'name'}
               render={label => (
                 <Label
                   handleLabelClick={this.handleLabelActionsCall}

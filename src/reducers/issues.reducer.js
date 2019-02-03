@@ -9,7 +9,6 @@ import {
   SET_ISSUES_PAGING,
   SET_CURRENT_PAGE,
   SET_SORT_STATE,
-  SET_SORTING,
   RESET_SORTING,
   SET_LABELS,
   SET_COLLABORATORS,
@@ -33,7 +32,6 @@ const initialState = {
   pageCount: 0,
   currentPage: 1,
   issuesState: null,
-  sorting: null,
   collaborators: [],
   assignees: [],
   repoAssignees: [],
@@ -49,7 +47,6 @@ export type IssuesState = {|
   +pageCount: number | null,
   +currentPage: number,
   +issuesState: any,
-  +sorting: any,
   +issueLabels: null | [],
   +collaborators: [],
   +assignees: [],
@@ -87,13 +84,11 @@ export default handleActions(
         state
       ),
 
-    [SET_SORTING]: (state, { payload }) =>
-      flow([set('sorting', payload.sorting), set('currentPage', 1)])(state),
-
     [RESET_SORTING]: state =>
       flow([
+        set('issuesParameters', initialState.issuesParameters),
         set('issuesState', initialState.issuesState),
-        set('sorting', initialState.sorting)
+        set('currentPage', initialState.currentPage)
       ])(state),
 
     [SET_LABELS]: (state, { payload: { labels } }) =>

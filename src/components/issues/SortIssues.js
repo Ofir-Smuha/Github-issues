@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { isEmpty, mapKeys, map, get, includes } from 'lodash/fp';
 import qs from 'qs';
 
-import IssuesState from 'components/issues/filter-sort-panel/IssuesState';
+import IssuesState from 'components/issues/IssuesState';
 import ListSelect from 'components/common/ListSelect';
 import ListItem from 'components/common/ListItem';
 
@@ -29,7 +29,6 @@ type ConnectedProps = {
 type OwnProps = {};
 
 type State = {
-  isOpen: boolean,
   isSortOpen: boolean,
   isAssigneeOpen: boolean,
   isLabelsOpen: boolean,
@@ -42,7 +41,6 @@ type State = {
 
 class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
-    isOpen: false,
     isSortOpen: false,
     isAssigneeOpen: false,
     isLabelsOpen: false,
@@ -57,7 +55,18 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     this.handleSetIssuesParametersFromParams();
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate(prevProps) {
+    const searchParams = this.props.location.search;
+
+    if (isEmpty(searchParams) && prevProps.location.search !== searchParams) {
+      this.setState({
+        selectedAssignees: [],
+        selectedLabels: [],
+        selectedMilestones: [],
+        selectedSort: []
+      });
+    }
+  }
 
   handleSetIssuesParametersFromParams = () => {
     const searchParams = this.extractSearchParams();
@@ -114,7 +123,6 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
           parameters['labels'] = searchParams[key];
           break;
         case 'sort':
-          // TODO: add sort functionality to common cmp
           if (this.isItemArray(searchParams[key])) {
             break;
           }
@@ -154,18 +162,11 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   };
 
   handleUrlChange = (parameter, itemValue, closeModalKey) => {
-    console.log(
-      'parameter',
-      parameter,
-      'value',
-      value,
-      'closeModalKey',
-      closeModalKey
-    );
     const value =
       parameter === 'sort' ? this.handleSortSelect(itemValue) : itemValue;
     const pathName = this.props.location.pathname;
     const searchParams = this.extractSearchParams();
+
     if (get(parameter, searchParams)) {
       if (parameter === 'label') {
         // If label is Array

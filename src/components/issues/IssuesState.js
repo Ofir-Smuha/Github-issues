@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import warning from '../../../assets/images/warning-black.svg';
-import check from '../../../assets/images/check.svg';
+import warning from '../../assets/images/warning-black.svg';
+import check from '../../assets/images/check.svg';
 
 type Props = {
   handleStateSelect: () => string
