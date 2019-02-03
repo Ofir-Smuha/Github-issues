@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { isEmpty } from 'lodash/fp';
 
 import Header from 'components/issues/details/Header';
 import IssueContent from 'components/issues/details/IssueContent';
@@ -14,6 +15,8 @@ import {
   fetchComments,
   removeComments,
   handlePostComment,
+  fetchCollaborators,
+  fetchRepoAssignees,
   ISSUE_LABEL
 } from 'actions/issues.actions';
 
@@ -42,6 +45,11 @@ class IssueDetails extends Component<ConnectedProps & OwnProps, OwnState> {
     }
     const { name, repo, number } = this.props.match.params;
     this.props.fetchIssue({ name, repo, number });
+
+    if (isEmpty(this.props.collaborators) && isEmpty(this.props.assignees)) {
+      this.props.fetchCollaborators(name, repo);
+      this.props.fetchRepoAssignees(name, repo);
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -104,7 +112,9 @@ const mapStateToProps = (state: State) => ({
   currentIssue: state.issues.currentIssue,
   issueComments: state.issues.issueComments,
   isAuthenticated: state.user.token,
-  isLoading: isLoadingSelector(state, ISSUE_LABEL)
+  isLoading: isLoadingSelector(state, ISSUE_LABEL),
+  collaborators: state.issues.collaborators,
+  assignees: state.issues.assignees
 });
 
 export default connect(mapStateToProps, {
@@ -112,5 +122,7 @@ export default connect(mapStateToProps, {
   removeCurrentIssue,
   fetchComments,
   removeComments,
-  handlePostComment
+  handlePostComment,
+  fetchCollaborators,
+  fetchRepoAssignees
 })(IssueDetails);
