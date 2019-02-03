@@ -159,10 +159,15 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
         <AssignContainer>
           <TitleActionsContainer>
             <Title>Assignees</Title>
-            <GearIcon onClick={() => this.toggleState('isAssigneesOpen')} />
+            <GearIcon
+              onClick={() => this.setState({ isAssigneesOpen: true })}
+            />
             <ListSelect
               top={'23px'}
               right={'-2px'}
+              handleClickOutSide={() =>
+                this.setState({ isAssigneesOpen: false })
+              }
               isOpen={this.state.isAssigneesOpen}
               items={this.props.assignees}
               accessKey={'login'}
@@ -181,8 +186,9 @@ class SideBar extends Component<OwnProps & ConnectedProps, State> {
         <LabelsContainer>
           <TitleActionsContainer>
             <Title>Labels</Title>
-            <GearIcon onClick={() => this.toggleState('isLabelsOpen')} />
+            <GearIcon onClick={() => this.setState({ isLabelsOpen: true })} />
             <ListSelect
+              handleClickOutSide={() => this.setState({ isLabelsOpen: false })}
               top="23px"
               right="-2px"
               isOpen={this.state.isLabelsOpen}
