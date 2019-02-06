@@ -38,7 +38,8 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
   state = {
     isOpen: false,
     isSortOpen: false,
-    isAssigneeOpen: false
+    isAssigneeOpen: false,
+    selectedAssignees: []
   };
 
   componentDidMount() {
@@ -197,49 +198,83 @@ class SortIssues extends Component<ConnectedProps & OwnProps, State> {
     // Close on click
   };
 
+  handleItemSelect = (
+    parameter,
+    value,
+    closeModalKey,
+    itemId,
+    itemsKey,
+    isMultiSelect
+  ) => {
+    this.handleUrlChange(parameter, value, closeModalKey);
+
+    let selectedItems = [...this.state[itemsKey]];
+
+    if (isMultiSelect) {
+      selectedItems = selectedItems.includes(itemId)
+        ? selectedItems.filter(item => item !== itemId)
+        : [...selectedItems, itemId];
+    }
+
+    if (!isMultiSelect) {
+      selectedItems = selectedItems.includes(itemId) ? [] : [itemId];
+    }
+
+    this.setState({ [itemsKey]: selectedItems });
+  };
+
+  renderAssigneeDropDown = () => (
+    <ItemSelect>
+      <BarText>Assignee</BarText>
+      <SortIcon onClick={() => this.setState({ isAssigneeOpen: true })} />
+      <ListSelect
+        searchable={true}
+        right="0px"
+        top="20px"
+        isOpen={this.state.isAssigneeOpen}
+        items={this.props.repoAssignees}
+        handleInputChange={this.handleAssigneesFilter}
+        handleClickOutSide={() => this.setState({ isAssigneeOpen: false })}
+        render={assignee => (
+          <ListItem
+            key={assignee.id}
+            isSelected={this.state.selectedAssignees.includes(assignee.id)}
+            handleSelect={this.handleItemSelect}
+            image={assignee.avatar_url}
+            title={assignee.login}
+            itemId={assignee.id}
+            closeModalKey="isAssigneeOpen"
+            itemsKey="selectedAssignees"
+            width="20px"
+            height="20px"
+            subject="assignee"
+          />
+        )}>
+        Filter by who’s assigned
+      </ListSelect>
+    </ItemSelect>
+  );
+
+  renderSortDropDown = () => (
+    <ItemSelect>
+      <BarText>Sort</BarText>
+      <SortIcon onClick={this.toggleSort} />
+      {this.state.isSortOpen && (
+        <SortDropDown
+          handleClickOutSide={() => this.setState({ isSortOpen: false })}
+          setFetchBySort={this.setFetchBySort}
+        />
+      )}
+    </ItemSelect>
+  );
+
   render() {
     return (
       <SortContainer>
         <IssuesState handleSetFetchByState={this.setFetchByState} />
         <ItemSelectContainer>
-          <ItemSelect>
-            <BarText>Assignee</BarText>
-            <SortIcon onClick={() => this.setState({ isAssigneeOpen: true })} />
-            <ListSelect
-              searchable={true}
-              right="0px"
-              top="20px"
-              isOpen={this.state.isAssigneeOpen}
-              items={this.props.repoAssignees}
-              handleInputChange={this.handleAssigneesFilter}
-              handleClickOutSide={() =>
-                this.setState({ isAssigneeOpen: false })
-              }
-              render={assignee => (
-                <ListItem
-                  key={assignee.id}
-                  image={assignee.avatar_url}
-                  title={assignee.login}
-                  width="20px"
-                  height="20px"
-                  subject="assignee"
-                  closeModalKey="isAssigneeOpen"
-                  handleSelect={this.handleUrlChange}
-                />
-              )}>
-              Filter by who’s assigned
-            </ListSelect>
-          </ItemSelect>
-          <ItemSelect>
-            <BarText>Sort</BarText>
-            <SortIcon onClick={this.toggleSort} />
-            {this.state.isSortOpen && (
-              <SortDropDown
-                handleClickOutSide={() => this.setState({ isSortOpen: false })}
-                setFetchBySort={this.setFetchBySort}
-              />
-            )}
-          </ItemSelect>
+          {this.renderAssigneeDropDown()}
+          {this.renderSortDropDown()}
         </ItemSelectContainer>
       </SortContainer>
     );
