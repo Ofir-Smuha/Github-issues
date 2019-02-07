@@ -22,7 +22,7 @@ class AutoSearch extends Component {
   };
 
   handleSelect = path => {
-    this.props.history.replace(`/${path}/issues`);
+    this.props.history.push(`/${path}/issues`);
     this.setState({
       isOpen: false,
       searchValue: ''
