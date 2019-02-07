@@ -10,7 +10,9 @@ const redirectMiddleware: Middleware = () => {
       return next(action);
     }
 
-    history.replace('/login');
+    const { payload } = action;
+
+    history.replace(payload.url);
   };
 };
 
