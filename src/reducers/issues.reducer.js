@@ -16,7 +16,8 @@ import {
   SET_ASSIGNEES,
   SET_NEW_ISSUE,
   SET_REPO_ASSIGNEES,
-  SET_ISSUES_PARAMETERS
+  SET_ISSUES_PARAMETERS,
+  SET_SEARCHED_REPOS
 } from 'actions/issues.actions';
 
 import type { Issue, Issues } from 'components/issues/issues.types';
@@ -34,7 +35,8 @@ const initialState = {
   sorting: null,
   collaborators: [],
   assignees: [],
-  repoAssignees: []
+  repoAssignees: [],
+  searchedRepos: []
 };
 
 export type IssuesState = {|
@@ -49,7 +51,8 @@ export type IssuesState = {|
   +issueLabels: null | [],
   +collaborators: [],
   +assignees: [],
-  +repoAssignees: []
+  +repoAssignees: [],
+  +searchedRepos: []
 |};
 
 export default handleActions(
@@ -94,7 +97,9 @@ export default handleActions(
     [SET_REPO_ASSIGNEES]: (state, { payload: { assignees } }) =>
       set('repoAssignees', assignees, state),
     [SET_ISSUES_PARAMETERS]: (state, { payload: { parameters } }) =>
-      set('issuesParameters', parameters, state)
+      set('issuesParameters', parameters, state),
+    [SET_SEARCHED_REPOS]: (state, { payload }) =>
+      set('searchedRepos', payload.repos.items, state)
   },
   initialState
 );
