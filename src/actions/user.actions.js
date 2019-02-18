@@ -4,10 +4,9 @@ export const GET_TOKEN_WITH_CODE = 'GET_TOKEN_WITH_CODE';
 export const GET_USER_DATA_FROM_TOKEN = 'GET_USER_DATA_FROM_TOKEN';
 export const SAVE_TOKEN_TO_LOCAL_STORAGE = 'SAVE_TOKEN_TO_LOCAL_STORAGE';
 export const SET_USER_IN_STATE = 'SET_USER_IN_STATE';
-export const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
-export const RESET_AUTH_ERROR = 'RESET_AUTH_ERROR';
 export const FETCH_USER_REPOSITORIES = 'FETCH_USER_REPOSITORIES';
 export const SET_USER_REPOSITORIES = 'SET_USER_REPOSITORIES';
+export const NAVIGATE = 'NAVIGATE';
 
 const LOGIN_LABEL = 'login';
 const REPOSITORIES_LABEL = 'fetch-repositories';
@@ -23,7 +22,7 @@ export const getUserTokenWithCode = (userCode: string) =>
         user => getUserInfoWithToken(user.token),
         user => saveTokenToLocalStorage(user.token)
       ],
-      onError: setAuthError
+      onError: () => navigateTo('/login')
     },
     meta: {
       blacklistKeys: ['error']
@@ -55,14 +54,10 @@ export const setUserInState = (user: Object) => ({
   }
 });
 
-export const setAuthError = () => ({
-  type: SET_AUTH_ERROR,
-  payload: {}
-});
-
-export const resetAuthError = () => ({
-  type: RESET_AUTH_ERROR,
-  payload: {}
+export const navigateTo = (url: string) => ({
+  type: NAVIGATE,
+  payload: { url },
+  meta: { redirect: true }
 });
 
 export const fetchUserRepositories = repositoriesUrl =>

@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { get, isNull } from 'lodash/fp';
-import qs from 'qs';
 
 import { loadFromStorage } from 'utils/local-storage.utils';
 import theme from 'constants/themes.constants';
 
 import PrivateRoute from 'components/common/PrivateRoute';
+import AuthenticatePage from 'components/login/AuthenticatePage';
 import ErrorBoundary from './ErrorBoundary';
 import Loader from 'components/common/Loader';
 
@@ -45,16 +45,10 @@ class App extends React.Component<ConnectedProps & OwnProps> {
     if (token) {
       this.props.saveTokenToLocalStorage(token);
       this.props.getUserInfoWithToken(token);
-    } else {
-      const searchParams = get('search', this.props.location);
+    }
 
-      if (searchParams) {
-        const codeParams = qs.parse(searchParams);
-        const userCode = codeParams['?code'];
-        this.props.getUserTokenWithCode(userCode);
-      } else {
-        this.props.saveTokenToLocalStorage(null);
-      }
+    if (!token) {
+      this.props.saveTokenToLocalStorage(null);
     }
   }
 
@@ -92,6 +86,7 @@ class App extends React.Component<ConnectedProps & OwnProps> {
                 isAuthenticated={this.props.isAuthenticated}
                 component={IssueDetails}
               />
+              <Route path="/login/authenticate" component={AuthenticatePage} />
               <Route path="/login" component={Login} />
               <Route exact path="/error" component={ErrorPage} />
             </Switch>

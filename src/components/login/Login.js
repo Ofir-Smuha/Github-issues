@@ -9,7 +9,7 @@ type ConnectedProps = {};
 type OwnProps = {};
 
 const gitHubUrl =
-  'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&scope=user%20repo&redirect_uri=http://localhost:3000/';
+  'https://github.com/login/oauth/authorize?client_id=6f2d834c1c19457787bf&scope=user%20repo&redirect_uri=http://localhost:3000/login/authenticate';
 
 const Login = (props: OwnProps) => {
   return (
